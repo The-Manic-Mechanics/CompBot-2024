@@ -4,11 +4,17 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class GrabbyArm extends SubsystemBase {
   /** Creates a new GrabbyArm. */
-  public GrabbyArm() {}
+
+  private MotorController topArmMotor;
+  private MotorController bottomArmMotor;
+
+  public GrabbyArm() {
+  }
 
   @Override
   public void periodic() {
