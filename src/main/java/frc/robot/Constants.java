@@ -16,4 +16,18 @@ public final class Constants {
   public static class ControllerConstants {
     public static final int DRIVERMAIN_CONTROLLER_PORT = 0;
   }
+
+  public static class DriveTrainConstants {
+    public static final int CAN_PORT_5 = 5;
+    public static final int CAN_PORT_7 = 7;
+    public static final int CAN_PORT_2 = 2;
+    public static final int CAN_PORT_6 = 6;
+    public static final int CAN_PORT_3 = 3;
+    public static final int CAN_PORT_4 = 4;
+
+    public static final int FRONT_LEFT_MOTOR_PORT = CAN_PORT_2;
+    public static final int FRONT_RIGHT_MOTOR_PORT = CAN_PORT_7;
+    public static final int BACK_LEFT_MOTOR_PORT = CAN_PORT_5;
+    public static final int BACK_RIGHT_MOTOR_PORT = CAN_PORT_6;
+  }
 }

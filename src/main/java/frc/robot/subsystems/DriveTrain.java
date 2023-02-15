@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.DriveTrainConstants;
 
 public class DriveTrain extends SubsystemBase {
   /** Creates a new DriveTrain. */
@@ -14,10 +15,10 @@ public class DriveTrain extends SubsystemBase {
 
   public DriveTrain() {
 
-    VictorSP frontLeft = new VictorSP(0);
-    VictorSP frontRight = new VictorSP(1);
-    VictorSP backLeft = new VictorSP(2);
-    VictorSP backRight = new VictorSP(3);
+    VictorSP frontLeft = new VictorSP(DriveTrainConstants.FRONT_LEFT_MOTOR_PORT);
+    VictorSP frontRight = new VictorSP(DriveTrainConstants.FRONT_RIGHT_MOTOR_PORT);
+    VictorSP backLeft = new VictorSP(DriveTrainConstants.BACK_LEFT_MOTOR_PORT);
+    VictorSP backRight = new VictorSP(DriveTrainConstants.BACK_RIGHT_MOTOR_PORT);
 
     frontRight.setInverted(true);
     frontLeft.setInverted(true);
