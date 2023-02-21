@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveTrainConstants;
 
@@ -13,15 +15,25 @@ public class DriveTrain extends SubsystemBase {
   /** Creates a new DriveTrain. */
   MecanumDrive mecanumDrive;
 
+  WPI_VictorSPX frontLeft;
+  WPI_VictorSPX frontRight;
+  WPI_VictorSPX backLeft;
+  WPI_VictorSPX backRight;
+ 
+
   public DriveTrain() {
 
-    VictorSP frontLeft = new VictorSP(DriveTrainConstants.FRONT_LEFT_MOTOR_PORT);
-    VictorSP frontRight = new VictorSP(DriveTrainConstants.FRONT_RIGHT_MOTOR_PORT);
-    VictorSP backLeft = new VictorSP(DriveTrainConstants.BACK_LEFT_MOTOR_PORT);
-    VictorSP backRight = new VictorSP(DriveTrainConstants.BACK_RIGHT_MOTOR_PORT);
+    frontLeft = new WPI_VictorSPX(DriveTrainConstants.FRONT_LEFT_MOTOR_PORT);
+    frontRight = new WPI_VictorSPX(DriveTrainConstants.FRONT_RIGHT_MOTOR_PORT);
+    backLeft = new WPI_VictorSPX(DriveTrainConstants.BACK_LEFT_MOTOR_PORT);
+    backRight = new WPI_VictorSPX(DriveTrainConstants.BACK_RIGHT_MOTOR_PORT);
 
-    frontRight.setInverted(true);
+    // frontRight.setInverted(true);
+    // backRight.setInverted(true);
+
     frontLeft.setInverted(true);
+    // frontRight.setInverted(true);
+    backLeft.setInverted(true);
 
 
     mecanumDrive = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
@@ -35,5 +47,9 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putData("frontLeft", frontLeft);
+    SmartDashboard.putData("frontRight", frontRight);
+    SmartDashboard.putData("backLeft", backLeft);
+    SmartDashboard.putData("backRight", backRight);
   }
 }

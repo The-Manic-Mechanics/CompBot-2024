@@ -39,11 +39,11 @@ public class DriveMecanum extends CommandBase {
       moveSpeedX = RobotContainer.driverMainController.getRightTriggerAxis();
     }
 
-    moveSpeedY = -1 * RobotContainer.driverMainController.getLeftY();
-    moveSpeedX = RobotContainer.driverMainController.getLeftX();
-    moveSpeedZ = RobotContainer.driverMainController.getRightX();
+    moveSpeedY = RobotContainer.driverMainController.getLeftY();
+    moveSpeedX = -1 * RobotContainer.driverMainController.getLeftX();
+    moveSpeedZ = -1  * RobotContainer.driverMainController.getRightX();
 
-    sysDriveTrain.CartisianDrive(moveSpeedX, moveSpeedY, moveSpeedZ);
+    sysDriveTrain.CartisianDrive(moveSpeedY, moveSpeedX, moveSpeedZ);
   }
 
   // Called once the command ends or is interrupted.
