@@ -6,13 +6,19 @@ package frc.robot;
 
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ClawClose;
+import frc.robot.commands.ClawOpen;
 import frc.robot.commands.DriveMecanum;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.TelescoperIn;
+import frc.robot.commands.TelescoperOut;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.GrabbyArm;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -32,6 +38,8 @@ public class RobotContainer {
 
   private final DriveTrain sysDriveTrain = new DriveTrain();
 
+  private final GrabbyArm sysArm = new GrabbyArm();
+
   // ----------------------------------------------------------------------------------
 
   // ---------------------------
@@ -40,6 +48,11 @@ public class RobotContainer {
 
   private final DriveMecanum cmdDriveMecanum = new DriveMecanum(sysDriveTrain);
 
+  private final ClawOpen cmdClawOpen = new ClawOpen(sysArm);
+  private final ClawClose cmdClawClose = new ClawClose(sysArm);
+
+  private final TelescoperIn cmdTelescoperIn = new TelescoperIn(sysArm);
+  private final TelescoperOut cmdTelescoperOut = new TelescoperOut(sysArm);
   // ----------------------------------------------------------------------------------
 
   // ---------------------------
@@ -47,11 +60,13 @@ public class RobotContainer {
   // ---------------------------
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  public static final XboxController driverMainController = 
-    new XboxController(ControllerConstants.DRIVERMAIN_CONTROLLER_PORT
-  );
+  public static final XboxController driverMainController = new XboxController(ControllerConstants.DRIVERONE_PORT);
 
+  public static final XboxController driverSecondController = new XboxController(ControllerConstants.DRIVERTWO_PORT);
+  private final JoystickButton driverSecondA = new JoystickButton(driverSecondController, 1);
+  private final JoystickButton driverSecondY = new JoystickButton(driverSecondController, 4);
   // ---------------------------------------------------------------------------------
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -86,13 +101,22 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    // driveMainController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+  // ----------------------------
+  // Driver (Main)
+  // ----------------------------
+    // Assigning driver main button X to cmdAutoBalance
+
+
+  // -------------------------------------------------------------------------------------
+
+  
+  // ----------------------------
+  // Driver (Secondary)
+  // ----------------------------
+
+  
+  // -------------------------------------------------------------------------------------
   }
 
   /**
