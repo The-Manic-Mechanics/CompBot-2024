@@ -10,14 +10,18 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 
+/** Creates a new GrabbyArm. */
 public class GrabbyArm extends SubsystemBase {
-  /** Creates a new GrabbyArm. */
+
 
   private WPI_VictorSPX topArmMotor;
   private WPI_VictorSPX bottomArmMotor;
+
+  MotorControllerGroup armGroup;
 
   private DoubleSolenoid armTelescoper;
   private DoubleSolenoid claw;
@@ -33,6 +37,18 @@ public class GrabbyArm extends SubsystemBase {
     topArmMotor = new WPI_VictorSPX(ArmConstants.TOP_ARM_MOTOR_PORT);
     bottomArmMotor = new WPI_VictorSPX(ArmConstants.BOTTOM_ARM_MOTOR_PORT);
 
+    topArmMotor.setInverted(true);
+
+    armGroup = new MotorControllerGroup(topArmMotor, bottomArmMotor);
+
+  }
+
+  public void SetArmSpeed(double speed, double speedMultiplier) {
+    if (speedMultiplier == 0) {
+      speedMultiplier = 1;
+    }
+    armGroup.set(speed * speedMultiplier);
+    
   }
 
   public void ToggleTelescope(DoubleSolenoid.Value value) {

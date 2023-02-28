@@ -6,9 +6,13 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
+import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveTrainConstants;
 
 public class DriveTrain extends SubsystemBase {
@@ -19,7 +23,15 @@ public class DriveTrain extends SubsystemBase {
   WPI_VictorSPX frontRight;
   WPI_VictorSPX backLeft;
   WPI_VictorSPX backRight;
- 
+
+  MecanumDriveKinematics mecanumDriveKinematics;
+
+  Translation2d frontLeftLocation;
+  Translation2d frontRightLocation;
+  Translation2d backLeftLocation;
+  Translation2d backRightLocation;
+
+  MecanumDriveOdometry mecanumDriveOdometry;
 
   public DriveTrain() {
 
@@ -37,6 +49,11 @@ public class DriveTrain extends SubsystemBase {
 
 
     mecanumDrive = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
+
+    frontLeftLocation = new Translation2d(0, 0);
+    frontRightLocation = new Translation2d(0, 0);
+    backLeftLocation = new Translation2d(0, 0);
+    backRightLocation = new Translation2d(0, 0);
   
   }
 
@@ -51,5 +68,9 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putData("frontRight", frontRight);
     SmartDashboard.putData("backLeft", backLeft);
     SmartDashboard.putData("backRight", backRight);
+
+    // Putting Controller Left and Right Stick Values
+    SmartDashboard.putNumber("LeftStickY Value", RobotContainer.driverMainController.getLeftY());
+    SmartDashboard.putNumber("RightStickY Value", RobotContainer.driverMainController.getRightY());
   }
 }

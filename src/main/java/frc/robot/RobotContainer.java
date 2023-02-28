@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.commands.ArmDrive;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ClawClose;
 import frc.robot.commands.ClawOpen;
@@ -53,6 +54,8 @@ public class RobotContainer {
 
   private final TelescoperIn cmdTelescoperIn = new TelescoperIn(sysArm);
   private final TelescoperOut cmdTelescoperOut = new TelescoperOut(sysArm);
+
+  private final ArmDrive cmdArmDrive = new ArmDrive(sysArm);
   // ----------------------------------------------------------------------------------
 
   // ---------------------------
@@ -65,6 +68,8 @@ public class RobotContainer {
   public static final XboxController driverSecondController = new XboxController(ControllerConstants.DRIVERTWO_PORT);
   private final JoystickButton driverSecondA = new JoystickButton(driverSecondController, 1);
   private final JoystickButton driverSecondY = new JoystickButton(driverSecondController, 4);
+  private final JoystickButton driverSecondLeftBump = new JoystickButton(driverSecondController, 5);
+  private final JoystickButton driverSecondRghtBump = new JoystickButton(driverSecondController, 6);
   // ---------------------------------------------------------------------------------
 
 
@@ -114,6 +119,15 @@ public class RobotContainer {
   // ----------------------------
   // Driver (Secondary)
   // ----------------------------
+
+    driverSecondA.onTrue(cmdTelescoperIn);
+    driverSecondY.onTrue(cmdTelescoperOut);
+
+    driverSecondLeftBump.onTrue(cmdClawOpen);
+    driverSecondRghtBump.onTrue(cmdClawClose);
+
+    
+
 
   
   // -------------------------------------------------------------------------------------

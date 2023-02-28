@@ -48,7 +48,42 @@ public final class Constants {
     public static final int TELESCOPER_FWD_PORT = 2;
     public static final int TELESCOPER_RVRSE_PORT = 3;
     
-     public static final int TOP_ARM_MOTOR_PORT = 0;
-     public static final int BOTTOM_ARM_MOTOR_PORT = 0;
+     public static final int TOP_ARM_MOTOR_PORT = 3;
+     public static final int BOTTOM_ARM_MOTOR_PORT = 4;
+  }
+
+  public static class VMXPiConstants {
+    // Target Threshold Min and Max
+    public static final double TARGET_PITCH_MAX_THRESHOLD = 0;
+    public static final double TARGET_PITCH_MIN_THRESHOLD = 0;
+
+    public static class AutoBalanceConstants {
+      // Target Tolerance
+      public static final double TARGET_TOLERANCE = 2;
+
+      // Deadzone where the robot won't try to autobalance
+      public static final double DEADZONE_MAX = 30;
+      public static final double DEADZONE_MIN = -30;
+
+      // The set value where the robot is level
+      public static final double SETPOINT = 0;
+
+      // The proportial gain of the auto balancing PID loop
+      public static final double KP = .7;
+      // The integral gain of the auto balancing PID loop
+      public static final double KI = 0;
+      // The derivitive gain of the auto balancing PID loop
+      public static final double KD = 0;
+
+      // The period between controller updates
+      public static final double PID_PERIOD = 0.02;
+
+      // The range where if you push the controller joystick during AutoBalancing it will stop
+      public static final double DISABLETHRESHOLD_CONTROLLER_LEFTSTICK_MAX = 0.1;
+      public static final double DISABLETHRESHOLD_CONTROLLER_LEFTSTICK_MIN = -0.1;
+
+      public static final double DISABLETHRESHOLD_CONTROLLER_RIGHTSTICK_MAX = 0.1;
+      public static final double DISABLETHRESHOLD_CONTROLLER_RIGHTSTICK_MIN = -0.1;
+    }
   }
 }
