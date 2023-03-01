@@ -43,11 +43,16 @@ public class GrabbyArm extends SubsystemBase {
 
   }
 
-  public void SetArmSpeed(double speed, double speedMultiplier) {
-    if (speedMultiplier == 0) {
-      speedMultiplier = 1;
-    }
-    armGroup.set(speed * speedMultiplier);
+  public void SetArmSpeed(double indvSpeed) {
+    // topArmMotor.set(indvSpeed);
+    bottomArmMotor.set(indvSpeed);
+  }
+
+  public void SetArmGroupSpeed(double speed, double speedMultiplier) {
+    // if (speedMultiplier == 0) {
+    //  speedMultiplier = 1;
+    // }
+    armGroup.set(speed /** speedMultiplier */);
     
   }
 

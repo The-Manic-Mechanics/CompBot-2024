@@ -26,7 +26,9 @@ public class ArmDrive extends CommandBase {
   @Override
   public void execute() {
     double speed = RobotContainer.driverSecondController.getLeftY();
-    sysArm.SetArmSpeed(speed, 0.25);
+
+    sysArm.SetArmSpeed(speed);
+    // sysArm.SetArmSpeed(speed, 0.25);
   }
 
   // Called once the command ends or is interrupted.
