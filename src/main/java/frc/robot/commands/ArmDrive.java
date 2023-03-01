@@ -6,12 +6,12 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.GrabbyArm;
+import frc.robot.subsystems.Arm;
 
 public class ArmDrive extends CommandBase {
-  private final GrabbyArm sysArm;
+  private final Arm sysArm;
   /** Creates a new ArmDrive. */
-  public ArmDrive(GrabbyArm inSysArm) {
+  public ArmDrive(Arm inSysArm) {
     // Use addRequirements() here to declare subsystem dependencies.
     sysArm = inSysArm;
 
@@ -25,9 +25,9 @@ public class ArmDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = RobotContainer.driverSecondController.getLeftY();
+    double speed = -1 * RobotContainer.driverSecondController.getLeftY();
 
-    sysArm.SetArmSpeed(speed);
+    sysArm.SetArmSpeed(speed * .20);
     // sysArm.SetArmSpeed(speed, 0.25);
   }
 

@@ -6,17 +6,18 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.GrabbyArm;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Solenoids;
 
 public class TelescoperOut extends CommandBase {
   /** Creates a new DriveMecanum. */
-  private final GrabbyArm sysArm;
+  private final Solenoids sysSolenoids;
 
-  public TelescoperOut(GrabbyArm inSysArm) {
+  public TelescoperOut(Solenoids inSysSolenoids) {
     // Use addRequirements() here to declare subsystem dependencies.
-    sysArm = inSysArm;
+    sysSolenoids = inSysSolenoids;
 
-    addRequirements(sysArm);
+    addRequirements(sysSolenoids);
   }
 
   // Called when the command is initially scheduled.
@@ -26,13 +27,13 @@ public class TelescoperOut extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    sysArm.ToggleTelescope(Value.kForward);
+    sysSolenoids.ToggleTelescope(Value.kForward);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    sysArm.ToggleTelescope(Value.kOff);
+    sysSolenoids.ToggleTelescope(Value.kOff);
   }
 
   // Returns true when the command should end.

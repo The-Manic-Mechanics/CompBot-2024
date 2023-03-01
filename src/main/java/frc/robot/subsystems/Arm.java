@@ -11,11 +11,13 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
 
 /** Creates a new GrabbyArm. */
-public class GrabbyArm extends SubsystemBase {
+public class Arm extends SubsystemBase {
 
 
   private WPI_VictorSPX topArmMotor;
@@ -23,14 +25,9 @@ public class GrabbyArm extends SubsystemBase {
 
   MotorControllerGroup armGroup;
 
-  private DoubleSolenoid armTelescoper;
-  private DoubleSolenoid claw;
+ 
 
-  public GrabbyArm() {
-
-    // Initialising Solenoids
-    armTelescoper = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ArmConstants.TELESCOPER_FWD_PORT, ArmConstants.TELESCOPER_RVRSE_PORT);
-    claw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ArmConstants.CLAW_FWD_PORT, ArmConstants.CLAW_RVRSE_PORT);
+  public Arm() {
 
     // #TODO# Set Ports To CAN ids
     // Initialising Motors
@@ -44,7 +41,7 @@ public class GrabbyArm extends SubsystemBase {
   }
 
   public void SetArmSpeed(double indvSpeed) {
-    // topArmMotor.set(indvSpeed);
+    topArmMotor.set(indvSpeed);
     bottomArmMotor.set(indvSpeed);
   }
 
@@ -56,16 +53,12 @@ public class GrabbyArm extends SubsystemBase {
     
   }
 
-  public void ToggleTelescope(DoubleSolenoid.Value value) {
-    armTelescoper.set(value);
-  }
-
-  public void ToggleClaw(DoubleSolenoid.Value value) {
-    claw.set(value);
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("LeftStick", RobotContainer.driverSecondController.getLeftY());
+
+    SmartDashboard.putData("TopMotor", topArmMotor);
+    SmartDashboard.putData("BottomMotor", bottomArmMotor);
   }
 }

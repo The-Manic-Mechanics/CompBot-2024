@@ -15,7 +15,8 @@ import frc.robot.commands.TelescoperIn;
 import frc.robot.commands.TelescoperOut;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.GrabbyArm;
+import frc.robot.subsystems.Solenoids;
+import frc.robot.subsystems.Arm;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -39,7 +40,9 @@ public class RobotContainer {
 
   private final DriveTrain sysDriveTrain = new DriveTrain();
 
-  private final GrabbyArm sysArm = new GrabbyArm();
+  private final Arm sysArm = new Arm();
+
+  private final Solenoids sysSolenoids = new Solenoids();
 
   // ----------------------------------------------------------------------------------
 
@@ -49,13 +52,14 @@ public class RobotContainer {
 
   private final DriveMecanum cmdDriveMecanum = new DriveMecanum(sysDriveTrain);
 
-  private final ClawOpen cmdClawOpen = new ClawOpen(sysArm);
-  private final ClawClose cmdClawClose = new ClawClose(sysArm);
-
-  private final TelescoperIn cmdTelescoperIn = new TelescoperIn(sysArm);
-  private final TelescoperOut cmdTelescoperOut = new TelescoperOut(sysArm);
-
   private final ArmDrive cmdArmDrive = new ArmDrive(sysArm);
+
+  private final ClawOpen cmdClawOpen = new ClawOpen(sysSolenoids);
+  private final ClawClose cmdClawClose = new ClawClose(sysSolenoids);
+
+  private final TelescoperIn cmdTelescoperIn = new TelescoperIn(sysSolenoids);
+  private final TelescoperOut cmdTelescoperOut = new TelescoperOut(sysSolenoids);
+
   // ----------------------------------------------------------------------------------
 
   // ---------------------------
@@ -81,6 +85,7 @@ public class RobotContainer {
   // --------------------------
 
   sysDriveTrain.setDefaultCommand(cmdDriveMecanum);
+  sysArm.setDefaultCommand(cmdArmDrive);
 
   // ----------------------------------------------------------------------------------
 
