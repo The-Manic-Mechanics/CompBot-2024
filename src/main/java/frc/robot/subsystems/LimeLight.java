@@ -38,19 +38,12 @@ public class LimeLight extends SubsystemBase {
   // Current position of the robot on the field in (X, Y, Z)
   NetworkTableEntry botPose = limeLightTable.getEntry("botpose");
 
-
-  
-
-  // #TODO# set the below values to meaningful values
-
-  // #TODO# Find a way to drive towards POI (BotPose (Most Likely) or Drive towards it and strafe)
-
   // how many degrees the limelight is mounted from perfectly vertical
-  double limelightMountAngleDegrees = 0;
+  double limelightMountAngleDegrees = 90;
   // distance from the center of the Limelight lens to the floor
-  double limelightLensHeightInches = 0;
+  double limelightLensHeightInches = 20;
   // distance from the april tag to the floor
-  double aprilTagToFloorInches = 0;
+  double aprilTagToFloorInches = 17.12598;
 
  
 

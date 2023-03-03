@@ -10,7 +10,6 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ClawClose;
 import frc.robot.commands.ClawOpen;
 import frc.robot.commands.DriveMecanum;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TelescoperIn;
 import frc.robot.commands.TelescoperOut;
 import frc.robot.subsystems.DriveTrain;

@@ -27,7 +27,7 @@ public class ArmDrive extends CommandBase {
   public void execute() {
     double speed = -1 * RobotContainer.driverSecondController.getLeftY();
 
-    sysArm.SetArmSpeed(speed * .20);
+    sysArm.SetArmSpeed(speed, .20);
     // sysArm.SetArmSpeed(speed, 0.25);
   }
 
