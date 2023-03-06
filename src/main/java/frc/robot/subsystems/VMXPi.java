@@ -83,5 +83,9 @@ public class VMXPi extends SubsystemBase {
     SmartDashboard.putNumber("AutoBalancing PID Loop Output", autoBalancingPID.calculate(vmxPiRoll));
     // Putting all the data from the Autobalancing PID onto SmartDashboard
     SmartDashboard.putData("AutoBalancing PID", autoBalancingPID);
+
+    SmartDashboard.getNumber("kP", kP);
+    SmartDashboard.getNumber("kI", kI);
+    SmartDashboard.getNumber("kD", kD);
   }
 }
