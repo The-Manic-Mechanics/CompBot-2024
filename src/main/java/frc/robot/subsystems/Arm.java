@@ -57,6 +57,10 @@ public class Arm extends SubsystemBase {
     
   }
 
+  public double GetArmEnc() {
+    return armEncoder.get();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

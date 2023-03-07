@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,12 +34,37 @@ public class DriveTrain extends SubsystemBase {
 
   MecanumDriveOdometry mecanumDriveOdometry;
 
+  Encoder frontLeftEnc;
+  Encoder frontRightEnc;
+  Encoder backLeftEnc;
+  Encoder backRightEnc;
+
   public DriveTrain() {
 
     frontLeft = new WPI_VictorSPX(DriveTrainConstants.FRONT_LEFT_MOTOR_PORT);
     frontRight = new WPI_VictorSPX(DriveTrainConstants.FRONT_RIGHT_MOTOR_PORT);
     backLeft = new WPI_VictorSPX(DriveTrainConstants.BACK_LEFT_MOTOR_PORT);
     backRight = new WPI_VictorSPX(DriveTrainConstants.BACK_RIGHT_MOTOR_PORT);
+
+    frontLeftEnc = new Encoder(
+      DriveTrainConstants.FRONT_LEFT_ENCODER_A,
+      DriveTrainConstants.FRONT_LEFT_ENCODER_B
+    );
+
+    frontRightEnc = new Encoder(
+      DriveTrainConstants.FRONT_RIGHT_ENCODER_A,
+      DriveTrainConstants.FRONT_RIGHT_ENCODER_B
+    );
+
+    backLeftEnc = new Encoder(
+      DriveTrainConstants.BACK_LEFT_ENCODER_A,
+      DriveTrainConstants.BACK_LEFT_ENCODER_B
+    );
+
+    backRightEnc = new Encoder(
+      DriveTrainConstants.BACK_RIGHT_ENCODER_A,
+      DriveTrainConstants.BACK_RIGHT_ENCODER_B
+    );
 
     // frontRight.setInverted(true);
     // backRight.setInverted(true);
@@ -50,6 +76,7 @@ public class DriveTrain extends SubsystemBase {
 
     mecanumDrive = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
 
+    // #TODO# Add Values
     frontLeftLocation = new Translation2d(0, 0);
     frontRightLocation = new Translation2d(0, 0);
     backLeftLocation = new Translation2d(0, 0);

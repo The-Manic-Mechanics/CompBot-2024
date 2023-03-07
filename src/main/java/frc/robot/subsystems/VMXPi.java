@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.VMXPiConstants;
 import frc.robot.Constants.VMXPiConstants.AutoBalanceConstants;
 
 public class VMXPi extends SubsystemBase {
@@ -37,7 +36,7 @@ public class VMXPi extends SubsystemBase {
 
     // Initializing vmxPi  
     try { 
-      vmxPi = new AHRS(Port.kUSB);
+      vmxPi = new AHRS(Port.kMXP);
   } catch (RuntimeException ex) {
       DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
   }
@@ -87,5 +86,10 @@ public class VMXPi extends SubsystemBase {
     SmartDashboard.getNumber("kP", kP);
     SmartDashboard.getNumber("kI", kI);
     SmartDashboard.getNumber("kD", kD);
+
+    // #FIXME# Possibly an off number (Check to make sure it's right)
+    SmartDashboard.putNumber("Accel X", vmxPi.getWorldLinearAccelX());
+    SmartDashboard.putNumber("Accel Y", vmxPi.getWorldLinearAccelY());
+    SmartDashboard.putNumber("Accel Z", vmxPi.getWorldLinearAccelZ());
   }
 }

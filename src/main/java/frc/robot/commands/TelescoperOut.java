@@ -11,13 +11,16 @@ import frc.robot.subsystems.Solenoids;
 
 public class TelescoperOut extends CommandBase {
   /** Creates a new DriveMecanum. */
+  // #TODO# Figure out how to combine Arm and Solenoids subsystems into one for command usage
   private final Solenoids sysSolenoids;
+  private final Arm sysArm;
 
-  public TelescoperOut(Solenoids inSysSolenoids) {
+  public TelescoperOut(Solenoids inSysSolenoids, Arm inSysArm) {
     // Use addRequirements() here to declare subsystem dependencies.
     sysSolenoids = inSysSolenoids;
+    sysArm = inSysArm;
 
-    addRequirements(sysSolenoids);
+    addRequirements(sysSolenoids, sysArm);
   }
 
   // Called when the command is initially scheduled.
@@ -27,7 +30,9 @@ public class TelescoperOut extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    sysSolenoids.ToggleTelescope(Value.kForward);
+    // if (sysArm.GetArmEnc() < ) {
+      sysSolenoids.ToggleTelescope(Value.kForward);
+    // }
   }
 
   // Called once the command ends or is interrupted.
