@@ -25,8 +25,16 @@ public class Solenoids extends SubsystemBase {
     armTelescoper.set(value);
   }
 
+  public DoubleSolenoid.Value GetTelescope() {
+   return armTelescoper.get();
+  }
+
   public void ToggleClaw(DoubleSolenoid.Value value) {
     claw.set(value);
+  }
+
+  public DoubleSolenoid.Value GetClaw() {
+    return claw.get();
   }
 
   @Override

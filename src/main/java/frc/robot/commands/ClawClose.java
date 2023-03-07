@@ -39,6 +39,10 @@ public class ClawClose extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (sysSolenoids.GetTelescope() == Value.kForward) {
+      return true;
+      } else {
+        return false;
+      }
   }
 }

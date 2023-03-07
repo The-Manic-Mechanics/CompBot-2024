@@ -37,7 +37,11 @@ public class Arm extends SubsystemBase {
 
     armEncoder = new Encoder(ArmConstants.ARM_ENCODER_CHANNEL_A, ArmConstants.ARM_ENCODER_CHANNEL_B);
 
-    armEncoder.setDistancePerPulse(25);
+    // armEncoder.setDistancePerPulse(1);
+    // #FIXME# Could cause unwanted reset after auton
+    armEncoder.reset();
+
+    // armEncoder.setReverseDirection(true);
   }
 
   public void SetArmSpeed(double indvSpeed, double speedMultiplier) {

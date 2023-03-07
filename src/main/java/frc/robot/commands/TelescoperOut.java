@@ -31,7 +31,7 @@ public class TelescoperOut extends CommandBase {
   @Override
   public void execute() {
     // if (sysArm.GetArmEnc() < ) {
-      sysSolenoids.ToggleTelescope(Value.kForward);
+      sysSolenoids.ToggleTelescope(Value.kReverse);
     // }
   }
 
@@ -44,6 +44,10 @@ public class TelescoperOut extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (sysSolenoids.GetTelescope() == Value.kReverse) {
+    return true;
+    } else {
+      return false;
+    }
   }
 }

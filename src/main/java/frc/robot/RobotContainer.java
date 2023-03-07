@@ -56,8 +56,8 @@ public class RobotContainer {
   private final ClawOpen cmdClawOpen = new ClawOpen(sysSolenoids);
   private final ClawClose cmdClawClose = new ClawClose(sysSolenoids);
 
-  private final TelescoperIn cmdTelescoperIn = new TelescoperIn(sysSolenoids);
-  private final TelescoperOut cmdTelescoperOut = new TelescoperOut(sysSolenoids);
+  private final TelescoperIn cmdTelescoperIn = new TelescoperIn(sysSolenoids, sysArm);
+  private final TelescoperOut cmdTelescoperOut = new TelescoperOut(sysSolenoids, sysArm);
 
   // ----------------------------------------------------------------------------------
 
