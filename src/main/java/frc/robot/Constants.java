@@ -50,6 +50,11 @@ public final class Constants {
     
     public static final int BACK_RIGHT_ENCODER_A = 2;
     public static final int BACK_RIGHT_ENCODER_B = 3;
+
+    public static final double FRONT_LEFT_LOCATION = 0.391;
+    public static final double FRONT_RIGHT_LOCATION = 0.391;
+    public static final double BACK_LEFT_LOCATION = 0.391;
+    public static final double BACK_RIGHT_LOCATION = 0.391;
   }
 
   public static class ArmConstants {

@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort.Port;
@@ -37,7 +38,7 @@ public class VMXPi extends SubsystemBase {
 
     // Initializing vmxPi  
     try { 
-      vmxPi = new AHRS(Port.kOnboard);
+      vmxPi = new AHRS(SPI.Port.kMXP);
   } catch (RuntimeException ex) {
       DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
   }
@@ -49,7 +50,6 @@ public class VMXPi extends SubsystemBase {
     autoBalancingPID.setSetpoint(AutoBalanceConstants.SETPOINT);
     // Setting the tolerence for the setpoint
     autoBalancingPID.setTolerance(AutoBalanceConstants.TARGET_TOLERANCE);
-
   }
 
   //Function to get pitch from VMXPI
@@ -57,7 +57,7 @@ public class VMXPi extends SubsystemBase {
     // double vmxPitchy = vmxPi.getPitch();
     // return vmxPitchy;
     return vmxPi.getRoll();
-  }
+  } 
 
   // Function for Calculating AutoBalance PID
   public double CalculateAutoBalancePID() {
@@ -67,6 +67,10 @@ public class VMXPi extends SubsystemBase {
   // Function for checking if AutoBalancePID is at SetPoint
   public boolean AutoBalancePIDAtSetpoint() {
     return autoBalancingPID.atSetpoint();
+  }
+
+  public Rotation2d getRotation2d() {
+    return vmxPi.getRotation2d();
   }
 
 
