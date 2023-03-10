@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -24,7 +26,8 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveTrainConstants;
 
 public class DriveTrain extends SubsystemBase {
-  VMXPi vmxPi;
+  VMXPi sysVMXPi;
+  LimeLight sysLimelight;
 
   /** Creates a new DriveTrain. */
   MecanumDrive mecanumDrive;
@@ -117,8 +120,14 @@ public class DriveTrain extends SubsystemBase {
       backRightEnc.getDistance()
     );
 
+    double [] currentPose = sysLimelight.GetBotPose();
+    // #FIXME# Make sure all values are what you think they are in API (Like the value used for rot)
+    Rotation2d rot = new Rotation2d(currentPose[3]);
+
+    Pose2d fieldPose = new Pose2d(currentPose[1], currentPose[2], rot);
+
     // #TODO# Use apriltags to caculate initial pose
-    mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics,  vmxPi.getRotation2d(), wheelPositions, null);
+    mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics,  sysVMXPi.getRotation2d(), wheelPositions, null);
 
   }
 
