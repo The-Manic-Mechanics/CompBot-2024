@@ -43,41 +43,43 @@ public class AutoAimLeft extends CommandBase {
   @Override
   public void execute() {
 
-    botPoseX = sysLimeLight.GetBotPoseX();
+    // #TODO# Instead of the code below, use trajectory generation to generate a path and follow it
 
-    if (sysLimeLight.GetCurrentAprilTag() != 9) {
-      if (botPoseX >= -2.95) {
-        sysDriveTrain.CartisianDrive(0, 0, -.25);
+    // botPoseX = sysLimeLight.GetBotPoseX();
 
-        strafeDirection = "r";
+    // if (sysLimeLight.GetCurrentAprilTag() != 9) {
+    //   if (botPoseX >= -2.95) {
+    //     sysDriveTrain.CartisianDrive(0, 0, -.25);
 
-      } else if (botPoseX <= -3.05) {
-        sysDriveTrain.CartisianDrive(0, 0, .25);
+    //     strafeDirection = "r";
 
-          strafeDirection = "l";
-      }
-      // #TODO# Finish This (Add Values)
-      if ((strafeDirection == "l") && (sysLimeLight.GetTX() != 0)) {
-        // Strafe Left
-      } else if ((strafeDirection == "r") && (sysLimeLight.GetTX() != 0)) {
-        // Strafe Right
-      }
+    //   } else if (botPoseX <= -3.05) {
+    //     sysDriveTrain.CartisianDrive(0, 0, .25);
 
-      double fwdDistance = sysLimeLight.GetPOIDistance();
+    //       strafeDirection = "l";
+    //   }
+    //   // #TODO# Finish This (Add Values)
+    //   if ((strafeDirection == "l") && (sysLimeLight.GetTX() != 0)) {
+    //     // Strafe Left
+    //   } else if ((strafeDirection == "r") && (sysLimeLight.GetTX() != 0)) {
+    //     // Strafe Right
+    //   }
 
-      // Drive (fwdDistance) forward using encoders
+    //   double fwdDistance = sysLimeLight.GetPOIDistance();
 
-      // if (Encoders.getDistance >= fwdDistance) {
-      // Drive (leftDistance) left using encoders
-      // }
+    //   // Drive (fwdDistance) forward using encoders
 
-      // if (Enoders.getDistance >= leftDistance) {
-      isAimed = true;
-      // }
+    //   // if (Encoders.getDistance >= fwdDistance) {
+    //   // Drive (leftDistance) left using encoders
+    //   // }
 
-    } else {
-      SmartDashboard.putString("Error", "No AprilTag Found");
-    }
+    //   // if (Enoders.getDistance >= leftDistance) {
+    //   isAimed = true;
+    //   // }
+
+    // } else {
+    //   SmartDashboard.putString("Error", "No AprilTag Found");
+    // }
     
    
   }

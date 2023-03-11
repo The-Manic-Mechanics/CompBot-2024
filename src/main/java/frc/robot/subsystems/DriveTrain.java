@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -15,20 +16,20 @@ import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveTrainConstants;
+import frc.robot.Constants.DriveTrainConstants.Autonomous;
 
 public class DriveTrain extends SubsystemBase {
-  VMXPi vmxPi;
+  VMXPi sysVMXPi;
+  LimeLight sysLimelight;
 
   /** Creates a new DriveTrain. */
   MecanumDrive mecanumDrive;
-
+ 
   WPI_VictorSPX frontLeft;
   WPI_VictorSPX frontRight;
   WPI_VictorSPX backLeft;
@@ -41,14 +42,14 @@ public class DriveTrain extends SubsystemBase {
 
   MecanumDriveWheelPositions wheelPositions;
 
-  MecanumDriveKinematics mecanumDriveKinematics;
+  public MecanumDriveKinematics mecanumDriveKinematics;
 
   Translation2d frontLeftLocation;
   Translation2d frontRightLocation;
   Translation2d backLeftLocation;
   Translation2d backRightLocation;
 
-  MecanumDriveOdometry mecanumDriveOdometry;
+  public MecanumDriveOdometry mecanumDriveOdometry;
 
   Encoder frontLeftEnc;
   Encoder frontRightEnc;
@@ -101,7 +102,8 @@ public class DriveTrain extends SubsystemBase {
 
     mecanumDriveKinematics = new MecanumDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
 
-    mecanumChassisSpeeds = new ChassisSpeeds(3.87096, 1.93548, 3.87096);
+    mecanumChassisSpeeds = new ChassisSpeeds(Autonomous.MAX_METRES_PER_SEC, Autonomous.MAX_METRES_PER_SEC * .5, Autonomous.MAX_METRES_PER_SEC);
+
     mecanumDriveWheelSpeeds = mecanumDriveKinematics.toWheelSpeeds(mecanumChassisSpeeds);
 
     
@@ -117,10 +119,14 @@ public class DriveTrain extends SubsystemBase {
       backRightEnc.getDistance()
     );
 
-    vmxPi = new VMXPi();
+    double [] currentPose = sysLimelight.GetBotPose();
+    // #FIXME# Make sure all values are what you think they are in API (Like the value used for rot)
+    Rotation2d rot = new Rotation2d(currentPose[3]);
+
+    Pose2d fieldPose = new Pose2d(currentPose[1], currentPose[2], rot);
 
     // #TODO# Use apriltags to caculate initial pose
-    mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics,  vmxPi.getRotation2d(), wheelPositions, );
+    mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics,  sysVMXPi.getRotation2d(), wheelPositions, null);
 
   }
 
@@ -128,9 +134,30 @@ public class DriveTrain extends SubsystemBase {
     mecanumDrive.driveCartesian(speedX, speedY, speedZ);
   }
 
+  public void MecanumDriveVolts(
+    double frontLeftVolts, 
+    double frontRightVolts, 
+    double backLeftVolts, 
+    double backRightVolts
+    ) {
+      frontLeft.setVoltage(frontLeftVolts);
+      frontRight.setVoltage(frontRightVolts);
+      backLeft.setVoltage(backLeftVolts);
+      backRight.setVoltage(backRightVolts);
+  }
+
+  public Pose2d getPoseOd() {
+    return mecanumDriveOdometry.getPoseMeters();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    Rotation2d curHeadRot2d = new Rotation2d(sysVMXPi.GetHeading());
+
+    mecanumDriveOdometry.update(curHeadRot2d, wheelPositions);
+
     SmartDashboard.putData("frontLeft", frontLeft);
     SmartDashboard.putData("frontRight", frontRight);
     SmartDashboard.putData("backLeft", backLeft);

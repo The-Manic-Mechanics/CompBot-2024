@@ -62,6 +62,7 @@ public class LimeLight extends SubsystemBase {
     double area = tA.getDouble(0.0);
     double id = tID.getDouble(9.0);
 
+
     if (id == 1) {
     currentlyViewedAprilTag = "1";
       } else if (id == 2) {

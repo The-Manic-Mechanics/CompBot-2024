@@ -10,7 +10,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VMXPiConstants.AutoBalanceConstants;
@@ -72,6 +71,18 @@ public class VMXPi extends SubsystemBase {
   public Rotation2d getRotation2d() {
     return vmxPi.getRotation2d();
   }
+  // #FIXME# Values may be backwards
+  public double GetHeading() {
+    if (vmxPi.getCompassHeading() > 180) {
+    return vmxPi.getCompassHeading();
+    } else {
+    double negHeading = -1 * vmxPi.getCompassHeading();
+    
+    return negHeading;
+    }
+  }
+
+
 
 
   @Override
