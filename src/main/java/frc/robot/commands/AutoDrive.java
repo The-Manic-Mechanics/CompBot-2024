@@ -58,7 +58,7 @@ public class AutoDrive extends CommandBase {
       new PIDController(1, 0, 0), 
       new PIDController(1, 0, 0), 
       new PIDController(1, 0, 0), 
-      sysDriveTrain.mecanumDriveWheelSpeeds :: getWheelSpeeds, 
+      null, 
       null);
 
 //      // Create a voltage constraint to ensure we don't accelerate too fast

@@ -148,6 +148,10 @@ public class DriveTrain extends SubsystemBase {
       backRight.setVoltage(backRightVolts);
   }
 
+  public MecanumDriveWheelSpeeds getCurMecWheelSpeeds() {
+    return new MecanumDriveWheelSpeeds(frontLeft.get(), frontRight.get(), 0, 0)
+  }
+
   public Pose2d getPoseOd() {
     return mecanumDriveOdometry.getPoseMeters();
   }
