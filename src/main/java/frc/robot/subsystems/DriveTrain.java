@@ -38,7 +38,7 @@ public class DriveTrain extends SubsystemBase {
   ADXRS450_Gyro gyro;
 
   ChassisSpeeds mecanumChassisSpeeds;
-  MecanumDriveWheelSpeeds mecanumDriveWheelSpeeds;
+  public MecanumDriveWheelSpeeds mecanumDriveWheelSpeeds;
 
   MecanumDriveWheelPositions wheelPositions;
 
@@ -108,7 +108,6 @@ public class DriveTrain extends SubsystemBase {
     mecanumChassisSpeeds = new ChassisSpeeds(Autonomous.MAX_METRES_PER_SEC, Autonomous.MAX_METRES_PER_SEC * .5, Autonomous.MAX_METRES_PER_SEC);
 
     mecanumDriveWheelSpeeds = mecanumDriveKinematics.toWheelSpeeds(mecanumChassisSpeeds);
-
     
     double frontLeftSpeed = mecanumDriveWheelSpeeds.frontLeftMetersPerSecond;
     double frontRightSpeed = mecanumDriveWheelSpeeds.frontRightMetersPerSecond;

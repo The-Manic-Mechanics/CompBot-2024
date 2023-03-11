@@ -7,17 +7,20 @@ package frc.robot.commands;
 import java.util.List;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Constants.DriveTrainConstants.Autonomous;
 import frc.robot.subsystems.DriveTrain;
@@ -41,7 +44,22 @@ public class AutoDrive extends CommandBase {
   @Override
   public void execute() {
 
-    
+    MecanumControllerCommand mecanumControllerCommand = 
+    new MecanumControllerCommand(
+      null,
+      sysDriveTrain.mecanumDriveOdometry :: getPoseMeters, 
+      new SimpleMotorFeedforward(0, 0, 0), 
+      sysDriveTrain.mecanumDriveKinematics, 
+      new PIDController(1, 0, 0), 
+      new PIDController(1, 0, 0), 
+      new ProfiledPIDController(1, 0, 0, null), 
+      Autonomous.MAX_METRES_PER_SEC, 
+      new PIDController(1, 0, 0),
+      new PIDController(1, 0, 0), 
+      new PIDController(1, 0, 0), 
+      new PIDController(1, 0, 0), 
+      sysDriveTrain.mecanumDriveWheelSpeeds :: getWheelSpeeds, 
+      null);
 
 //      // Create a voltage constraint to ensure we don't accelerate too fast
 
