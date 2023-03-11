@@ -89,7 +89,7 @@ public class LimeLight extends SubsystemBase {
     SmartDashboard.putNumber("LimeLight X", x);
     SmartDashboard.putNumber("LimeLight Y", y);
     SmartDashboard.putNumber("LimeLight Area", area);
-    SmartDashboard.putString("Currently Viewed AprilTag", currentlyViewedAprilTag);
+    // SmartDashboard.putString("Currently Viewed AprilTag", currentlyViewedAprilTag);
     SmartDashboard.putNumber("BotPose Z", this.GetBotPoseX());
    
   }

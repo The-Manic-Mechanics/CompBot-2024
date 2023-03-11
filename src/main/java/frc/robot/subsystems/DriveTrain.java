@@ -58,6 +58,9 @@ public class DriveTrain extends SubsystemBase {
 
   public DriveTrain() {
 
+    sysLimelight = new LimeLight();
+    sysVMXPi = new VMXPi();
+
     frontLeft = new WPI_VictorSPX(DriveTrainConstants.FRONT_LEFT_MOTOR_PORT);
     frontRight = new WPI_VictorSPX(DriveTrainConstants.FRONT_RIGHT_MOTOR_PORT);
     backLeft = new WPI_VictorSPX(DriveTrainConstants.BACK_LEFT_MOTOR_PORT);
@@ -123,10 +126,10 @@ public class DriveTrain extends SubsystemBase {
     // #FIXME# Make sure all values are what you think they are in API (Like the value used for rot)
     Rotation2d rot = new Rotation2d(currentPose[3]);
 
-    Pose2d fieldPose = new Pose2d(currentPose[1], currentPose[2], rot);
+    Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], rot);
 
     // #TODO# Use apriltags to caculate initial pose
-    mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics,  sysVMXPi.getRotation2d(), wheelPositions, null);
+    mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics,  sysVMXPi.getRotation2d(), wheelPositions, initPose);
 
   }
 

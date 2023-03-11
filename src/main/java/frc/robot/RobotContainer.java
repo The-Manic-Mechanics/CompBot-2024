@@ -51,7 +51,7 @@ public class RobotContainer {
 
   private final DriveMecanum cmdDriveMecanum = new DriveMecanum(sysDriveTrain);
 
-  private final ArmDrive cmdArmDrive = new ArmDrive(sysArm);
+  private final ArmDrive cmdArmDrive = new ArmDrive(sysArm/* , sysSolenoids*/);
 
   private final ClawOpen cmdClawOpen = new ClawOpen(sysSolenoids);
   private final ClawClose cmdClawClose = new ClawClose(sysSolenoids);

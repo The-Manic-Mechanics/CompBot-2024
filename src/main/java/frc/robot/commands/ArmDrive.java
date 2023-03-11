@@ -7,15 +7,18 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Solenoids;
 
 public class ArmDrive extends CommandBase {
   private final Arm sysArm;
+  // private final Solenoids sysSolenoids;
   /** Creates a new ArmDrive. */
-  public ArmDrive(Arm inSysArm) {
+  public ArmDrive(Arm inSysArm/*, Solenoids inSysSolenoids*/) {
     // Use addRequirements() here to declare subsystem dependencies.
     sysArm = inSysArm;
+    // sysSolenoids = inSysSolenoids;
 
-    addRequirements(sysArm);
+    addRequirements(sysArm/* ,  sysSolenoids */);
   }
 
   // Called when the command is initially scheduled.
@@ -25,9 +28,16 @@ public class ArmDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = -1 * RobotContainer.driverSecondController.getLeftY();
 
-    sysArm.SetArmSpeed(speed, .30);
+    double speed;
+
+    if ((sysArm.GetArmEnc() > 6100 && RobotContainer.driverSecondController.getLeftY() > 0) || (sysArm.GetArmEnc() < 0 && RobotContainer.driverSecondController.getLeftY() < 0)) {
+      speed = 0;
+    } else {
+      speed = -1 * RobotContainer.driverSecondController.getLeftY();
+    }
+    
+    sysArm.SetArmSpeed(speed, .35);
     // sysArm.SetArmSpeed(speed, 0.25);
   }
 

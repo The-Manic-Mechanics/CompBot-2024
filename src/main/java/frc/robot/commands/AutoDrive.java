@@ -43,108 +43,108 @@ public class AutoDrive extends CommandBase {
 
     
 
-     // Create a voltage constraint to ensure we don't accelerate too fast
+//      // Create a voltage constraint to ensure we don't accelerate too fast
 
-     var autoVoltageConstraint =
+//      var autoVoltageConstraint =
 
-     new DifferentialDriveVoltageConstraint(
+//      new DifferentialDriveVoltageConstraint(
 
-         new SimpleMotorFeedforward(
+//          new SimpleMotorFeedforward(
 
-             Autonomous.VOLTS,
+//              Autonomous.VOLTS,
 
-             Autonomous.VOLT_SECS_PER_M,
+//              Autonomous.VOLT_SECS_PER_M,
 
-             Autonomous.VOLT_SECS_SQURED_PER_M),
+//              Autonomous.VOLT_SECS_SQURED_PER_M),
 
-         sysDriveTrain.mecanumDriveKinematics,
+//          sysDriveTrain.mecanumDriveKinematics,
 
-         10);
-
-
- // Create config for trajectory
-
- TrajectoryConfig config =
-
-     new TrajectoryConfig(
-
-             Autonomous.MAX_METRES_PER_SEC,
-
-             Autonomous.MAX_ACCEL)
-
-         // Add kinematics to ensure max speed is actually obeyed
-
-         .setKinematics(sysDriveTrain.mecanumDriveKinematics)
-
-         // Apply the voltage constraint
-
-         .addConstraint(autoVoltageConstraint);
+//          10);
 
 
- // An example trajectory to follow.  All units in meters.
+//  // Create config for trajectory
 
- Trajectory exampleTrajectory =
+//  TrajectoryConfig config =
 
-     TrajectoryGenerator.generateTrajectory(
+//      new TrajectoryConfig(
 
-         // Start at the origin facing the +X direction
+//              Autonomous.MAX_METRES_PER_SEC,
 
-         new Pose2d(0, 0, new Rotation2d(0)),
+//              Autonomous.MAX_ACCEL)
 
-         // Pass through these two interior waypoints, making an 's' curve path
+//          // Add kinematics to ensure max speed is actually obeyed
 
-         List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+//          .setKinematics(sysDriveTrain.mecanumDriveKinematics)
 
-         // End 3 meters straight ahead of where we started, facing forward
+//          // Apply the voltage constraint
 
-         new Pose2d(3, 0, new Rotation2d(0)),
-
-         // Pass config
-
-         config);
+//          .addConstraint(autoVoltageConstraint);
 
 
- RamseteCommand ramseteCommand =
+//  // An example trajectory to follow.  All units in meters.
 
-     new RamseteCommand(
+//  Trajectory exampleTrajectory =
 
-         exampleTrajectory,
+//      TrajectoryGenerator.generateTrajectory(
 
-         sysDriveTrain.mecanumDriveOdometry::getPose,
+//          // Start at the origin facing the +X direction
 
-         new RamseteController(Autonomous.RAMSETE_B, Autonomous.RAMSETE_ZETA),
+//          new Pose2d(0, 0, new Rotation2d(0)),
 
-         new SimpleMotorFeedforward(
+//          // Pass through these two interior waypoints, making an 's' curve path
 
-             Autonomous.VOLTS,
+//          List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
 
-             Autonomous.VOLT_SECS_PER_M,
+//          // End 3 meters straight ahead of where we started, facing forward
 
-             Autonomous.VOLT_SECS_SQURED_PER_M),
+//          new Pose2d(3, 0, new Rotation2d(0)),
 
-         sysDriveTrain.mecanumDriveKinematics,
+//          // Pass config
 
-         sysDriveTrain::getWheelSpeeds,
-
-         new PIDController(Autonomous.DRIVE_VEL, 0, 0),
-
-         new PIDController(Autonomous.DRIVE_VEL, 0, 0),
-
-         // RamseteCommand passes volts to the callback
-
-         sysDriveTrain::mecanumDriveVolts,
-
-         sysDriveTrain);
+//          config);
 
 
- // Reset odometry to the starting pose of the trajectory.
+//  RamseteCommand ramseteCommand =
 
- m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+//      new RamseteCommand(
+
+//          exampleTrajectory,
+
+//          sysDriveTrain.mecanumDriveOdometry::getPose,
+
+//          new RamseteController(Autonomous.RAMSETE_B, Autonomous.RAMSETE_ZETA),
+
+//          new SimpleMotorFeedforward(
+
+//              Autonomous.VOLTS,
+
+//              Autonomous.VOLT_SECS_PER_M,
+
+//              Autonomous.VOLT_SECS_SQURED_PER_M),
+
+//          sysDriveTrain.mecanumDriveKinematics,
+
+//          sysDriveTrain::getWheelSpeeds,
+
+//          new PIDController(Autonomous.DRIVE_VEL, 0, 0),
+
+//          new PIDController(Autonomous.DRIVE_VEL, 0, 0),
+
+//          // RamseteCommand passes volts to the callback
+
+//          sysDriveTrain::mecanumDriveVolts,
+
+//          sysDriveTrain);
 
 
- // Run path following command, then stop at the end.
+//  // Reset odometry to the starting pose of the trajectory.
 
- return ramseteCommand.andThen(() -> m_robotDrive.tankDriveVolts(0, 0));
+//  m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+
+
+//  // Run path following command, then stop at the end.
+
+//  return ramseteCommand.andThen(() -> m_robotDrive.tankDriveVolts(0, 0));
   }
 
   // Called once the command ends or is interrupted.
