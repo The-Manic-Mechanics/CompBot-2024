@@ -38,6 +38,10 @@ public class LimeLight extends SubsystemBase {
   // Current position of the robot on the field in (X, Y, Z)
   NetworkTableEntry botPose = limeLightTable.getEntry("botpose");
 
+  NetworkTableEntry ledMode = limeLightTable.getEntry("ledMode");
+  
+
+
   // how many degrees the limelight is mounted from perfectly vertical
   double limelightMountAngleDegrees = 90;
   // distance from the center of the Limelight lens to the floor

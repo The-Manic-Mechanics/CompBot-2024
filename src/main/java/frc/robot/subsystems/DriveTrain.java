@@ -62,6 +62,11 @@ public class DriveTrain extends SubsystemBase {
     backLeft = new WPI_VictorSPX(DriveTrainConstants.BACK_LEFT_MOTOR_PORT);
     backRight = new WPI_VictorSPX(DriveTrainConstants.BACK_RIGHT_MOTOR_PORT);
 
+    frontLeftLocation = new Translation2d(DriveTrainConstants.FRONT_LEFT_LOCATION, DriveTrainConstants.FRONT_LEFT_LOCATION);
+    frontRightLocation = new Translation2d(DriveTrainConstants.FRONT_RIGHT_LOCATION, -1 * DriveTrainConstants.FRONT_RIGHT_LOCATION);
+    backLeftLocation = new Translation2d(-1 * DriveTrainConstants.BACK_LEFT_LOCATION, DriveTrainConstants.BACK_LEFT_LOCATION);
+    backRightLocation = new Translation2d(-1 * DriveTrainConstants.BACK_RIGHT_LOCATION, -1 * DriveTrainConstants.BACK_RIGHT_LOCATION);
+
     gyro = new ADXRS450_Gyro();
 
     frontLeftEnc = new Encoder(
@@ -94,17 +99,12 @@ public class DriveTrain extends SubsystemBase {
 
     mecanumDrive = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
 
-    mecanumChassisSpeeds = new ChassisSpeeds(3.87096, 1.93548, 3.87096);
-
-    mecanumDriveWheelSpeeds = mecanumDriveKinematics.toWheelSpeeds(mecanumChassisSpeeds);
-
-    frontLeftLocation = new Translation2d(DriveTrainConstants.FRONT_LEFT_LOCATION, DriveTrainConstants.FRONT_LEFT_LOCATION);
-    frontRightLocation = new Translation2d(DriveTrainConstants.FRONT_RIGHT_LOCATION, -1 * DriveTrainConstants.FRONT_RIGHT_LOCATION);
-    backLeftLocation = new Translation2d(-1 * DriveTrainConstants.BACK_LEFT_LOCATION, DriveTrainConstants.BACK_LEFT_LOCATION);
-    backRightLocation = new Translation2d(-1 * DriveTrainConstants.BACK_RIGHT_LOCATION, -1 * DriveTrainConstants.BACK_RIGHT_LOCATION);
-
     mecanumDriveKinematics = new MecanumDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
 
+    mecanumChassisSpeeds = new ChassisSpeeds(3.87096, 1.93548, 3.87096);
+    mecanumDriveWheelSpeeds = mecanumDriveKinematics.toWheelSpeeds(mecanumChassisSpeeds);
+
+    
     double frontLeftSpeed = mecanumDriveWheelSpeeds.frontLeftMetersPerSecond;
     double frontRightSpeed = mecanumDriveWheelSpeeds.frontRightMetersPerSecond;
     double backLeftSpeed = mecanumDriveWheelSpeeds.rearLeftMetersPerSecond;
@@ -117,8 +117,10 @@ public class DriveTrain extends SubsystemBase {
       backRightEnc.getDistance()
     );
 
+    vmxPi = new VMXPi();
+
     // #TODO# Use apriltags to caculate initial pose
-    mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics,  vmxPi.getRotation2d(), wheelPositions, null);
+    mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics,  vmxPi.getRotation2d(), wheelPositions, );
 
   }
 
@@ -137,5 +139,7 @@ public class DriveTrain extends SubsystemBase {
     // Putting Controller Left and Right Stick Values
     SmartDashboard.putNumber("LeftStickY Value", RobotContainer.driverMainController.getLeftY());
     SmartDashboard.putNumber("RightStickY Value", RobotContainer.driverMainController.getRightY());
+    SmartDashboard.putNumber("LeftStickX Value", RobotContainer.driverMainController.getLeftX());
+    SmartDashboard.putNumber("RightStickX Value", RobotContainer.driverMainController.getRightX());
   }
 }
