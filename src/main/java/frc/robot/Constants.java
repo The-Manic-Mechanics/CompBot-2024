@@ -55,6 +55,26 @@ public final class Constants {
     public static final double FRONT_RIGHT_LOCATION = 0.391;
     public static final double BACK_LEFT_LOCATION = 0.391;
     public static final double BACK_RIGHT_LOCATION = 0.391;
+
+   
+
+    public static class Autonomous {
+      // #TODO# Add values to below constants
+      // The forward maximum speed
+      public static final double MAX_METRES_PER_SEC = 3.87096;
+      public static final double MAX_ACCEL = 1;
+      public static final double DRIVE_VEL = 8.5;
+
+      public static final double TRACK_WIDTH_METRES = 0;
+
+      public static final double VOLTS = 0.22;
+      public static final double VOLT_SECS_PER_M = 1.98;
+      public static final double VOLT_SECS_SQURED_PER_M = 1.98;
+
+      public static final double RAMSETE_B = 2;
+      public static final double RAMSETE_ZETA = 0.7;
+
+    }
   }
 
   public static class ArmConstants {
