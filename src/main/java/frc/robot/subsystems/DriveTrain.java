@@ -38,7 +38,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveTrainConstants;
-import frc.robot.Constants.DriveTrainConstants.Autonomous;
+import frc.robot.Constants.DriveTrainConstants.DriveAuton;
 
 public class DriveTrain extends SubsystemBase {
   VMXPi sysVMXPi;
@@ -122,7 +122,7 @@ public class DriveTrain extends SubsystemBase {
 
     mecanumDriveKinematics = new MecanumDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
 
-    mecanumChassisSpeeds = new ChassisSpeeds(Autonomous.MAX_METRES_PER_SEC, Autonomous.MAX_METRES_PER_SEC * .5, Autonomous.MAX_METRES_PER_SEC);
+    mecanumChassisSpeeds = new ChassisSpeeds(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_METRES_PER_SEC * .5, DriveAuton.MAX_METRES_PER_SEC);
 
     mecanumDriveWheelSpeeds = mecanumDriveKinematics.toWheelSpeeds(mecanumChassisSpeeds);
 
@@ -152,15 +152,10 @@ public class DriveTrain extends SubsystemBase {
 
     // This is just an example event map. It would be better to have a constant, global event map
     // in your code that will be used by all path following commands.
-    HashMap<String, Command> eventMap = new HashMap<>();
+
     // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
     // eventMap.put("intakeDown", new IntakeDown());
 
-FollowPathWithEvents command = new FollowPathWithEvents(
-    getPathFollowingCommand(examplePath),
-    examplePath.getMarkers(),
-    eventMap
-);
   }
 
   public void CartisianDrive(double speedX, double speedY, double speedZ) {
@@ -241,13 +236,23 @@ FollowPathWithEvents command = new FollowPathWithEvents(
             new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
             new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
             new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-            Autonomous.MAX_METRES_PER_SEC, // Max wheel velocity meters per second
+            DriveAuton.MAX_METRES_PER_SEC, // Max wheel velocity meters per second
             this::setWheelSpeeds , // MecanumDriveWheelSpeeds consumer
             true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
             this // Requires this drive subsystem
         )
     );
-}
+  }
+
+  public FollowPathWithEvents followPathEvents(PathPlannerTrajectory inPath) {
+    FollowPathWithEvents command = new FollowPathWithEvents(
+      followTrajectoryCommand(inPath, false),   
+      inPath.getMarkers(),
+      DriveAuton.EVENT_MAP
+    );
+
+    return command;
+  }
 
   @Override
   public void periodic() {

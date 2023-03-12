@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import java.util.HashMap;
+
 import javax.security.auth.login.FailedLoginException;
 
 import edu.wpi.first.wpilibj.CAN;
+import edu.wpi.first.wpilibj2.command.Command;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -58,7 +61,7 @@ public final class Constants {
 
    
 
-    public static class Autonomous {
+    public static class DriveAuton {
       // #TODO# Add values to below constants
       // The forward maximum speed
       public static final double MAX_METRES_PER_SEC = 3.87096;
@@ -73,6 +76,8 @@ public final class Constants {
 
       public static final double RAMSETE_B = 2;
       public static final double RAMSETE_ZETA = 0.7;
+
+      public static final  HashMap<String, Command> EVENT_MAP = new HashMap<>();
 
     }
   }
