@@ -4,20 +4,37 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import java.util.HashMap;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
+import com.pathplanner.lib.auto.MecanumAutoBuilder;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
+import com.pathplanner.lib.commands.PPMecanumControllerCommand;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
+import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveTrainConstants;
@@ -108,7 +125,7 @@ public class DriveTrain extends SubsystemBase {
     mecanumChassisSpeeds = new ChassisSpeeds(Autonomous.MAX_METRES_PER_SEC, Autonomous.MAX_METRES_PER_SEC * .5, Autonomous.MAX_METRES_PER_SEC);
 
     mecanumDriveWheelSpeeds = mecanumDriveKinematics.toWheelSpeeds(mecanumChassisSpeeds);
-    
+
     double frontLeftSpeed = mecanumDriveWheelSpeeds.frontLeftMetersPerSecond;
     double frontRightSpeed = mecanumDriveWheelSpeeds.frontRightMetersPerSecond;
     double backLeftSpeed = mecanumDriveWheelSpeeds.rearLeftMetersPerSecond;
@@ -129,7 +146,21 @@ public class DriveTrain extends SubsystemBase {
 
     // #TODO# Use apriltags to caculate initial pose
     mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics,  sysVMXPi.getRotation2d(), wheelPositions, initPose);
+    
+    // This will load the file "Example Path.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
+    // PathPlannerTrajectory examplePath = PathPlanner.loadPath("Example Path", new PathConstrains(4, 3));
 
+    // This is just an example event map. It would be better to have a constant, global event map
+    // in your code that will be used by all path following commands.
+    HashMap<String, Command> eventMap = new HashMap<>();
+    // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
+    // eventMap.put("intakeDown", new IntakeDown());
+
+FollowPathWithEvents command = new FollowPathWithEvents(
+    getPathFollowingCommand(examplePath),
+    examplePath.getMarkers(),
+    eventMap
+);
   }
 
   public void CartisianDrive(double speedX, double speedY, double speedZ) {
@@ -149,12 +180,74 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public MecanumDriveWheelSpeeds getCurMecWheelSpeeds() {
-    return new MecanumDriveWheelSpeeds(frontLeft.get(), frontRight.get(), 0, 0)
+    return new MecanumDriveWheelSpeeds(
+      frontLeft.get(), frontRight.get(), 
+      backLeft.get(), backRight.get()
+      );
+  }
+
+  public void setWheelSpeeds(MecanumDriveWheelSpeeds inSpeeds) {
+    frontLeft.set(inSpeeds.frontLeftMetersPerSecond);
+    frontRight.set(inSpeeds.frontRightMetersPerSecond);
+    backLeft.set(inSpeeds.rearLeftMetersPerSecond);
+    backRight.set(inSpeeds.rearRightMetersPerSecond);
+  }
+
+  public void setDriveMotsVolts(MecanumDriveMotorVoltages inVolts ) {
+    frontLeft.setVoltage(inVolts.frontLeftVoltage);
+    frontRight.setVoltage(inVolts.frontRightVoltage);
+    backLeft.setVoltage(inVolts.rearLeftVoltage);
+    backRight.setVoltage(inVolts.rearRightVoltage);
   }
 
   public Pose2d getPoseOd() {
     return mecanumDriveOdometry.getPoseMeters();
   }
+
+  /*For on the fly path generation*/
+  public PathPlannerTrajectory genPath(
+    double maxVel, double maxAccel, Translation2d transP1, double rotHead1, double rotHolo1, Translation2d transP2, double rotHead2, double rotHolo2) {
+    PathPlannerTrajectory traj1 = PathPlanner.generatePath(
+
+      new PathConstraints(maxVel, maxAccel), 
+
+      new PathPoint(
+        transP1, 
+        Rotation2d.fromDegrees(rotHead1), 
+        Rotation2d.fromDegrees(rotHolo1)), // position, heading, holonomic rotation
+
+      new PathPoint(
+        transP2, 
+        Rotation2d.fromDegrees(rotHead2),
+        Rotation2d.fromDegrees(rotHolo2)) // position, heading, holonomic rotation
+    );
+
+    return traj1;
+  }
+
+  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+    Pose2d initHoloPose = traj.getInitialHolonomicPose();
+
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> {
+          // Reset odometry for the first path you run during auto
+          if (isFirstPath) {
+              mecanumDriveOdometry.resetPosition(null, wheelPositions, getPoseOd());}
+        }),
+        new PPMecanumControllerCommand(
+            traj, 
+            mecanumDriveOdometry::getPoseMeters, // Pose supplier
+            this.mecanumDriveKinematics, // MecanumDriveKinematics
+            new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+            new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
+            new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+            Autonomous.MAX_METRES_PER_SEC, // Max wheel velocity meters per second
+            this::setWheelSpeeds , // MecanumDriveWheelSpeeds consumer
+            true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+            this // Requires this drive subsystem
+        )
+    );
+}
 
   @Override
   public void periodic() {

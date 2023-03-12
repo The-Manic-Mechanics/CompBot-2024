@@ -16,6 +16,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Solenoids;
 import frc.robot.subsystems.Arm;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -50,6 +51,24 @@ public class RobotContainer {
   // ---------------------------
 
   private final DriveMecanum cmdDriveMecanum = new DriveMecanum(sysDriveTrain);
+
+  // This is just an example event map. It would be better to have a constant, global event map
+  //   in your code that will be used by all path following commands.
+  //   HashMap<String, Command> eventMap = new HashMap<>();
+
+  //   // Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
+    // MecanumAutoBuilder autoBuilder = new MecanumAutoBuilder(
+    //     sysDriveTrain.mecanumDriveOdometry::getPoseMeters, // Pose2d supplier
+    //     sysDriveTrain.mecanumDriveOdometry::resetPose, // Pose2d consumer,used to reset odometry at the beginning of auto
+    //     sysDriveTrain.mecanumDriveKinematics, // SwerveDriveKinematics
+    //     new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+    //     new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+    //     Autonomous.MAX_METRES_PER_SEC, // Module states consumer used to output to the drive subsystem
+    //     sysDriveTrain :: setWheelSpeeds,
+    //     eventMap,
+    //     true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+    //     Subsystem.sysDriveTrain // The drive subsystem. Used to properly set the requirements of path following commands
+    // );
 
   private final ArmDrive cmdArmDrive = new ArmDrive(sysArm/* , sysSolenoids*/);
 
