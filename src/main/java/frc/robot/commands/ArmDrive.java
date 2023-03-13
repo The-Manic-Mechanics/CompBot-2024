@@ -31,11 +31,13 @@ public class ArmDrive extends CommandBase {
 
     double speed;
 
-    if ((sysArm.GetArmEnc() > 6100 && RobotContainer.driverSecondController.getLeftY() > 0) || (sysArm.GetArmEnc() < 0 && RobotContainer.driverSecondController.getLeftY() < 0)) {
+    if ((sysArm.GetArmEnc() > 6100 && RobotContainer.driverSecondController.getLeftY() > 0) || (sysArm.GetArmEnc() <400 && RobotContainer.driverSecondController.getLeftY() < 0)) {
       speed = 0;
     } else {
       speed = -1 * RobotContainer.driverSecondController.getLeftY();
     }
+
+    
     
     sysArm.SetArmSpeed(speed, .35);
     // sysArm.SetArmSpeed(speed, 0.25);
