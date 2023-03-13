@@ -4,7 +4,9 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.pathplanner.lib.PathConstraints;
@@ -28,6 +30,7 @@ import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
@@ -146,6 +149,8 @@ public class DriveTrain extends SubsystemBase {
 
     // #TODO# Use apriltags to caculate initial pose
     mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics,  sysVMXPi.getRotation2d(), wheelPositions, initPose);
+
+    
     
     // This will load the file "Example Path.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
     // PathPlannerTrajectory examplePath = PathPlanner.loadPath("Example Path", new PathConstrains(4, 3));
@@ -219,6 +224,22 @@ public class DriveTrain extends SubsystemBase {
 
     return traj1;
   }
+
+  public Pose2d currentAprilTag(int aimTo) {
+
+    Pose2d tagId1 = new Pose2d(610.77, 42.19, null);
+    Pose2d tagId2 = new Pose2d(610.77, 108.19, null);
+    Pose2d tagId3 = new Pose2d(aimTo, aimTo, null);
+    Pose2d tagId6 = new Pose2d(aimTo, aimTo, null);
+    Pose2d tagId7 = new Pose2d(aimTo, aimTo, null);
+    Pose2d tagId8 = new Pose2d(aimTo, aimTo, null);
+
+    List aprilTagCords = new ArrayList<Pose2d>(); 
+    aprilTagCords.add()
+    
+  }
+
+  
 
   public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
     Pose2d initHoloPose = traj.getInitialHolonomicPose();

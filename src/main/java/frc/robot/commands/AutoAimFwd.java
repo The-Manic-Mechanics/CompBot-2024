@@ -21,58 +21,63 @@ public class AutoAimFwd extends CommandBase {
     addRequirements(sysDriveTrain, sysLimeLight);
   }
 
-  double aprilTagOffsetAngle;
+  // double aprilTagOffsetAngle;
 
-  double botPoseX;
+  // double botPoseX;
 
-  double distanceToPOI;
+  // double distanceToPOI;
 
-  boolean isAimedFwd;
+  // boolean isAimedFwd;
 
-  String strafeDirection;
+  // String strafeDirection;
+
+  
 
 
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    isAimedFwd = false;
+    // isAimedFwd = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    botPoseX = sysLimeLight.GetBotPoseX();
 
-    if (sysLimeLight.GetCurrentAprilTag() != 9) {
-      if (botPoseX >= -2.95) {
-        sysDriveTrain.CartisianDrive(0, 0, -.25);
+    sysDriveTrain.genPath(aprilTagOffsetAngle, aprilTagOffsetAngle, null, aprilTagOffsetAngle, distanceToPOI, null, botPoseX, aprilTagOffsetAngle)
 
-        strafeDirection = "r";
+    // botPoseX = sysLimeLight.GetBotPoseX();
 
-      } else if (botPoseX <= -3.05) {
-        sysDriveTrain.CartisianDrive(0, 0, .25);
+    // if (sysLimeLight.GetCurrentAprilTag() != 9) {
+    //   if (botPoseX >= -2.95) {
+    //     sysDriveTrain.CartisianDrive(0, 0, -.25);
 
-          strafeDirection = "l";
-      }
-      // #TODO# Finish This (Add Values)
-      if ((strafeDirection == "l") && (sysLimeLight.GetTX() != 0)) {
-        // Strafe Left
-      } else if ((strafeDirection == "r") && (sysLimeLight.GetTX() != 0)) {
-        // Strafe Right
-      }
+    //     strafeDirection = "r";
 
-      double distance = sysLimeLight.GetPOIDistance();
+    //   } else if (botPoseX <= -3.05) {
+    //     sysDriveTrain.CartisianDrive(0, 0, .25);
 
-      // Drive (distance) forward using encoders
+    //       strafeDirection = "l";
+    //   }
+    //   // #TODO# Finish This (Add Values)
+    //   if ((strafeDirection == "l") && (sysLimeLight.GetTX() != 0)) {
+    //     // Strafe Left
+    //   } else if ((strafeDirection == "r") && (sysLimeLight.GetTX() != 0)) {
+    //     // Strafe Right
+    //   }
 
-      // if (Encoders.getDistance >= distance) {
-      isAimedFwd = true;
-      // }
-    } else {
-      SmartDashboard.putString("Error", "No AprilTag Found");
-    }
+    //   double distance = sysLimeLight.GetPOIDistance();
+
+    //   // Drive (distance) forward using encoders
+
+    //   // if (Encoders.getDistance >= distance) {
+    //   isAimedFwd = true;
+    //   // }
+    // } else {
+    //   SmartDashboard.putString("Error", "No AprilTag Found");
+    // }
     
    
   }

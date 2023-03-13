@@ -10,7 +10,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
-import frc.robot.Constants.DriveTrainConstants.Autonomous;
+import frc.robot.Constants.DriveTrainConstants.DriveAuton;
 import frc.robot.subsystems.DriveTrain;
 
 public class AutoDrive extends CommandBase {
@@ -31,6 +31,8 @@ public class AutoDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    
 
     // MecanumControllerCommand mecanumControllerCommand = 
     // new MecanumControllerCommand(
