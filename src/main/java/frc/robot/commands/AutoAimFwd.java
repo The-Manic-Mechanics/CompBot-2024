@@ -46,7 +46,7 @@ public class AutoAimFwd extends CommandBase {
   public void execute() {
 
 
-    sysDriveTrain.genPath(aprilTagOffsetAngle, aprilTagOffsetAngle, null, aprilTagOffsetAngle, distanceToPOI, null, botPoseX, aprilTagOffsetAngle)
+    // sysDriveTrain.genPath(aprilTagOffsetAngle, aprilTagOffsetAngle, , aprilTagOffsetAngle, distanceToPOI, null, botPoseX, aprilTagOffsetAngle)
 
     // botPoseX = sysLimeLight.GetBotPoseX();
 

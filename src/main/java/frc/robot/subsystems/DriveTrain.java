@@ -73,6 +73,15 @@ public class DriveTrain extends SubsystemBase {
   Encoder backLeftEnc;
   Encoder backRightEnc;
 
+  Pose2d aprilId1;
+  Pose2d aprilId2;
+  Pose2d aprilId3;
+  Pose2d aprilId6;
+  Pose2d aprilId7;
+  Pose2d aprilId8;
+
+  List aprilTagCords;
+
   public DriveTrain() {
 
     sysLimelight = new LimeLight();
@@ -158,6 +167,21 @@ public class DriveTrain extends SubsystemBase {
     // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
     // eventMap.put("intakeDown", new IntakeDown());
 
+    aprilId2 =  new Pose2d(610.77, 108.19, new Rotation2d(18.22));
+    aprilId3 = new Pose2d(610.77, 174.19, new Rotation2d(18.22));
+    aprilId6 = new Pose2d(40.45, 174.19, new Rotation2d(18.22));
+    aprilId7 = new Pose2d(40.45, 108.19, new Rotation2d(18.22));
+    aprilId8 =  new Pose2d(40.45, 42.19, new Rotation2d(18.22));
+    aprilId1 = new Pose2d(610.77, 42.19, new Rotation2d(18.22));
+
+    aprilTagCords = new ArrayList<Pose2d>();
+
+    aprilTagCords.add(1, aprilId1);
+    aprilTagCords.add(2, aprilId2);
+    aprilTagCords.add(3, aprilId3);
+    aprilTagCords.add(6, aprilId6);
+    aprilTagCords.add(7, aprilId7);
+    aprilTagCords.add(8, aprilId8);
   }
 
   public void CartisianDrive(double speedX, double speedY, double speedZ) {
@@ -173,7 +197,13 @@ public class DriveTrain extends SubsystemBase {
       frontLeft.setVoltage(frontLeftVolts);
       frontRight.setVoltage(frontRightVolts);
       backLeft.setVoltage(backLeftVolts);
-      backRight.setVoltage(backRightVolts);
+      backRight.setVoltage(backRightVolts); List aprilTagCords = new ArrayList<Pose2d>();
+      aprilTagCords.add(1, aprilId1);
+      aprilTagCords.add(2, aprilId2);
+      aprilTagCords.add(3, aprilId3);
+      aprilTagCords.add(6, aprilId6);
+      aprilTagCords.add(7, aprilId7);
+      aprilTagCords.add(8, aprilId8);
   }
 
   public MecanumDriveWheelSpeeds getCurMecWheelSpeeds() {
@@ -223,17 +253,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public Pose2d currentAprilTag(int aimTo) {
-
-    Pose2d tagId1 = new Pose2d(610.77, 42.19, null);
-    Pose2d tagId2 = new Pose2d(610.77, 108.19, null);
-    Pose2d tagId3 = new Pose2d(aimTo, aimTo, null);
-    Pose2d tagId6 = new Pose2d(aimTo, aimTo, null);
-    Pose2d tagId7 = new Pose2d(aimTo, aimTo, null);
-    Pose2d tagId8 = new Pose2d(aimTo, aimTo, null);
-
-    List aprilTagCords = new ArrayList<Pose2d>(); 
-    aprilTagCords.add()
-    
+    return aprilTagCords.get(aimTo);
   }
 
   
