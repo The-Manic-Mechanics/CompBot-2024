@@ -30,9 +30,12 @@ public class TelescoperOut extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if (sysArm.GetArmEnc() < ) {
+     if ((sysArm.GetArmEnc() > 5500 ) || (sysArm.GetArmEnc() < 450 )) {
+      sysSolenoids.ToggleTelescope(Value.kOff);
+     } else {
       sysSolenoids.ToggleTelescope(Value.kReverse);
-    // }
+     }
+      
   }
 
   // Called once the command ends or is interrupted.
