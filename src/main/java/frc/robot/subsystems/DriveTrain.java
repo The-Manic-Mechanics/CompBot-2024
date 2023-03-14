@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Collections;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.pathplanner.lib.PathConstraints;
@@ -46,7 +47,7 @@ public class DriveTrain extends SubsystemBase {
 
   /** Creates a new DriveTrain. */
   MecanumDrive mecanumDrive;
- 
+
   WPI_VictorSPX frontLeft;
   WPI_VictorSPX frontRight;
   WPI_VictorSPX backLeft;
@@ -83,32 +84,32 @@ public class DriveTrain extends SubsystemBase {
     backLeft = new WPI_VictorSPX(DriveTrainConstants.BACK_LEFT_MOTOR_PORT);
     backRight = new WPI_VictorSPX(DriveTrainConstants.BACK_RIGHT_MOTOR_PORT);
 
-    frontLeftLocation = new Translation2d(DriveTrainConstants.FRONT_LEFT_LOCATION, DriveTrainConstants.FRONT_LEFT_LOCATION);
-    frontRightLocation = new Translation2d(DriveTrainConstants.FRONT_RIGHT_LOCATION, -1 * DriveTrainConstants.FRONT_RIGHT_LOCATION);
-    backLeftLocation = new Translation2d(-1 * DriveTrainConstants.BACK_LEFT_LOCATION, DriveTrainConstants.BACK_LEFT_LOCATION);
-    backRightLocation = new Translation2d(-1 * DriveTrainConstants.BACK_RIGHT_LOCATION, -1 * DriveTrainConstants.BACK_RIGHT_LOCATION);
+    frontLeftLocation = new Translation2d(DriveTrainConstants.FRONT_LEFT_LOCATION,
+        DriveTrainConstants.FRONT_LEFT_LOCATION);
+    frontRightLocation = new Translation2d(DriveTrainConstants.FRONT_RIGHT_LOCATION,
+        -1 * DriveTrainConstants.FRONT_RIGHT_LOCATION);
+    backLeftLocation = new Translation2d(-1 * DriveTrainConstants.BACK_LEFT_LOCATION,
+        DriveTrainConstants.BACK_LEFT_LOCATION);
+    backRightLocation = new Translation2d(-1 * DriveTrainConstants.BACK_RIGHT_LOCATION,
+        -1 * DriveTrainConstants.BACK_RIGHT_LOCATION);
 
     gyro = new ADXRS450_Gyro();
 
     frontLeftEnc = new Encoder(
-      DriveTrainConstants.FRONT_LEFT_ENCODER_A,
-      DriveTrainConstants.FRONT_LEFT_ENCODER_B
-    );
+        DriveTrainConstants.FRONT_LEFT_ENCODER_A,
+        DriveTrainConstants.FRONT_LEFT_ENCODER_B);
 
     frontRightEnc = new Encoder(
-      DriveTrainConstants.FRONT_RIGHT_ENCODER_A,
-      DriveTrainConstants.FRONT_RIGHT_ENCODER_B
-    );
+        DriveTrainConstants.FRONT_RIGHT_ENCODER_A,
+        DriveTrainConstants.FRONT_RIGHT_ENCODER_B);
 
     backLeftEnc = new Encoder(
-      DriveTrainConstants.BACK_LEFT_ENCODER_A,
-      DriveTrainConstants.BACK_LEFT_ENCODER_B
-    );
+        DriveTrainConstants.BACK_LEFT_ENCODER_A,
+        DriveTrainConstants.BACK_LEFT_ENCODER_B);
 
     backRightEnc = new Encoder(
-      DriveTrainConstants.BACK_RIGHT_ENCODER_A,
-      DriveTrainConstants.BACK_RIGHT_ENCODER_B
-    );
+        DriveTrainConstants.BACK_RIGHT_ENCODER_A,
+        DriveTrainConstants.BACK_RIGHT_ENCODER_B);
 
     // frontRight.setInverted(true);
     // backRight.setInverted(true);
@@ -117,12 +118,13 @@ public class DriveTrain extends SubsystemBase {
     // frontRight.setInverted(true);
     backLeft.setInverted(true);
 
-
     mecanumDrive = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
 
-    mecanumDriveKinematics = new MecanumDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
+    mecanumDriveKinematics = new MecanumDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation,
+        backRightLocation);
 
-    mecanumChassisSpeeds = new ChassisSpeeds(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_METRES_PER_SEC * .5, DriveAuton.MAX_METRES_PER_SEC);
+    mecanumChassisSpeeds = new ChassisSpeeds(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_METRES_PER_SEC * .5,
+        DriveAuton.MAX_METRES_PER_SEC);
 
     mecanumDriveWheelSpeeds = mecanumDriveKinematics.toWheelSpeeds(mecanumChassisSpeeds);
 
@@ -132,27 +134,29 @@ public class DriveTrain extends SubsystemBase {
     double backRightSpeed = mecanumDriveWheelSpeeds.rearRightMetersPerSecond;
 
     wheelPositions = new MecanumDriveWheelPositions(
-      frontLeftEnc.getDistance(), 
-      frontRightEnc.getDistance(), 
-      backLeftEnc.getDistance(), 
-      backRightEnc.getDistance()
-    );
+        frontLeftEnc.getDistance(),
+        frontRightEnc.getDistance(),
+        backLeftEnc.getDistance(),
+        backRightEnc.getDistance());
 
-    double [] currentPose = sysLimelight.GetBotPose();
-    // #FIXME# Make sure all values are what you think they are in API (Like the value used for rot)
+    double[] currentPose = sysLimelight.GetBotPose();
+    // #FIXME# Make sure all values are what you think they are in API (Like the
+    // value used for rot)
     Rotation2d rot = new Rotation2d(currentPose[3]);
 
     Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], rot);
 
     // #TODO# Use apriltags to caculate initial pose
-    mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics,  sysVMXPi.getRotation2d(), wheelPositions, initPose);
+    mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics, sysVMXPi.getRotation2d(), wheelPositions,
+        initPose);
 
-    
-    
-    // This will load the file "Example Path.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
-    // PathPlannerTrajectory examplePath = PathPlanner.loadPath("Example Path", new PathConstrains(4, 3));
+    // This will load the file "Example Path.path" and generate it with a max
+    // velocity of 4 m/s and a max acceleration of 3 m/s^2
+    // PathPlannerTrajectory examplePath = PathPlanner.loadPath("Example Path", new
+    // PathConstrains(4, 3));
 
-    // This is just an example event map. It would be better to have a constant, global event map
+    // This is just an example event map. It would be better to have a constant,
+    // global event map
     // in your code that will be used by all path following commands.
 
     // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
@@ -165,22 +169,20 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void MecanumDriveVolts(
-    double frontLeftVolts, 
-    double frontRightVolts, 
-    double backLeftVolts, 
-    double backRightVolts
-    ) {
-      frontLeft.setVoltage(frontLeftVolts);
-      frontRight.setVoltage(frontRightVolts);
-      backLeft.setVoltage(backLeftVolts);
-      backRight.setVoltage(backRightVolts);
+      double frontLeftVolts,
+      double frontRightVolts,
+      double backLeftVolts,
+      double backRightVolts) {
+    frontLeft.setVoltage(frontLeftVolts);
+    frontRight.setVoltage(frontRightVolts);
+    backLeft.setVoltage(backLeftVolts);
+    backRight.setVoltage(backRightVolts);
   }
 
   public MecanumDriveWheelSpeeds getCurMecWheelSpeeds() {
     return new MecanumDriveWheelSpeeds(
-      frontLeft.get(), frontRight.get(), 
-      backLeft.get(), backRight.get()
-      );
+        frontLeft.get(), frontRight.get(),
+        backLeft.get(), backRight.get());
   }
 
   public void setWheelSpeeds(MecanumDriveWheelSpeeds inSpeeds) {
@@ -190,7 +192,7 @@ public class DriveTrain extends SubsystemBase {
     backRight.set(inSpeeds.rearRightMetersPerSecond);
   }
 
-  public void setDriveMotsVolts(MecanumDriveMotorVoltages inVolts ) {
+  public void setDriveMotsVolts(MecanumDriveMotorVoltages inVolts) {
     frontLeft.setVoltage(inVolts.frontLeftVoltage);
     frontRight.setVoltage(inVolts.frontRightVoltage);
     backLeft.setVoltage(inVolts.rearLeftVoltage);
@@ -201,42 +203,40 @@ public class DriveTrain extends SubsystemBase {
     return mecanumDriveOdometry.getPoseMeters();
   }
 
-  /*For on the fly path generation*/
+  /* For on the fly path generation */
   public PathPlannerTrajectory genPath(
-    double maxVel, double maxAccel, Translation2d transP1, double rotHead1, double rotHolo1, Translation2d transP2, double rotHead2, double rotHolo2) {
+      double maxVel, double maxAccel, Translation2d transP1, double rotHead1, double rotHolo1, Translation2d transP2,
+      double rotHead2, double rotHolo2) {
     PathPlannerTrajectory traj1 = PathPlanner.generatePath(
 
-      new PathConstraints(maxVel, maxAccel), 
+        new PathConstraints(maxVel, maxAccel),
 
-      new PathPoint(
-        transP1, 
-        Rotation2d.fromDegrees(rotHead1), 
-        Rotation2d.fromDegrees(rotHolo1)), // position, heading, holonomic rotation
+        new PathPoint(
+            transP1,
+            Rotation2d.fromDegrees(rotHead1),
+            Rotation2d.fromDegrees(rotHolo1)), // position, heading, holonomic rotation
 
-      new PathPoint(
-        transP2, 
-        Rotation2d.fromDegrees(rotHead2),
-        Rotation2d.fromDegrees(rotHolo2)) // position, heading, holonomic rotation
+        new PathPoint(
+            transP2,
+            Rotation2d.fromDegrees(rotHead2),
+            Rotation2d.fromDegrees(rotHolo2)) // position, heading, holonomic rotation
     );
 
     return traj1;
   }
 
   public Pose2d currentAprilTag(int aimTo) {
-
-    Pose2d tagId1 = new Pose2d(610.77, 42.19, null);
-    Pose2d tagId2 = new Pose2d(610.77, 108.19, null);
-    Pose2d tagId3 = new Pose2d(aimTo, aimTo, null);
-    Pose2d tagId6 = new Pose2d(aimTo, aimTo, null);
-    Pose2d tagId7 = new Pose2d(aimTo, aimTo, null);
-    Pose2d tagId8 = new Pose2d(aimTo, aimTo, null);
-
-    List aprilTagCords = new ArrayList<Pose2d>(); 
-    aprilTagCords.add()
-    
+    List<Pose2d> aprilTagCords = new ArrayList<>();
+    Collections.addAll(aprilTagCords, 
+      new Pose2d(610.77, 42.19, null),
+      new Pose2d(610.77, 108.19, null),
+      new Pose2d(aimTo, aimTo, null),
+      new Pose2d(aimTo, aimTo, null),
+      new Pose2d(aimTo, aimTo, null),
+      new Pose2d(aimTo, aimTo, null)
+    );
+    return aprilTagCords.get(aimTo);
   }
-
-  
 
   public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
     Pose2d initHoloPose = traj.getInitialHolonomicPose();
@@ -245,29 +245,31 @@ public class DriveTrain extends SubsystemBase {
         new InstantCommand(() -> {
           // Reset odometry for the first path you run during auto
           if (isFirstPath) {
-              mecanumDriveOdometry.resetPosition(null, wheelPositions, getPoseOd());}
+            mecanumDriveOdometry.resetPosition(null, wheelPositions, getPoseOd());
+          }
         }),
         new PPMecanumControllerCommand(
-            traj, 
+            traj,
             mecanumDriveOdometry::getPoseMeters, // Pose supplier
             this.mecanumDriveKinematics, // MecanumDriveKinematics
-            new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+            new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use
+                                        // feedforwards.
             new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
-            new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+            new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will
+                                        // only use feedforwards.
             DriveAuton.MAX_METRES_PER_SEC, // Max wheel velocity meters per second
-            this::setWheelSpeeds , // MecanumDriveWheelSpeeds consumer
-            true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+            this::setWheelSpeeds, // MecanumDriveWheelSpeeds consumer
+            true, // Should the path be automatically mirrored depending on alliance color.
+                  // Optional, defaults to true
             this // Requires this drive subsystem
-        )
-    );
+        ));
   }
 
   public FollowPathWithEvents followPathEvents(PathPlannerTrajectory inPath) {
     FollowPathWithEvents command = new FollowPathWithEvents(
-      followTrajectoryCommand(inPath, false),   
-      inPath.getMarkers(),
-      DriveAuton.EVENT_MAP
-    );
+        followTrajectoryCommand(inPath, false),
+        inPath.getMarkers(),
+        DriveAuton.EVENT_MAP);
 
     return command;
   }
