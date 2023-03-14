@@ -12,13 +12,23 @@ import frc.robot.Constants.ArmConstants;
 public class Solenoids extends SubsystemBase {
   private DoubleSolenoid armTelescoper;
   private DoubleSolenoid claw;
+  private DoubleSolenoid brake;
   
   /** Creates a new Solenoids. */
   public Solenoids() {
     // Initialising Solenoids
     armTelescoper = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ArmConstants.TELESCOPER_FWD_PORT, ArmConstants.TELESCOPER_RVRSE_PORT);
     claw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ArmConstants.CLAW_FWD_PORT, ArmConstants.CLAW_RVRSE_PORT);
+    brake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ArmConstants.BRAKING_PORT_FWD, ArmConstants.BRAKING_PORT_BACK);
  
+  }
+
+  public void ToggleBrake(DoubleSolenoid.Value value) {
+    brake.set(value);
+  }
+
+  public void GetBrake(DoubleSolenoid.Value value) {
+    brake.get();
   }
 
   public void ToggleTelescope(DoubleSolenoid.Value value) {

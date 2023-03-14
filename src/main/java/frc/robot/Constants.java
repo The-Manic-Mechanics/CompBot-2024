@@ -91,6 +91,9 @@ public final class Constants {
     public static final int TELESCOPER_FWD_PORT = 2;
     public static final int TELESCOPER_RVRSE_PORT = 3;
     
+    public static final int BRAKING_PORT_FWD = 5;
+    public static final int BRAKING_PORT_BACK = 4;
+
     public static final int TOP_ARM_MOTOR_PORT = 3;
     public static final int BOTTOM_ARM_MOTOR_PORT = 4;
 
