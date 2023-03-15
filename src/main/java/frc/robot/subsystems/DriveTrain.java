@@ -223,13 +223,6 @@ public class DriveTrain extends SubsystemBase {
       );
   }
 
-  public MecanumDriveWheelPositions getCurMecWheelPos() {
-    return new MecanumDriveWheelPositions(
-      frontLeftEnc.getDistance(), frontRightEnc.getDistance(), 
-      backLeftEnc.getDistance(), backRightEnc.getDistance()
-      );
-  }
-
   public void setWheelSpeeds(MecanumDriveWheelSpeeds inSpeeds) {
     frontLeft.set(inSpeeds.frontLeftMetersPerSecond);
     frontRight.set(inSpeeds.frontRightMetersPerSecond);
@@ -311,11 +304,6 @@ public class DriveTrain extends SubsystemBase {
                   // Optional, defaults to true
             this // Requires this drive subsystem
         ));
-  }
-
-  public Command buildAuto(List<PathPlannerTrajectory> pathGroup) {
-    Command out = autoBuilder.fullAuto(pathGroup);
-    return out;
   }
 
   public Command buildAuto(List<PathPlannerTrajectory> pathGroup) {
