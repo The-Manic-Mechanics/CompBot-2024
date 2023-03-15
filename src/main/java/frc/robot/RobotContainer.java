@@ -18,7 +18,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Solenoids;
 import frc.robot.subsystems.Arm;
-
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -91,7 +91,7 @@ public class RobotContainer {
   // ---------------------------
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  public static final XboxController driverMainController = new XboxController(ControllerConstants.DRIVERONE_PORT);
+  public static final Joystick driverMainController = new Joystick(ControllerConstants.DRIVERONE_PORT);
   private final JoystickButton driverMainA = new JoystickButton(driverMainController, 1);
   private final JoystickButton driverMainY = new JoystickButton(driverMainController, 4);
 
@@ -167,13 +167,13 @@ public class RobotContainer {
   // -------------------------------------------------------------------------------------
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+  // /**
+  //  * Use this to pass the autonomous command to the main {@link Robot} class.
+  //  *
+  //  * @return the command to run in autonomous
+  //  */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return sysDriveTrain.buildAuto(sysDriveTrain.autoRoutineChooser.getSelected());
+     return Autos.exampleAuto(m_exampleSubsystem);
   }
 }

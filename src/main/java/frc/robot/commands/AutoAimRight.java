@@ -22,16 +22,10 @@ public class AutoAimRight extends CommandBase {
   }
 
   double aprilTagOffsetAngle;
-
   double botPoseX;
-
   double distanceToPOI;
-
   boolean isAimed;
-
   String strafeDirection;
-
-
 
   // Called when the command is initially scheduled.
   @Override
@@ -48,22 +42,22 @@ public class AutoAimRight extends CommandBase {
     if (sysLimeLight.GetCurrentAprilTag() != 9) {
       if (botPoseX >= -2.95) {
         sysDriveTrain.CartisianDrive(0, 0, -0.25);
-
         strafeDirection = "r";
 
       } else if (botPoseX <= -3.05) {
         sysDriveTrain.CartisianDrive(0, 0, .25);
+        strafeDirection = "l";
 
-          strafeDirection = "l";
-      }
-      // #TODO# Finish This (Add Values)
-      if ((strafeDirection == "l") && (sysLimeLight.GetTX() != 0)) {
-        // Strafe Left
-      } else if ((strafeDirection == "r") && (sysLimeLight.GetTX() != 0)) {
-        // Strafe Right
       }
 
-      double fwdDistance = sysLimeLight.GetPOIDistance();
+      // // #TODO# Finish This (Add Values)
+      // if ((strafeDirection == "l") && (sysLimeLight.GetTX() != 0)) {
+      //   // Strafe Left
+      // } else if ((strafeDirection == "r") && (sysLimeLight.GetTX() != 0)) {
+      //   // Strafe Right
+      // }
+
+      //double fwdDistance = sysLimeLight.GetPOIDistance();
 
       // Drive (fwdDistance) forward using encoders
 
@@ -75,8 +69,6 @@ public class AutoAimRight extends CommandBase {
     } else {
       SmartDashboard.putString("Error", "No AprilTag Found");
     }
-    
-   
   }
 
   // Called once the command ends or is interrupted.

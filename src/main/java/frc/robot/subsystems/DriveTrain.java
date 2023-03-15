@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Collections;
 
@@ -29,8 +28,6 @@ import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
@@ -139,10 +136,10 @@ public class DriveTrain extends SubsystemBase {
 
     mecanumDriveWheelSpeeds = mecanumDriveKinematics.toWheelSpeeds(mecanumChassisSpeeds);
 
-    double frontLeftSpeed = mecanumDriveWheelSpeeds.frontLeftMetersPerSecond;
-    double frontRightSpeed = mecanumDriveWheelSpeeds.frontRightMetersPerSecond;
-    double backLeftSpeed = mecanumDriveWheelSpeeds.rearLeftMetersPerSecond;
-    double backRightSpeed = mecanumDriveWheelSpeeds.rearRightMetersPerSecond;
+    //double frontLeftSpeed = mecanumDriveWheelSpeeds.frontLeftMetersPerSecond;
+    //double frontRightSpeed = mecanumDriveWheelSpeeds.frontRightMetersPerSecond;
+    //double backLeftSpeed = mecanumDriveWheelSpeeds.rearLeftMetersPerSecond;
+    //double backRightSpeed = mecanumDriveWheelSpeeds.rearRightMetersPerSecond;
 
     wheelPositions = new MecanumDriveWheelPositions(
         frontLeftEnc.getDistance(),
@@ -281,7 +278,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-    Pose2d initHoloPose = traj.getInitialHolonomicPose();
+    //Pose2d initHoloPose = traj.getInitialHolonomicPose();
 
     return new SequentialCommandGroup(
         new InstantCommand(() -> {
@@ -334,9 +331,9 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putData("backRight", backRight);
 
     // Putting Controller Left and Right Stick Values
-    SmartDashboard.putNumber("LeftStickY Value", RobotContainer.driverMainController.getLeftY());
-    SmartDashboard.putNumber("RightStickY Value", RobotContainer.driverMainController.getRightY());
-    SmartDashboard.putNumber("LeftStickX Value", RobotContainer.driverMainController.getLeftX());
-    SmartDashboard.putNumber("RightStickX Value", RobotContainer.driverMainController.getRightX());
+    SmartDashboard.putNumber("LeftStickY Value", RobotContainer.driverMainController.getY());
+    SmartDashboard.putNumber("RightStickY Value", RobotContainer.driverMainController.getY());
+    SmartDashboard.putNumber("LeftStickX Value", RobotContainer.driverMainController.getX());
+    SmartDashboard.putNumber("RightStickX Value", RobotContainer.driverMainController.getX());
   }
 }

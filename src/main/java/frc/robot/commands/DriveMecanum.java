@@ -31,28 +31,25 @@ public class DriveMecanum extends CommandBase {
   @Override
   public void execute() {
 
-    if (RobotContainer.driverMainController.getLeftTriggerAxis() != 0) {
-      moveSpeedX = -1 * RobotContainer.driverMainController.getLeftTriggerAxis();
-    }
 
-    if (RobotContainer.driverMainController.getRightTriggerAxis() != 0) {
-      moveSpeedX = RobotContainer.driverMainController.getRightTriggerAxis();
-    }
+    // if (RobotContainer.driverMainController.getRightTriggerAxis() != 0) {
+    //   moveSpeedX = RobotContainer.driverMainController.getRightTriggerAxis();
+    // }
 
-    if (Math.abs(RobotContainer.driverMainController.getLeftY()) > .082) {
-      moveSpeedY = RobotContainer.driverMainController.getLeftY();
+    if (Math.abs(RobotContainer.driverMainController.getY()) > .082) {
+      moveSpeedY = RobotContainer.driverMainController.getY();
     } else {
       moveSpeedY = 0;
     }
 
-    if (Math.abs(RobotContainer.driverMainController.getLeftX()) > .045) {
-      moveSpeedX = -1 * RobotContainer.driverMainController.getLeftX();
+    if (Math.abs(RobotContainer.driverMainController.getX()) > .045) {
+      moveSpeedX = -1 * RobotContainer.driverMainController.getX();
     } else {
       moveSpeedX = 0;
     }
     
-    if (Math.abs(RobotContainer.driverMainController.getRightX()) > .1)
-    moveSpeedZ = -1  * RobotContainer.driverMainController.getRightX();
+    if (Math.abs(RobotContainer.driverMainController.getX()) > .062)
+    moveSpeedZ = -1  * RobotContainer.driverMainController.getX();
     
     sysDriveTrain.CartisianDrive(moveSpeedY, moveSpeedX, moveSpeedZ);
   }
