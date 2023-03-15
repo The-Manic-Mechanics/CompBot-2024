@@ -18,7 +18,7 @@ public class VMXPi extends SubsystemBase {
   /** Creates a new VMXPi. */
 
   // Defining VMX Pi
-  AHRS vmxPi;
+  public AHRS vmxPi;
   // Double to Store VMX Pi Roll
   double vmxPiRoll;
   // #TODO# Use the heading from the VMXPi to remain perpendicular to the switch when auto balancing

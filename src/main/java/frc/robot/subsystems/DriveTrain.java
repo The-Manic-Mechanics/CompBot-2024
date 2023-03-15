@@ -13,6 +13,8 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
+import com.pathplanner.lib.auto.MecanumAutoBuilder;
+import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPMecanumControllerCommand;
 
@@ -31,8 +33,10 @@ import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -52,7 +56,7 @@ public class DriveTrain extends SubsystemBase {
   WPI_VictorSPX backLeft;
   WPI_VictorSPX backRight;
 
-  ADXRS450_Gyro gyro;
+  public ADXRS450_Gyro gyro;
 
   ChassisSpeeds mecanumChassisSpeeds;
   public MecanumDriveWheelSpeeds mecanumDriveWheelSpeeds;
@@ -81,6 +85,9 @@ public class DriveTrain extends SubsystemBase {
   Pose2d aprilId8;
 
   List aprilTagCords;
+
+  public SendableChooser<List<PathPlannerTrajectory>> autoRoutineChooser;
+  MecanumAutoBuilder autoBuilder;
 
   public DriveTrain() {
 
@@ -121,6 +128,10 @@ public class DriveTrain extends SubsystemBase {
 
     // frontRight.setInverted(true);
     // backRight.setInverted(true);
+    frontLeftEnc.setDistancePerPulse(DriveAuton.DISTANCE_PER_PULSE);
+    frontRightEnc.setDistancePerPulse(DriveAuton.DISTANCE_PER_PULSE);
+    backLeftEnc.setDistancePerPulse(DriveAuton.DISTANCE_PER_PULSE);
+    backRightEnc.setDistancePerPulse(DriveAuton.DISTANCE_PER_PULSE);
 
     frontLeft.setInverted(true);
     // frontRight.setInverted(true);
@@ -147,7 +158,7 @@ public class DriveTrain extends SubsystemBase {
       backRightEnc.getDistance()
     );
 
-    double [] currentPose = sysLimelight.GetBotPose();
+    double [] currentPose = sysLimelight.GetBotPoseArray();
     // #FIXME# Make sure all values are what you think they are in API (Like the value used for rot)
     Rotation2d rot = new Rotation2d(currentPose[3]);
 
@@ -182,6 +193,27 @@ public class DriveTrain extends SubsystemBase {
     aprilTagCords.add(6, aprilId6);
     aprilTagCords.add(7, aprilId7);
     aprilTagCords.add(8, aprilId8);
+
+    List<PathPlannerTrajectory> LinkLoadingSideBlue = PathPlanner.loadPathGroup("Loading Station Side Link", DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL);
+    List<PathPlannerTrajectory> LinkCommunitySideBlue = PathPlanner.loadPathGroup("Community Zone Side Link", DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL);
+
+    SendableChooser<List<PathPlannerTrajectory>> autoRoutineChooser = new SendableChooser<>();
+    autoRoutineChooser.addOption("Link Loading Side Blue", LinkLoadingSideBlue);
+    autoRoutineChooser.addOption("Link Community Side Blue", LinkCommunitySideBlue);
+    SmartDashboard.putData("Auton Chooser", autoRoutineChooser);
+
+    MecanumAutoBuilder autoBuilder = new MecanumAutoBuilder(
+      mecanumDriveOdometry :: getPoseMeters,
+      this :: resetOdometry, 
+      mecanumDriveKinematics, 
+      new PIDConstants(0, 0, 0), // Constants for the translation controller
+      new PIDConstants(0, 0, 0), // Constants for the rot controller
+      DriveAuton.MAX_METRES_PER_SEC, 
+      this :: setWheelSpeeds, 
+      DriveAuton.EVENT_MAP, 
+      true, 
+      this);
+    
   }
 
   public void CartisianDrive(double speedX, double speedY, double speedZ) {
@@ -213,6 +245,13 @@ public class DriveTrain extends SubsystemBase {
       );
   }
 
+  public MecanumDriveWheelPositions getCurMecWheelPos() {
+    return new MecanumDriveWheelPositions(
+      frontLeftEnc.getDistance(), frontRightEnc.getDistance(), 
+      backLeftEnc.getDistance(), backRightEnc.getDistance()
+      );
+  }
+
   public void setWheelSpeeds(MecanumDriveWheelSpeeds inSpeeds) {
     frontLeft.set(inSpeeds.frontLeftMetersPerSecond);
     frontRight.set(inSpeeds.frontRightMetersPerSecond);
@@ -225,10 +264,6 @@ public class DriveTrain extends SubsystemBase {
     frontRight.setVoltage(inVolts.frontRightVoltage);
     backLeft.setVoltage(inVolts.rearLeftVoltage);
     backRight.setVoltage(inVolts.rearRightVoltage);
-  }
-
-  public Pose2d getPoseOd() {
-    return mecanumDriveOdometry.getPoseMeters();
   }
 
   /*For on the fly path generation*/
@@ -256,7 +291,9 @@ public class DriveTrain extends SubsystemBase {
     return aprilTagCords.get(aimTo);
   }
 
-  
+  public void resetOdometry(Pose2d odoResetPose) {
+    mecanumDriveOdometry.resetPosition(sysVMXPi.vmxPi.getRotation2d(), getCurMecWheelPos(), odoResetPose);
+  }
 
   public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
     Pose2d initHoloPose = traj.getInitialHolonomicPose();
@@ -265,7 +302,7 @@ public class DriveTrain extends SubsystemBase {
         new InstantCommand(() -> {
           // Reset odometry for the first path you run during auto
           if (isFirstPath) {
-              mecanumDriveOdometry.resetPosition(null, wheelPositions, getPoseOd());}
+              mecanumDriveOdometry.resetPosition(null, wheelPositions, mecanumDriveOdometry.getPoseMeters());}
         }),
         new PPMecanumControllerCommand(
             traj, 
@@ -280,6 +317,11 @@ public class DriveTrain extends SubsystemBase {
             this // Requires this drive subsystem
         )
     );
+  }
+
+  public Command buildAuto(List<PathPlannerTrajectory> pathGroup) {
+    Command out = autoBuilder.fullAuto(pathGroup);
+    return out;
   }
 
   public FollowPathWithEvents followPathEvents(PathPlannerTrajectory inPath) {

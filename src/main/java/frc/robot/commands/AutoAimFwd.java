@@ -6,19 +6,23 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DriveTrainConstants.DriveAuton;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.LimeLight;
+import frc.robot.subsystems.VMXPi;
 
 public class AutoAimFwd extends CommandBase {
   /** Creates a new AutoAim. */
   private final DriveTrain sysDriveTrain;
   private final LimeLight sysLimeLight;
+  private final VMXPi sysVMXPi;
 
-  public AutoAimFwd(DriveTrain inSysDriveTrain, LimeLight inSysLimeLight) {
+  public AutoAimFwd(DriveTrain inSysDriveTrain, LimeLight inSysLimeLight, VMXPi inSysVMXPi) {
     // Use addRequirements() here to declare subsystem dependencies.
     sysDriveTrain = inSysDriveTrain;
     sysLimeLight = inSysLimeLight;
-    addRequirements(sysDriveTrain, sysLimeLight);
+    sysVMXPi = inSysVMXPi;
+    addRequirements(sysDriveTrain, sysLimeLight, sysVMXPi);
   }
 
   // double aprilTagOffsetAngle;
@@ -46,8 +50,8 @@ public class AutoAimFwd extends CommandBase {
   public void execute() {
 
 
-    // sysDriveTrain.genPath(aprilTagOffsetAngle, aprilTagOffsetAngle, , aprilTagOffsetAngle, distanceToPOI, null, botPoseX, aprilTagOffsetAngle)
-
+    sysDriveTrain.genPath(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL, sysLimeLight.GetBotPose2d(), 0, sysVMXPi.vmxPi.getAngle(), null, 0, 0)
+    sysDriveTrain.mecanumDriveOdometry.resetPosition(sysVMXPi.vmxPi.getRotation2d(), sysDriveTrain.getCurMecWheelPos(), null);
     // botPoseX = sysLimeLight.GetBotPoseX();
 
     // if (sysLimeLight.GetCurrentAprilTag() != 9) {

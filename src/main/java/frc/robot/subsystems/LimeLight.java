@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -15,8 +18,8 @@ public class LimeLight extends SubsystemBase {
   /** Creates a new LimeLight. */
   public LimeLight() {
     
-    
   }
+  
   
 
   NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -50,7 +53,7 @@ public class LimeLight extends SubsystemBase {
   double aprilTagToFloorInches = 17.12598;
 
  
-
+  double [] botPoseArray = botPose.getDoubleArray(new double[6]);
 
   @Override
   public void periodic() {
@@ -96,12 +99,16 @@ public class LimeLight extends SubsystemBase {
 
   
 
-  public double [] GetBotPose() {
+  public double [] GetBotPoseArray() {
     return botPose.getDoubleArray(new double[6]);
   }
 
+  public Translation2d GetBotPose2d() {
+    return new Translation2d(botPoseArray [1], botPoseArray [2]);
+  }
+
   public double GetBotPoseX() {
-    double [] botPoseArray = botPose.getDoubleArray(new double[6]);
+    
     return botPoseArray [1];
   }
 

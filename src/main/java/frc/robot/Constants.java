@@ -61,6 +61,8 @@ public final class Constants {
 
    
 
+   
+
     public static class DriveAuton {
       // #TODO# Add values to below constants
       // The forward maximum speed
@@ -78,6 +80,8 @@ public final class Constants {
       public static final double RAMSETE_ZETA = 0.7;
 
       public static final  HashMap<String, Command> EVENT_MAP = new HashMap<>();
+
+      public static final double DISTANCE_PER_PULSE = 25.132741228718 / 39.37;
 
     }
   }
