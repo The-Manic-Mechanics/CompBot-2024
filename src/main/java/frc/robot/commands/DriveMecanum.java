@@ -51,7 +51,7 @@ public class DriveMecanum extends CommandBase {
       moveSpeedX = 0;
     }
     
-    if (Math.abs(RobotContainer.driverMainController.getRightX()) > .062)
+    if (Math.abs(RobotContainer.driverMainController.getRightX()) > .1)
     moveSpeedZ = -1  * RobotContainer.driverMainController.getRightX();
     
     sysDriveTrain.CartisianDrive(moveSpeedY, moveSpeedX, moveSpeedZ);

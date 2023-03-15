@@ -50,7 +50,7 @@ public class AutoAimFwd extends CommandBase {
   public void execute() {
 
 
-    sysDriveTrain.genPath(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL, sysLimeLight.GetBotPose2d(), 0, sysVMXPi.vmxPi.getAngle(), null, 0, 0)
+    sysDriveTrain.genPath(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL, sysLimeLight.GetBotPose2d(), 0, sysVMXPi.vmxPi.getAngle(), null, 0, 0);
     sysDriveTrain.mecanumDriveOdometry.resetPosition(sysVMXPi.vmxPi.getRotation2d(), sysDriveTrain.getCurMecWheelPos(), null);
     // botPoseX = sysLimeLight.GetBotPoseX();
 
@@ -93,6 +93,6 @@ public class AutoAimFwd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isAimedFwd;
+    return false;
   }
 }

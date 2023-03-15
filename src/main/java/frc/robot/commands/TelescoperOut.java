@@ -14,6 +14,7 @@ public class TelescoperOut extends CommandBase {
   // #TODO# Figure out how to combine Arm and Solenoids subsystems into one for command usage
   private final Solenoids sysSolenoids;
   private final Arm sysArm;
+  boolean finished;
 
   public TelescoperOut(Solenoids inSysSolenoids, Arm inSysArm) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -25,15 +26,20 @@ public class TelescoperOut extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    finished = false;
+
      if ((sysArm.GetArmEnc() > 5500 ) || (sysArm.GetArmEnc() < 450 )) {
-      sysSolenoids.ToggleTelescope(Value.kOff);
+      // sysSolenoids.ToggleTelescope(Value.kOff);
+      finished = true;
      } else {
       sysSolenoids.ToggleTelescope(Value.kReverse);
+      finished = true;
      }
       
   }
@@ -47,10 +53,6 @@ public class TelescoperOut extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (sysSolenoids.GetTelescope() == Value.kReverse) {
-    return true;
-    } else {
-      return false;
-    }
+    return finished;
   }
 }
