@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.VMXPiConstants;
 import frc.robot.Constants.VMXPiConstants.AutoBalanceConstants;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.VMXPi;

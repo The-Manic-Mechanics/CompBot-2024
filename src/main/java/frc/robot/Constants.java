@@ -5,10 +5,6 @@
 package frc.robot;
 
 import java.util.HashMap;
-
-import javax.security.auth.login.FailedLoginException;
-
-import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**

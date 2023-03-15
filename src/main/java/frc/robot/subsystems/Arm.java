@@ -61,6 +61,7 @@ public class Arm extends SubsystemBase {
     
   }
 
+  // Gets the arm encoder from the current armEncoder instance.
   public double GetArmEnc() {
     return armEncoder.get();
   }
