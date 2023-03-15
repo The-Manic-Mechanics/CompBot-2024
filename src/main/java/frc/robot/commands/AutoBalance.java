@@ -77,6 +77,8 @@ public class AutoBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    double lgety = RobotContainer.driverMainController.getY();
+    double rgetx = RobotContainer.driverMainController.getX();
     if ((AutoBalanceConstants.DEADZONE_MIN >= currentRoll) 
     ||
     (AutoBalanceConstants.DEADZONE_MAX <= currentRoll)) {
@@ -85,18 +87,19 @@ public class AutoBalance extends CommandBase {
       return true;
 
     // #TODO# Move this shutoff into RobotContainer or make it faster in some other way
-    } else if (RobotContainer.driverMainController.getBButtonPressed() == true) {
+    // 9 corresponds to joystick labels
+    } else if (RobotContainer.driverMainController.getRawButtonPressed(9) == true) {
       return true;
 
     } else if (
       (
-      RobotContainer.driverMainController.getLeftY() > AutoBalanceConstants.DISABLETHRESHOLD_CONTROLLER_LEFTSTICK_MAX 
+      lgety > AutoBalanceConstants.DISABLETHRESHOLD_CONTROLLER_LEFTSTICK_MAX 
       ||
-      RobotContainer.driverMainController.getLeftY() < AutoBalanceConstants.DISABLETHRESHOLD_CONTROLLER_LEFTSTICK_MIN
+      lgety < AutoBalanceConstants.DISABLETHRESHOLD_CONTROLLER_LEFTSTICK_MIN
       ) || (
-      RobotContainer.driverMainController.getRightX() > AutoBalanceConstants.DISABLETHRESHOLD_CONTROLLER_RIGHTSTICK_MAX
+      rgetx > AutoBalanceConstants.DISABLETHRESHOLD_CONTROLLER_RIGHTSTICK_MAX
       ||
-      RobotContainer.driverMainController.getRightX() < AutoBalanceConstants.DISABLETHRESHOLD_CONTROLLER_RIGHTSTICK_MIN
+      rgetx < AutoBalanceConstants.DISABLETHRESHOLD_CONTROLLER_RIGHTSTICK_MIN
       )
       ) {
       return true;

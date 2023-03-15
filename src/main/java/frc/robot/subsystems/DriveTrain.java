@@ -331,9 +331,9 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putData("backRight", backRight);
 
     // Putting Controller Left and Right Stick Values
-    SmartDashboard.putNumber("LeftStickY Value", RobotContainer.driverMainController.getLeftY());
-    SmartDashboard.putNumber("RightStickY Value", RobotContainer.driverMainController.getRightY());
-    SmartDashboard.putNumber("LeftStickX Value", RobotContainer.driverMainController.getLeftX());
-    SmartDashboard.putNumber("RightStickX Value", RobotContainer.driverMainController.getRightX());
+    SmartDashboard.putNumber("LeftStickY Value", RobotContainer.driverMainController.getY());
+    SmartDashboard.putNumber("RightStickY Value", RobotContainer.driverMainController.getY());
+    SmartDashboard.putNumber("LeftStickX Value", RobotContainer.driverMainController.getX());
+    SmartDashboard.putNumber("RightStickX Value", RobotContainer.driverMainController.getX());
   }
 }
