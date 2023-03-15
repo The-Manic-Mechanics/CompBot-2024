@@ -63,7 +63,7 @@ public final class Constants {
       // #TODO# Add values to below constants
       // The forward maximum speed
       public static final double MAX_METRES_PER_SEC = 3.87096;
-      public static final double MAX_ACCEL = 1;
+      public static final double MAX_ACCEL = 2;
       public static final double DRIVE_VEL = 8.5;
 
       public static final double TRACK_WIDTH_METRES = 0;

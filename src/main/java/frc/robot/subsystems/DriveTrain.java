@@ -169,12 +169,13 @@ public class DriveTrain extends SubsystemBase {
     // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
     // eventMap.put("intakeDown", new IntakeDown());
 
+    Command 
 
     List<PathPlannerTrajectory> LinkLoadingSideBlue = PathPlanner.loadPathGroup("Loading Station Side Link", DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL);
     List<PathPlannerTrajectory> LinkCommunitySideBlue = PathPlanner.loadPathGroup("Community Zone Side Link", DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL);
 
     SendableChooser<List<PathPlannerTrajectory>> autoRoutineChooser = new SendableChooser<>();
-    autoRoutineChooser.addOption("Link Loading Side Blue", LinkLoadingSideBlue);
+    autoRoutineChooser.addOption("Link Loading Side Blue", LinkLoadingSideBlue.autoBuilder());
     autoRoutineChooser.addOption("Link Community Side Blue", LinkCommunitySideBlue);
     SmartDashboard.putData("Auton Chooser", autoRoutineChooser);
 
@@ -182,8 +183,8 @@ public class DriveTrain extends SubsystemBase {
       mecanumDriveOdometry :: getPoseMeters,
       this :: resetOdometry, 
       mecanumDriveKinematics, 
-      new PIDConstants(0, 0, 0), // Constants for the translation controller
-      new PIDConstants(0, 0, 0), // Constants for the rot controller
+      new PIDConstants(.5, 0, 0), // Constants for the translation controller
+      new PIDConstants(.5, 0, 0), // Constants for the rot controller
       DriveAuton.MAX_METRES_PER_SEC, 
       this :: setWheelSpeeds, 
       DriveAuton.EVENT_MAP, 
