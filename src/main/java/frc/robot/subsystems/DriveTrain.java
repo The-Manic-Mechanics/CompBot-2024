@@ -75,7 +75,7 @@ public class DriveTrain extends SubsystemBase {
   Encoder backLeftEnc;
   Encoder backRightEnc;
 
-  public SendableChooser<List<PathPlannerTrajectory>> autoRoutineChooser;
+  public SendableChooser<Command> autoRoutineChooser;
   MecanumAutoBuilder autoBuilder;
 
   public DriveTrain() {
@@ -149,9 +149,7 @@ public class DriveTrain extends SubsystemBase {
 
     double [] currentPose = sysLimelight.GetBotPoseArray();
     // #FIXME# Make sure all values are what you think they are in API (Like the value used for rot)
-    Rotation2d rot = new Rotation2d(currentPose[3]);
-
-    Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], rot);
+    Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], sysVMXPi.vmxPi.getRotation2d());
 
     // #TODO# Use apriltags to caculate initial pose
     mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics, sysVMXPi.getRotation2d(), wheelPositions,
@@ -169,14 +167,14 @@ public class DriveTrain extends SubsystemBase {
     // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
     // eventMap.put("intakeDown", new IntakeDown());
 
-    Command 
+    
 
-    List<PathPlannerTrajectory> LinkLoadingSideBlue = PathPlanner.loadPathGroup("Loading Station Side Link", DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL);
+    List<PathPlannerTrajectory> LinkLoadingSideBlue = PathPlanner.loadPathGroup("Loading Station Side Link", new PathConstraints(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL));
     List<PathPlannerTrajectory> LinkCommunitySideBlue = PathPlanner.loadPathGroup("Community Zone Side Link", DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL);
 
-    SendableChooser<List<PathPlannerTrajectory>> autoRoutineChooser = new SendableChooser<>();
-    autoRoutineChooser.addOption("Link Loading Side Blue", LinkLoadingSideBlue.autoBuilder());
-    autoRoutineChooser.addOption("Link Community Side Blue", LinkCommunitySideBlue);
+    SendableChooser <Command> autoRoutineChooser = new SendableChooser<>();
+    autoRoutineChooser.addOption("Link Loading Side Blue", autoBuilder.fullAuto(LinkLoadingSideBlue));
+    autoRoutineChooser.addOption("Link Community Side Blue", autoBuilder.fullAuto(LinkCommunitySideBlue));
     SmartDashboard.putData("Auton Chooser", autoRoutineChooser);
 
     MecanumAutoBuilder autoBuilder = new MecanumAutoBuilder(
@@ -264,12 +262,12 @@ public class DriveTrain extends SubsystemBase {
   public Pose2d currentAprilTag(int aimTo) {
     List<Pose2d> aprilTagCords = new ArrayList<>();
     Collections.addAll(aprilTagCords, 
-      new Pose2d(610.77, 42.19, null),
-      new Pose2d(610.77, 108.19, null),
-      new Pose2d(aimTo, aimTo, null),
-      new Pose2d(aimTo, aimTo, null),
-      new Pose2d(aimTo, aimTo, null),
-      new Pose2d(aimTo, aimTo, null)
+      new Pose2d(610.77, 42.19, new Rotation2d(3.14159)),
+      new Pose2d(610.77, 108.19, new Rotation2d(3.14159)),
+      new Pose2d(610.77, 174.19, new Rotation2d(3.14159)),
+      new Pose2d(aimTo, aimTo, new Rotation2d(0)),
+      new Pose2d(aimTo, aimTo, new Rotation2d(0)),
+      new Pose2d(aimTo, aimTo, new Rotation2d(0))
     );
     return aprilTagCords.get(aimTo);
   }
@@ -322,9 +320,9 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    Rotation2d curHeadRot2d = new Rotation2d(sysVMXPi.GetHeading());
+    Rotation2d curRot2d = sysVMXPi.getRotation2d();
 
-    mecanumDriveOdometry.update(curHeadRot2d, wheelPositions);
+    mecanumDriveOdometry.update(curRot2d, wheelPositions);
 
     SmartDashboard.putData("frontLeft", frontLeft);
     SmartDashboard.putData("frontRight", frontRight);

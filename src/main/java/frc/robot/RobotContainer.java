@@ -92,8 +92,8 @@ public class RobotContainer {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public static final Joystick driverMainController = new Joystick(ControllerConstants.DRIVERONE_PORT);
-  private final JoystickButton driverMainA = new JoystickButton(driverMainController, 1);
-  private final JoystickButton driverMainY = new JoystickButton(driverMainController, 4);
+  private final JoystickButton mainButton1 = new JoystickButton(driverMainController, 1);
+  private final JoystickButton mainButton2 = new JoystickButton(driverMainController, 4);
 
   public static final XboxController driverSecondController = new XboxController(ControllerConstants.DRIVERTWO_PORT);
   private final JoystickButton driverSecondA = new JoystickButton(driverSecondController, 1);
@@ -142,8 +142,8 @@ public class RobotContainer {
   // Driver (Main)
   // ----------------------------
     // Assigning driver main button X to cmdAutoBalance
-    driverMainA.onTrue(cmdBrakeDown);
-    driverMainY.onTrue(cmdBrakeUp);
+    mainButton1.onTrue(cmdBrakeDown);
+    mainButton2.onTrue(cmdBrakeUp);
 
 
 
@@ -155,7 +155,10 @@ public class RobotContainer {
   // ----------------------------
 
     driverSecondA.onTrue(cmdTelescoperIn);
-    driverSecondY.onTrue(cmdTelescoperOut);
+    if ((sysArm.GetArmEnc() < 5500 ) || (sysArm.GetArmEnc() > 450 )) {
+      driverSecondY.onTrue(cmdTelescoperOut);
+    }
+    
 
     driverSecondLeftBump.onTrue(cmdClawOpen);
     driverSecondRghtBump.onTrue(cmdClawClose);
@@ -173,7 +176,6 @@ public class RobotContainer {
   //  * @return the command to run in autonomous
   //  */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-     return sysDriveTrain.autoRoutineChooser.;
+    return sysDriveTrain.autoRoutineChooser.getSelected();
   }
 }

@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -55,10 +53,11 @@ public class LimeLight extends SubsystemBase {
  
   double [] botPoseArray = botPose.getDoubleArray(new double[6]);
 
+  boolean tagDetected;
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
     // Getting the Limelight values from the Network tables periodically
     double x = tX.getDouble(0.0);
     double y = tY.getDouble(0.0);
@@ -87,6 +86,11 @@ public class LimeLight extends SubsystemBase {
                       }
     
    // botPose.getDoubleArray(new double [6]);
+   if (id != 9) {
+    tagDetected = true;
+   } else {
+    tagDetected = false;
+   }
 
     // Putting LimeLight values onto SmartDashboard
     SmartDashboard.putNumber("LimeLight X", x);
@@ -94,6 +98,9 @@ public class LimeLight extends SubsystemBase {
     SmartDashboard.putNumber("LimeLight Area", area);
     // SmartDashboard.putString("Currently Viewed AprilTag", currentlyViewedAprilTag);
     SmartDashboard.putNumber("BotPose Z", this.GetBotPoseX());
+
+    SmartDashboard.putBoolean("AprilTag Detected", tagDetected);
+    SmartDashboard.putString("Currently Viewed AprilTag", currentlyViewedAprilTag);
    
   }
 

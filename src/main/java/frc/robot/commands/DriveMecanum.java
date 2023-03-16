@@ -16,6 +16,8 @@ public class DriveMecanum extends CommandBase {
   double moveSpeedX;
   double moveSpeedZ;
 
+  double speedMultThrot;
+
   public DriveMecanum(DriveTrain inSysDriveTrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     sysDriveTrain = inSysDriveTrain;
@@ -35,22 +37,30 @@ public class DriveMecanum extends CommandBase {
     // if (RobotContainer.driverMainController.getRightTriggerAxis() != 0) {
     //   moveSpeedX = RobotContainer.driverMainController.getRightTriggerAxis();
     // }
+    if (RobotContainer.driverMainController.getThrottle() == 0) {
+      speedMultThrot = RobotContainer.driverMainController.getThrottle() + .01;
+    } else {
+      speedMultThrot = RobotContainer.driverMainController.getThrottle();
+    }
 
     if (Math.abs(RobotContainer.driverMainController.getY()) > .082) {
-      moveSpeedY = RobotContainer.driverMainController.getY();
+      moveSpeedY = speedMultThrot * RobotContainer.driverMainController.getY();
     } else {
       moveSpeedY = 0;
     }
 
     if (Math.abs(RobotContainer.driverMainController.getX()) > .045) {
-      moveSpeedX = -1 * RobotContainer.driverMainController.getX();
+      moveSpeedX = -speedMultThrot * RobotContainer.driverMainController.getX();
     } else {
       moveSpeedX = 0;
     }
     
-    if (Math.abs(RobotContainer.driverMainController.getX()) > .062)
-    moveSpeedZ = -1  * RobotContainer.driverMainController.getX();
-    
+    if (Math.abs(RobotContainer.driverMainController.getZ()) > .062) {
+    moveSpeedZ = -speedMultThrot  * RobotContainer.driverMainController.getZ();
+    } else {
+      moveSpeedZ = 0;
+    }
+
     sysDriveTrain.CartisianDrive(moveSpeedY, moveSpeedX, moveSpeedZ);
   }
 

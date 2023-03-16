@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Solenoids;
 
@@ -32,15 +33,21 @@ public class TelescoperOut extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    finished = false;
-
-     if ((sysArm.GetArmEnc() > 5500 ) || (sysArm.GetArmEnc() < 450 )) {
-      // sysSolenoids.ToggleTelescope(Value.kOff);
-      finished = true;
-     } else {
+    //  if ((sysArm.GetArmEnc() > 5500 ) || (sysArm.GetArmEnc() < 450 ) 
+    //  && 
+    //  RobotContainer.driverSecondController.getYButtonPressed()) {
+    //   // sysSolenoids.ToggleTelescope(Value.kOff);
+    //   finished = true;
+    //  } else {
       sysSolenoids.ToggleTelescope(Value.kReverse);
+    //   finished = true;
+    //  }
+
+    if (sysSolenoids.GetTelescope() == Value.kReverse) {
       finished = true;
-     }
+    } else {
+      finished = false;
+    }
       
   }
 
