@@ -167,16 +167,6 @@ public class DriveTrain extends SubsystemBase {
     // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
     // eventMap.put("intakeDown", new IntakeDown());
 
-    
-
-    List<PathPlannerTrajectory> LinkLoadingSideBlue = PathPlanner.loadPathGroup("Loading Station Side Link", new PathConstraints(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL));
-    List<PathPlannerTrajectory> LinkCommunitySideBlue = PathPlanner.loadPathGroup("Community Zone Side Link", DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL);
-
-    SendableChooser <Command> autoRoutineChooser = new SendableChooser<>();
-    autoRoutineChooser.addOption("Link Loading Side Blue", autoBuilder.fullAuto(LinkLoadingSideBlue));
-    autoRoutineChooser.addOption("Link Community Side Blue", autoBuilder.fullAuto(LinkCommunitySideBlue));
-    SmartDashboard.putData("Auton Chooser", autoRoutineChooser);
-
     MecanumAutoBuilder autoBuilder = new MecanumAutoBuilder(
       mecanumDriveOdometry :: getPoseMeters,
       this :: resetOdometry, 
@@ -187,8 +177,16 @@ public class DriveTrain extends SubsystemBase {
       this :: setWheelSpeeds, 
       DriveAuton.EVENT_MAP, 
       true, 
-      this);
-    
+      this
+    );
+
+    List<PathPlannerTrajectory> LinkLoadingSideBlue = PathPlanner.loadPathGroup("Loading Station Side Link", new PathConstraints(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL));
+    List<PathPlannerTrajectory> LinkCommunitySideBlue = PathPlanner.loadPathGroup("Community Zone Side Link", DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL);
+
+    SendableChooser <Command> autoRoutineChooser = new SendableChooser<>();
+    autoRoutineChooser.addOption("Link Loading Side Blue", autoBuilder.fullAuto(LinkLoadingSideBlue));
+    autoRoutineChooser.addOption("Link Community Side Blue", autoBuilder.fullAuto(LinkCommunitySideBlue));
+    SmartDashboard.putData("Auton Chooser", autoRoutineChooser);  
   }
 
   public void CartisianDrive(double speedX, double speedY, double speedZ) {
@@ -330,9 +328,8 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putData("backRight", backRight);
 
     // Putting Controller Left and Right Stick Values
-    SmartDashboard.putNumber("LeftStickY Value", RobotContainer.driverMainController.getY());
-    SmartDashboard.putNumber("RightStickY Value", RobotContainer.driverMainController.getY());
-    SmartDashboard.putNumber("LeftStickX Value", RobotContainer.driverMainController.getX());
-    SmartDashboard.putNumber("RightStickX Value", RobotContainer.driverMainController.getX());
+    SmartDashboard.putNumber("Y Value", RobotContainer.driverMainController.getY());
+    SmartDashboard.putNumber("X Value", RobotContainer.driverMainController.getX());
+    SmartDashboard.putNumber("Z Value", RobotContainer.driverMainController.getZ());
   }
 }

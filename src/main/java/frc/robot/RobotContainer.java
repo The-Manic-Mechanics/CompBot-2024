@@ -155,9 +155,9 @@ public class RobotContainer {
   // ----------------------------
 
     driverSecondA.onTrue(cmdTelescoperIn);
-    if ((sysArm.GetArmEnc() < 5500 ) || (sysArm.GetArmEnc() > 450 )) {
-      driverSecondY.onTrue(cmdTelescoperOut);
-    }
+   
+    driverSecondY.onTrue(cmdTelescoperOut);
+
     
 
     driverSecondLeftBump.onTrue(cmdClawOpen);

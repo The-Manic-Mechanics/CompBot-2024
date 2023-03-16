@@ -39,7 +39,9 @@ public class TelescoperOut extends CommandBase {
     //   // sysSolenoids.ToggleTelescope(Value.kOff);
     //   finished = true;
     //  } else {
+      if ((sysArm.GetArmEnc() > 5500 ) || (sysArm.GetArmEnc() < 450 )) {
       sysSolenoids.ToggleTelescope(Value.kReverse);
+      }
     //   finished = true;
     //  }
 

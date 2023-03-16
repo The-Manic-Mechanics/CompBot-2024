@@ -86,10 +86,10 @@ public class LimeLight extends SubsystemBase {
                       }
     
    // botPose.getDoubleArray(new double [6]);
-   if (id != 9) {
-    tagDetected = true;
-   } else {
+   if (id == 9) {
     tagDetected = false;
+   } else {
+    tagDetected = true;
    }
 
     // Putting LimeLight values onto SmartDashboard
@@ -100,7 +100,7 @@ public class LimeLight extends SubsystemBase {
     SmartDashboard.putNumber("BotPose Z", this.GetBotPoseX());
 
     SmartDashboard.putBoolean("AprilTag Detected", tagDetected);
-    SmartDashboard.putString("Currently Viewed AprilTag", currentlyViewedAprilTag);
+    //SmartDashboard.putString("Currently Viewed AprilTag", currentlyViewedAprilTag);
    
   }
 

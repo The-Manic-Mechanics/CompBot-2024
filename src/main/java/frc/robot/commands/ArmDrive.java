@@ -38,7 +38,7 @@ public class ArmDrive extends CommandBase {
 
     
     
-    sysArm.SetArmSpeed(speed, .35);
+    sysArm.SetArmSpeed(speed, .40);
     // sysArm.SetArmSpeed(speed, 0.25);
   }
 
