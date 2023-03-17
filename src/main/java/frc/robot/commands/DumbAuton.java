@@ -5,17 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveTrain;
 
 public class DumbAuton extends CommandBase {
   private final DriveTrain sysDriveTrain;
+  private final Arm sysArm;
   private final int auton_walk_feet = 5;
+  private final boolean auton_block_placed = false;
 
   /** Creates a new DumbAuton. */
-  public DumbAuton(DriveTrain inSysDriveTrain) {
+  public DumbAuton(DriveTrain inSysDriveTrain, Arm inSysArm) {
     sysDriveTrain = inSysDriveTrain;
+    sysArm = inSysArm;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(sysDriveTrain);
+    addRequirements(sysDriveTrain, sysArm);
   }
 
   // Called when the command is initially scheduled.
@@ -30,13 +34,17 @@ public class DumbAuton extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    int inches = auton_walk_feet * 12;
-    if ((sysDriveTrain.frontLeftEnc.getDistance() >= inches || 
-        (sysDriveTrain.frontRightEnc.getDistance() >= inches) || 
-        (sysDriveTrain.backLeftEnc.getDistance() >= inches) || 
-        (sysDriveTrain.backRightEnc.getDistance() >= inches))) {
-      sysDriveTrain.CartisianDrive(0, 0, 0);
-    } else sysDriveTrain.CartisianDrive(-.5, 0, 0);
+    if (!auton_block_placed) {
+
+    } else {
+      int inches = auton_walk_feet * 12;
+      if ((sysDriveTrain.frontLeftEnc.getDistance() >= inches || 
+         (sysDriveTrain.frontRightEnc.getDistance() >= inches) || 
+          (sysDriveTrain.backLeftEnc.getDistance() >= inches) || 
+          (sysDriveTrain.backRightEnc.getDistance() >= inches))) {
+        sysDriveTrain.CartisianDrive(0, 0, 0);
+      } else sysDriveTrain.CartisianDrive(-.5, 0, 0);
+    }
   }
 
   // Called once the command ends or is interrupted.
