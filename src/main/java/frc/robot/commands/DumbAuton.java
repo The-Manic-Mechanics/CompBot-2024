@@ -4,6 +4,9 @@
 
 package frc.robot.commands;
 
+import java.sql.Time;
+import java.util.concurrent.TimeUnit;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
@@ -20,7 +23,7 @@ public class DumbAuton extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initTime = Timer.getFPGATimestamp();
+    initTime = System.nanoTime();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -28,8 +31,8 @@ public class DumbAuton extends CommandBase {
   public void execute() {
     if (initTime == -1) return;
     
-    if (Math.abs(initTime - Timer.getFPGATimestamp()) < 6) {
-      sysDriveTrain.CartisianDrive(0, 1, 0);
+    if (initTime - System.nanoTime() < 1_000_000_000 * 2.5) {
+      sysDriveTrain.CartisianDrive(0, 0.7, 0);
     } else {
       sysDriveTrain.CartisianDrive(0, 0, 0);
 

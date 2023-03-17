@@ -6,9 +6,6 @@ package frc.robot;
 
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.ArmDrive;
-import frc.robot.commands.AutoAimFwd;
-import frc.robot.commands.AutoAimLeft;
-import frc.robot.commands.AutoAimRight;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ClawClose;
 import frc.robot.commands.ClawOpen;
@@ -16,14 +13,11 @@ import frc.robot.commands.DriveMecanum;
 import frc.robot.commands.DumbAuton;
 import frc.robot.commands.TelescoperIn;
 import frc.robot.commands.TelescoperOut;
-import frc.robot.commands.example;
 import frc.robot.commands.BrakeDown;
 import frc.robot.commands.BrakeUp;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.Solenoids;
-import frc.robot.subsystems.VMXPi;
 import frc.robot.subsystems.Arm;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -53,9 +47,6 @@ public class RobotContainer {
 
   private final Solenoids sysSolenoids = new Solenoids();
 
-  private final LimeLight sysLimeLight = new LimeLight();
-
-  private final VMXPi sysVMXPi = new VMXPi();
   // ----------------------------------------------------------------------------------
 
   // ---------------------------
@@ -83,19 +74,17 @@ public class RobotContainer {
     // );
 
   private final ArmDrive cmdArmDrive = new ArmDrive(sysArm/* , sysSolenoids*/);
-  private final AutoAimFwd cmdAutoAimFwd = new AutoAimFwd(sysDriveTrain, sysLimeLight, sysVMXPi);
-  private final AutoAimLeft cmdAutoAimLeft = new AutoAimLeft(sysDriveTrain, sysLimeLight, sysVMXPi);
-  private final AutoAimRight cmdAutoAimRight = new AutoAimRight(sysDriveTrain, sysLimeLight, sysVMXPi);
+
   private final ClawOpen cmdClawOpen = new ClawOpen(sysSolenoids);
   private final ClawClose cmdClawClose = new ClawClose(sysSolenoids);
 
   private final TelescoperIn cmdTelescoperIn = new TelescoperIn(sysSolenoids, sysArm);
   private final TelescoperOut cmdTelescoperOut = new TelescoperOut(sysSolenoids, sysArm);
 
+  private final DumbAuton cmdDumbAuton = new DumbAuton(sysDriveTrain);
+
   private final BrakeUp cmdBrakeUp = new BrakeUp(sysSolenoids);
   private final BrakeDown cmdBrakeDown = new BrakeDown(sysSolenoids);
-  private final example cmdexample = new example();
-  private final DumbAuton cmdDumbAuton = new DumbAuton(sysDriveTrain);
 
 
   // ----------------------------------------------------------------------------------
@@ -107,9 +96,6 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public static final XboxController driverMainController = new XboxController(ControllerConstants.DRIVERONE_PORT);
   private final JoystickButton mainButton1 = new JoystickButton(driverMainController, 1);
-  private final JoystickButton button_autoaim_fwd = new JoystickButton(driverMainController, 2);
-  private final JoystickButton button_autoaim_left = new JoystickButton(driverMainController, 5);
-  private final JoystickButton button_autoaim_right = new JoystickButton(driverMainController, 6);
   private final JoystickButton mainButton2 = new JoystickButton(driverMainController, 4);
 
   public static final XboxController driverSecondController = new XboxController(ControllerConstants.DRIVERTWO_PORT);
@@ -161,9 +147,6 @@ public class RobotContainer {
     // Assigning driver main button X to cmdAutoBalance
     mainButton1.onTrue(cmdBrakeDown);
     mainButton2.onTrue(cmdBrakeUp);
-    button_autoaim_fwd.onTrue(cmdAutoAimFwd);
-    button_autoaim_left.onTrue(cmdAutoAimLeft);
-    button_autoaim_right.onTrue(cmdAutoAimRight);
 
 
 
@@ -196,7 +179,6 @@ public class RobotContainer {
   //  * @return the command to run in autonomous
   //  */
   public Command getAutonomousCommand() {
-    // return sysDriveTrain.autoRoutineChooser.getSelected();
-    return cmdexample;
+    return cmdDumbAuton;
   }
 }
