@@ -70,10 +70,10 @@ public class DriveTrain extends SubsystemBase {
 
   public MecanumDriveOdometry mecanumDriveOdometry;
 
-  Encoder frontLeftEnc;
-  Encoder frontRightEnc;
-  Encoder backLeftEnc;
-  Encoder backRightEnc;
+  public Encoder frontLeftEnc;
+  public Encoder frontRightEnc;
+  public Encoder backLeftEnc;
+  public Encoder backRightEnc;
 
   public SendableChooser<Command> autoRoutineChooser;
   MecanumAutoBuilder autoBuilder;

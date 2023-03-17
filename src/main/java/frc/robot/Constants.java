@@ -122,7 +122,7 @@ public final class Constants {
 
       public static final  HashMap<String, Command> EVENT_MAP = new HashMap<>();
 
-      public static final double DISTANCE_PER_PULSE = 25.132741228718 / 39.37;
+      public static final double DISTANCE_PER_PULSE = 25.132741228718 / 4000;
 
     }
   }
