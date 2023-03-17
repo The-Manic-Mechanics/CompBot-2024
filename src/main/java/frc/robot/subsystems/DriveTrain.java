@@ -136,10 +136,10 @@ public class DriveTrain extends SubsystemBase {
 
     mecanumDriveWheelSpeeds = mecanumDriveKinematics.toWheelSpeeds(mecanumChassisSpeeds);
 
-    //double frontLeftSpeed = mecanumDriveWheelSpeeds.frontLeftMetersPerSecond;
-    //double frontRightSpeed = mecanumDriveWheelSpeeds.frontRightMetersPerSecond;
-    //double backLeftSpeed = mecanumDriveWheelSpeeds.rearLeftMetersPerSecond;
-    //double backRightSpeed = mecanumDriveWheelSpeeds.rearRightMetersPerSecond;
+    // double frontLeftSpeed = mecanumDriveWheelSpeeds.frontLeftMetersPerSecond;
+    // double frontRightSpeed = mecanumDriveWheelSpeeds.frontRightMetersPerSecond;
+    // double backLeftSpeed = mecanumDriveWheelSpeeds.rearLeftMetersPerSecond;
+    // double backRightSpeed = mecanumDriveWheelSpeeds.rearRightMetersPerSecond;
 
     wheelPositions = new MecanumDriveWheelPositions(
         frontLeftEnc.getDistance(),
@@ -147,8 +147,9 @@ public class DriveTrain extends SubsystemBase {
         backLeftEnc.getDistance(),
         backRightEnc.getDistance());
 
-    double [] currentPose = sysLimelight.GetBotPoseArray();
-    // #FIXME# Make sure all values are what you think they are in API (Like the value used for rot)
+    double[] currentPose = sysLimelight.GetBotPoseArray();
+    // #FIXME# Make sure all values are what you think they are in API (Like the
+    // value used for rot)
     Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], sysVMXPi.vmxPi.getRotation2d());
 
     // #TODO# Use apriltags to caculate initial pose
@@ -167,6 +168,7 @@ public class DriveTrain extends SubsystemBase {
     // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
     // eventMap.put("intakeDown", new IntakeDown());
 
+<<<<<<< HEAD
     MecanumAutoBuilder autoBuilder = new MecanumAutoBuilder(
       mecanumDriveOdometry :: getPoseMeters,
       this :: resetOdometry, 
@@ -188,6 +190,30 @@ public class DriveTrain extends SubsystemBase {
     autoRoutineChooser.addOption("Link Community Side Blue", autoBuilder.fullAuto(LinkCommunitySideBlue));
     autoRoutineChooser.setDefaultOption(getName(), null);
     SmartDashboard.putData("Auton Chooser", autoBuilder.fullAuto(LinkLoadingSideBlue));  
+=======
+    List<PathPlannerTrajectory> LinkLoadingSideBlue = PathPlanner.loadPathGroup("Loading Station Side Link",
+        new PathConstraints(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL));
+    List<PathPlannerTrajectory> LinkCommunitySideBlue = PathPlanner.loadPathGroup("Community Zone Side Link",
+        DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL);
+
+    autoRoutineChooser.addOption("Link Loading Side Blue", autoBuilder.fullAuto(LinkLoadingSideBlue));
+    autoRoutineChooser.addOption("Link Community Side Blue", autoBuilder.fullAuto(LinkCommunitySideBlue));
+    autoRoutineChooser.setDefaultOption("Default", autoBuilder.fullAuto(LinkLoadingSideBlue));
+    SmartDashboard.putData("Auton Chooser", autoRoutineChooser);
+
+    MecanumAutoBuilder autoBuilder = new MecanumAutoBuilder(
+        mecanumDriveOdometry::getPoseMeters,
+        this::resetOdometry,
+        mecanumDriveKinematics,
+        new PIDConstants(.5, 0, 0), // Constants for the translation controller
+        new PIDConstants(.5, 0, 0), // Constants for the rot controller
+        DriveAuton.MAX_METRES_PER_SEC,
+        this::setWheelSpeeds,
+        DriveAuton.EVENT_MAP,
+        true,
+        this);
+
+>>>>>>> 6695e32 (Live fixes)
   }
 
   public void CartisianDrive(double speedX, double speedY, double speedZ) {
@@ -213,9 +239,8 @@ public class DriveTrain extends SubsystemBase {
 
   public MecanumDriveWheelPositions getCurMecWheelPos() {
     return new MecanumDriveWheelPositions(
-      frontLeftEnc.getDistance(), frontRightEnc.getDistance(), 
-      backLeftEnc.getDistance(), backRightEnc.getDistance()
-      );
+        frontLeftEnc.getDistance(), frontRightEnc.getDistance(),
+        backLeftEnc.getDistance(), backRightEnc.getDistance());
   }
 
   public void setWheelSpeeds(MecanumDriveWheelSpeeds inSpeeds) {
@@ -236,7 +261,7 @@ public class DriveTrain extends SubsystemBase {
     return mecanumDriveOdometry.getPoseMeters();
   }
 
-  /*For on the fly path generation*/
+  /* For on the fly path generation */
   public PathPlannerTrajectory genPath(
       double maxVel, double maxAccel, Translation2d transP1, double rotHead1, double rotHolo1, Translation2d transP2,
       double rotHead2, double rotHolo2) {
@@ -260,14 +285,13 @@ public class DriveTrain extends SubsystemBase {
 
   public Pose2d currentAprilTag(int aimTo) {
     List<Pose2d> aprilTagCords = new ArrayList<>();
-    Collections.addAll(aprilTagCords, 
-      new Pose2d(610.77, 42.19, new Rotation2d(3.14159)),
-      new Pose2d(610.77, 108.19, new Rotation2d(3.14159)),
-      new Pose2d(610.77, 174.19, new Rotation2d(3.14159)),
-      new Pose2d(aimTo, aimTo, new Rotation2d(0)),
-      new Pose2d(aimTo, aimTo, new Rotation2d(0)),
-      new Pose2d(aimTo, aimTo, new Rotation2d(0))
-    );
+    Collections.addAll(aprilTagCords,
+        new Pose2d(610.77, 42.19, new Rotation2d(3.14159)),
+        new Pose2d(610.77, 108.19, new Rotation2d(3.14159)),
+        new Pose2d(610.77, 174.19, new Rotation2d(3.14159)),
+        new Pose2d(aimTo, aimTo, new Rotation2d(0)),
+        new Pose2d(aimTo, aimTo, new Rotation2d(0)),
+        new Pose2d(aimTo, aimTo, new Rotation2d(0)));
     return aprilTagCords.get(aimTo);
   }
 
@@ -276,13 +300,14 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-    //Pose2d initHoloPose = traj.getInitialHolonomicPose();
+    // Pose2d initHoloPose = traj.getInitialHolonomicPose();
 
     return new SequentialCommandGroup(
         new InstantCommand(() -> {
           // Reset odometry for the first path you run during auto
           if (isFirstPath) {
-              mecanumDriveOdometry.resetPosition(null, wheelPositions, mecanumDriveOdometry.getPoseMeters());}
+            mecanumDriveOdometry.resetPosition(null, wheelPositions, mecanumDriveOdometry.getPoseMeters());
+          }
         }),
         new PPMecanumControllerCommand(
             traj,
