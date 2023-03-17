@@ -183,10 +183,11 @@ public class DriveTrain extends SubsystemBase {
     List<PathPlannerTrajectory> LinkLoadingSideBlue = PathPlanner.loadPathGroup("Loading Station Side Link", new PathConstraints(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL));
     List<PathPlannerTrajectory> LinkCommunitySideBlue = PathPlanner.loadPathGroup("Community Zone Side Link", DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL);
 
-    SendableChooser <Command> autoRoutineChooser = new SendableChooser<>();
+    autoRoutineChooser = new SendableChooser<>();
     autoRoutineChooser.addOption("Link Loading Side Blue", autoBuilder.fullAuto(LinkLoadingSideBlue));
     autoRoutineChooser.addOption("Link Community Side Blue", autoBuilder.fullAuto(LinkCommunitySideBlue));
-    SmartDashboard.putData("Auton Chooser", autoRoutineChooser);  
+    autoRoutineChooser.setDefaultOption(getName(), null);
+    SmartDashboard.putData("Auton Chooser", autoBuilder.fullAuto(LinkLoadingSideBlue));  
   }
 
   public void CartisianDrive(double speedX, double speedY, double speedZ) {
@@ -328,8 +329,8 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putData("backRight", backRight);
 
     // Putting Controller Left and Right Stick Values
-    SmartDashboard.putNumber("Y Value", RobotContainer.driverMainController.getY());
-    SmartDashboard.putNumber("X Value", RobotContainer.driverMainController.getX());
-    SmartDashboard.putNumber("Z Value", RobotContainer.driverMainController.getZ());
+    SmartDashboard.putNumber("X Value", RobotContainer.driverMainController.getLeftX());
+    SmartDashboard.putNumber("Y Value", RobotContainer.driverMainController.getLeftY());
+    SmartDashboard.putNumber("Z Value", RobotContainer.driverMainController.getRightX());
   }
 }

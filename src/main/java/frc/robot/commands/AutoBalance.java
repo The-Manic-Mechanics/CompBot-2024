@@ -77,8 +77,8 @@ public class AutoBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double lgety = RobotContainer.driverMainController.getY();
-    double rgetx = RobotContainer.driverMainController.getX();
+    double lgety = RobotContainer.driverMainController.getLeftY();
+    double rgetx = RobotContainer.driverMainController.getLeftX();
     if ((AutoBalanceConstants.DEADZONE_MIN >= currentRoll) 
     ||
     (AutoBalanceConstants.DEADZONE_MAX <= currentRoll)) {

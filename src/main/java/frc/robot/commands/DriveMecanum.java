@@ -13,7 +13,7 @@ public class DriveMecanum extends CommandBase {
   /** Creates a new DriveMecanum. */
   private final DriveTrain sysDriveTrain;
 
-  double speedMultThrot;
+  double speedMultThrot = 1;
   Timer matchTimer;
   /** d = drift, ct = current time, o = old */
   double moveSpeedX, xvar, xvar_offset = 0.0, controllerd_stx = 0.0d, controllerd_oxvar;
@@ -41,97 +41,98 @@ public class DriveMecanum extends CommandBase {
     // if (RobotContainer.driverMainController.getRightTriggerAxis() != 0) {
     //   moveSpeedX = RobotContainer.driverMainController.getRightTriggerAxis();
     // }
-    xvar = RobotContainer.driverMainController.getX();
-    yvar = RobotContainer.driverMainController.getY();
-    zvar = RobotContainer.driverMainController.getZ();
+    xvar = RobotContainer.driverMainController.getLeftX();
+    yvar = RobotContainer.driverMainController.getLeftY();
+    zvar = RobotContainer.driverMainController.getRightX();
 
-    if (RobotContainer.driverMainController.getThrottle() == 0) {
-      speedMultThrot = RobotContainer.driverMainController.getThrottle() + .01;
-    } else {
-      speedMultThrot = RobotContainer.driverMainController.getThrottle();
-    }
-
-    // if (Math.abs(RobotContainer.driverMainController.getY()) > .045) {
-    //   moveSpeedY = -speedMultThrot * RobotContainer.driverMainController.getY();
+    // if (RobotContainer.driverMainController.getThrottle() == 0) {
+    //   speedMultThrot = RobotContainer.driverMainController.getThrottle() + .01;
     // } else {
-    //   moveSpeedY = 0;
+    //   speedMultThrot = RobotContainer.driverMainController.getThrottle();
     // }
+
+    if (Math.abs(yvar) > .15) {
+      moveSpeedY = speedMultThrot * yvar;
+    } else {
+      moveSpeedY = 0;
+    }
     
     // Y_THROTTLE
-    {
-      if (controllerd_sty == 0) {
-        if (yvar < .9) {
-          controllerd_oyvar = yvar;
-          controllerd_sty = matchTimer.getFPGATimestamp();
-        }
-        moveSpeedY = speedMultThrot * yvar;
-      } else {
-        if (Math.abs(yvar - controllerd_oyvar) >= 0.2) {
-          yvar_offset = 0;
-          controllerd_sty = 0;
-          moveSpeedY = speedMultThrot * yvar;
-          return;
-        }
-        if (Math.abs(controllerd_sty - matchTimer.getFPGATimestamp()) >= .5d && Math.abs(yvar - controllerd_oyvar) <= 0.2) {
-          yvar_offset = yvar;
-        }
-      }
-    }
-    
-    // if (Math.abs(RobotContainer.driverMainController.getX()) > .045) {
-    //   moveSpeedX = -speedMultThrot * RobotContainer.driverMainController.getX();
-    // } else {
-    //   moveSpeedX = 0;
+    // {
+    //   if (controllerd_sty == 0) {
+    //     if (yvar < .9) {
+    //       controllerd_oyvar = yvar;
+    //       controllerd_sty = matchTimer.getFPGATimestamp();
+    //     }
+    //     moveSpeedY = speedMultThrot * yvar;
+    //   } else {
+    //     if (Math.abs(yvar - controllerd_oyvar) >= controller_pause_radius) {
+    //       yvar_offset = 0;
+    //       controllerd_sty = 0;
+    //       moveSpeedY = speedMultThrot * yvar;
+    //       return;
+    //     }
+    //     if (Math.abs(controllerd_sty - matchTimer.getFPGATimestamp()) >= .5d && Math.abs(yvar - controllerd_oyvar) <= 0.2) {
+    //       yvar_offset = yvar;
+    //     }
+    //   }
     // }
+    
+    if (Math.abs(xvar) > .32) {
+      moveSpeedX = -speedMultThrot * xvar;
+    } else {
+      moveSpeedX = 0;
+    }
 
     // X_THROTTLE
-    {
-      if (controllerd_stx == 0) {
-        if (xvar < .9) {
-          controllerd_oxvar = xvar;
-          controllerd_stx = matchTimer.getFPGATimestamp();
-        }
-        moveSpeedX = speedMultThrot * xvar;
-      } else {
-        if (Math.abs(xvar - controllerd_oxvar) >= 0.2) {
-          xvar_offset = 0;
-          controllerd_stx = 0;
-          moveSpeedX = speedMultThrot * xvar;
-          return;
-        }
-        if (Math.abs(controllerd_stx - matchTimer.getFPGATimestamp()) >= .5d && Math.abs(xvar - controllerd_oxvar) <= 0.2) {
-          xvar_offset = xvar;
-        }
-      }
-    }
-    
-    // if (Math.abs(RobotContainer.driverMainController.getZ()) > .062) {
-    // moveSpeedZ = -speedMultThrot  * RobotContainer.driverMainController.getZ();
-    // } else {
-    //   moveSpeedZ = 0;
+    // {
+    //   if (controllerd_stx == 0) {
+    //     if (xvar < .9) {
+    //       controllerd_oxvar = xvar;
+    //       controllerd_stx = matchTimer.getFPGATimestamp();
+    //     }
+    //     moveSpeedX = speedMultThrot * xvar;
+    //   } else {
+    //     if (Math.abs(xvar - controllerd_oxvar) >= controller_pause_radius) {
+    //       xvar_offset = 0;
+    //       controllerd_stx = 0;
+    //       moveSpeedX = speedMultThrot * xvar;
+    //       return;
+    //     }
+    //     if (Math.abs(controllerd_stx - matchTimer.getFPGATimestamp()) >= .5d && Math.abs(xvar - controllerd_oxvar) <= 0.2) {
+    //       xvar_offset = xvar;
+    //     }
+    //   }
     // }
-    // Z_THROTTLE
-    {
-      if (controllerd_stz == 0) {
-        if (zvar < .9) {
-          controllerd_ozvar = zvar;
-          controllerd_stz = matchTimer.getFPGATimestamp();
-        }
-        moveSpeedZ = speedMultThrot * zvar;
-      } else {
-        if (Math.abs(zvar - controllerd_ozvar) >= 0.2) {
-          zvar_offset = 0;
-          controllerd_stz = 0;
-          moveSpeedZ = speedMultThrot * zvar;
-          return;
-        }
-        if (Math.abs(controllerd_stz - matchTimer.getFPGATimestamp()) >= .5d && Math.abs(zvar - controllerd_ozvar) <= 0.2) {
-          zvar_offset = zvar;
-        }
-      }
+    
+    if (Math.abs(zvar) > .062) {
+    moveSpeedZ = -speedMultThrot  * zvar;
+    } else {
+      moveSpeedZ = 0;
     }
 
-    sysDriveTrain.CartisianDrive(moveSpeedY - yvar_offset, moveSpeedX - xvar_offset, moveSpeedZ - zvar_offset);
+    // Z_THROTTLE
+    // {
+    //   if (controllerd_stz == 0) {
+    //     if (zvar < .9) {
+    //       controllerd_ozvar = zvar;
+    //       controllerd_stz = matchTimer.getFPGATimestamp();
+    //     }
+    //     moveSpeedZ = speedMultThrot * zvar;
+    //   } else {
+    //     if (Math.abs(zvar - controllerd_ozvar) >= controller_pause_radius) {
+    //       zvar_offset = 0;
+    //       controllerd_stz = 0;
+    //       moveSpeedZ = speedMultThrot * zvar;
+    //       return;
+    //     }
+    //     if (Math.abs(controllerd_stz - matchTimer.getFPGATimestamp()) >= .5d && Math.abs(zvar - controllerd_ozvar) <= 0.2) {
+    //       zvar_offset = zvar;
+    //     }
+    //   }
+    // }
+
+    sysDriveTrain.CartisianDrive(moveSpeedY, moveSpeedX, moveSpeedZ);
   }
 
   // Called once the command ends or is interrupted.
