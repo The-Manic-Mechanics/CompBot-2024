@@ -46,7 +46,7 @@ public class AutoAimLeft extends CommandBase {
       sysLimeLight.GetBotPose2d(), 
       0, 
       sysVMXPi.vmxPi.getAngle(), 
-      AprilTagCoordinates.AprilTagCoord_Trans2d(Integer.parseInt(sysLimeLight.limeLight_currentlyViewedAprilTag), 2),
+      AprilTagCoordinates.AprilTagCoord_Trans2d(Double.parseDouble(sysLimeLight.limeLight_currentlyViewedAprilTag), 2),
       0,
       sysVMXPi.vmxPi.getAngle()
     );

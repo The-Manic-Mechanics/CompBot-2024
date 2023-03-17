@@ -41,7 +41,7 @@ public class LimeLight extends SubsystemBase {
 
   NetworkTableEntry ledMode = limeLightTable.getEntry("ledMode");
   
-
+  public double [] botPoseArray;
 
   // how many degrees the limelight is mounted from perfectly vertical
   double limelightMountAngleDegrees = 90;
@@ -49,9 +49,6 @@ public class LimeLight extends SubsystemBase {
   double limelightLensHeightInches = 20;
   // distance from the april tag to the floor
   double aprilTagToFloorInches = 17.12598;
-
- 
-  public double [] botPoseArray = botPose.getDoubleArray(new double[6]);
 
   boolean tagDetected;
 
@@ -64,7 +61,7 @@ public class LimeLight extends SubsystemBase {
     double area = tA.getDouble(0.0);
     double id = tID.getDouble(9.0);
 
-    
+    botPoseArray = botPose.getDoubleArray(new double[6]);
    if (id == 9) {
     tagDetected = false;
     limeLight_currentlyViewedAprilTag = "None";
@@ -74,7 +71,7 @@ public class LimeLight extends SubsystemBase {
    }
 
     // Putting LimeLight values onto SmartDashboard
-    SmartDashboard.putNumber("LimeLight X", x);
+    SmartDashboard.putNumber("LimeLight X", botPoseArray[1]);
     SmartDashboard.putNumber("LimeLight Y", y);
     SmartDashboard.putNumber("LimeLight Area", area);
     // SmartDashboard.putString("Currently Viewed AprilTag", currentlyViewedAprilTag);

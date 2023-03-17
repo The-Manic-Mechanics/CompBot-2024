@@ -41,12 +41,12 @@ public class AutoAimFwd extends CommandBase {
   @Override
   public void execute() {
     PathPlannerTrajectory path = sysDriveTrain.genPath(
-      DriveAuton.MAX_METRES_PER_SEC, 
-      DriveAuton.MAX_ACCEL, 
+      .97, 
+      1, 
       sysLimeLight.GetBotPose2d(), 
       0, 
       sysVMXPi.vmxPi.getAngle(), 
-      AprilTagCoordinates.AprilTagCoord_Trans2d(Integer.parseInt(sysLimeLight.limeLight_currentlyViewedAprilTag), 1),
+      AprilTagCoordinates.AprilTagCoord_Trans2d(Double.parseDouble(sysLimeLight.limeLight_currentlyViewedAprilTag), 1),
       0,
       sysVMXPi.vmxPi.getAngle()
     );

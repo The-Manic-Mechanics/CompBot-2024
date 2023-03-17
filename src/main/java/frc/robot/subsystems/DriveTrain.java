@@ -168,52 +168,30 @@ public class DriveTrain extends SubsystemBase {
     // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
     // eventMap.put("intakeDown", new IntakeDown());
 
-<<<<<<< HEAD
-    MecanumAutoBuilder autoBuilder = new MecanumAutoBuilder(
-      mecanumDriveOdometry :: getPoseMeters,
-      this :: resetOdometry, 
-      mecanumDriveKinematics, 
-      new PIDConstants(.5, 0, 0), // Constants for the translation controller
-      new PIDConstants(.5, 0, 0), // Constants for the rot controller
-      DriveAuton.MAX_METRES_PER_SEC, 
-      this :: setWheelSpeeds, 
-      DriveAuton.EVENT_MAP, 
-      true, 
-      this
-    );
-
-    List<PathPlannerTrajectory> LinkLoadingSideBlue = PathPlanner.loadPathGroup("Loading Station Side Link", new PathConstraints(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL));
-    List<PathPlannerTrajectory> LinkCommunitySideBlue = PathPlanner.loadPathGroup("Community Zone Side Link", DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL);
-
-    autoRoutineChooser = new SendableChooser<>();
-    autoRoutineChooser.addOption("Link Loading Side Blue", autoBuilder.fullAuto(LinkLoadingSideBlue));
-    autoRoutineChooser.addOption("Link Community Side Blue", autoBuilder.fullAuto(LinkCommunitySideBlue));
-    autoRoutineChooser.setDefaultOption(getName(), null);
-    SmartDashboard.putData("Auton Chooser", autoBuilder.fullAuto(LinkLoadingSideBlue));  
-=======
     List<PathPlannerTrajectory> LinkLoadingSideBlue = PathPlanner.loadPathGroup("Loading Station Side Link",
         new PathConstraints(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL));
     List<PathPlannerTrajectory> LinkCommunitySideBlue = PathPlanner.loadPathGroup("Community Zone Side Link",
         DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL);
 
+    autoRoutineChooser = new SendableChooser<>();
+    
+    autoBuilder = new MecanumAutoBuilder(
+      mecanumDriveOdometry::getPoseMeters,
+      this::resetOdometry,
+      mecanumDriveKinematics,
+      new PIDConstants(.5, 0, 0), // Constants for the translation controller
+      new PIDConstants(.5, 0, 0), // Constants for the rot controller
+      DriveAuton.MAX_METRES_PER_SEC,
+      this::setWheelSpeeds,
+      DriveAuton.EVENT_MAP,
+      true,
+      this
+    );
+
     autoRoutineChooser.addOption("Link Loading Side Blue", autoBuilder.fullAuto(LinkLoadingSideBlue));
     autoRoutineChooser.addOption("Link Community Side Blue", autoBuilder.fullAuto(LinkCommunitySideBlue));
     autoRoutineChooser.setDefaultOption("Default", autoBuilder.fullAuto(LinkLoadingSideBlue));
     SmartDashboard.putData("Auton Chooser", autoRoutineChooser);
-
-    MecanumAutoBuilder autoBuilder = new MecanumAutoBuilder(
-        mecanumDriveOdometry::getPoseMeters,
-        this::resetOdometry,
-        mecanumDriveKinematics,
-        new PIDConstants(.5, 0, 0), // Constants for the translation controller
-        new PIDConstants(.5, 0, 0), // Constants for the rot controller
-        DriveAuton.MAX_METRES_PER_SEC,
-        this::setWheelSpeeds,
-        DriveAuton.EVENT_MAP,
-        true,
-        this);
-
->>>>>>> 6695e32 (Live fixes)
   }
 
   public void CartisianDrive(double speedX, double speedY, double speedZ) {

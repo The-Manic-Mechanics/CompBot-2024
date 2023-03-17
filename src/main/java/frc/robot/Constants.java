@@ -37,7 +37,8 @@ public final class Constants {
 
   public static class AprilTagCoordinates {
     /** direction: 1 (or !(2 or 3)) is fwd, 2 is left, 3 is right */
-    public static final Translation2d AprilTagCoord_Trans2d(int id, int direction) {
+    public static final Translation2d AprilTagCoord_Trans2d(double in_id, int direction) {
+      int id = (int)in_id;
       if (direction == 2) //left
       return new Translation2d(APRILTAG_COORDS[id][0], APRILTAG_COORDS[id][1] + 13.75);
       else if (direction == 3) //right
@@ -106,8 +107,8 @@ public final class Constants {
     public static class DriveAuton {
       // #TODO# Add values to below constants
       // The forward maximum speed
-      public static final double MAX_METRES_PER_SEC = 3.87096;
-      public static final double MAX_ACCEL = 2;
+      public static final double MAX_METRES_PER_SEC = .30; // 3.87096
+      public static final double MAX_ACCEL = .30; // 2
       public static final double DRIVE_VEL = 8.5;
 
       public static final double TRACK_WIDTH_METRES = 0;
