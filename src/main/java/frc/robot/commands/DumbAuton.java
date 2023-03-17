@@ -4,16 +4,16 @@
 
 package frc.robot.commands;
 
-import java.sql.Time;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+import java.time.Instant;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 
 public class DumbAuton extends CommandBase {
   private final DriveTrain sysDriveTrain;
-  private double initTime = 0;
+  private Instant initTime;
+  public double dumbAuton_WalkTime = 2;
   /** Creates a new DumbAuton. */
   public DumbAuton(DriveTrain inSysDriveTrain) {
     sysDriveTrain = inSysDriveTrain;
@@ -23,23 +23,19 @@ public class DumbAuton extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initTime = System.nanoTime();
+    initTime = Instant.now();
+    sysDriveTrain.CartisianDrive(0, 0.7, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (initTime == -1) return;
-    
-    if (initTime - System.nanoTime() < 1_000_000_000 * 2.5) {
+    if (initTime == null) return;
+    if (Duration.between(initTime, Instant.now()).toSeconds() < dumbAuton_WalkTime) {
       sysDriveTrain.CartisianDrive(0, 0.7, 0);
     } else {
       sysDriveTrain.CartisianDrive(0, 0, 0);
-
-      try {throw new Exception("Auton complete process");
-      } catch (Exception e) {}
-      
-      initTime = -1;
+      initTime = null;
     }
   }
 
