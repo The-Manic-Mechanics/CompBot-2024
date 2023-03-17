@@ -5,6 +5,10 @@
 package frc.robot;
 
 import java.util.HashMap;
+
+import javax.swing.TransferHandler;
+
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -29,6 +33,46 @@ public final class Constants {
   public static class ControllerConstants {
     public static final int DRIVERONE_PORT = 0;
     public static final int DRIVERTWO_PORT = 1;
+  }
+
+  public static class AprilTagCoordinates {
+    /** direction: 1 (or !(2 or 3)) is fwd, 2 is left, 3 is right */
+    public static final Translation2d AprilTagCoord_Trans2d(int id, int direction) {
+      if (direction == 2) //left
+      return new Translation2d(APRILTAG_COORDS[id][0], APRILTAG_COORDS[id][1] + 13.75);
+      else if (direction == 3) //right
+      return new Translation2d(APRILTAG_COORDS[id][0], APRILTAG_COORDS[id][1] - 13.75);
+
+      return new Translation2d(APRILTAG_COORDS[id][0], APRILTAG_COORDS[id][1]);
+    }
+    
+
+    public static final double[][] APRILTAG_COORDS = {
+      {
+        610.77 - 28.28, 42.19, 18.22, 180
+      },
+      {
+        610.77 - 28.28, 108.19, 18.22, 180
+      },
+      {
+        610.77 - 28.28, 174.19, 18.22, 180
+      },
+      {
+        636.96, 265.74, 27.38, 180
+      },
+      {
+        14.25, 265.74, 27.38, 0
+      },
+      {
+        40.45 + 28.28, 174.19, 18.22, 0
+      },
+      {
+        40.45 + 28.28, 108.19, 18.22, 0
+      },
+      {
+        40.45 + 28.28, 42.19, 18.22, 0
+      }
+    };
   }
 
   public static class DriveTrainConstants {

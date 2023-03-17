@@ -32,7 +32,7 @@ public class LimeLight extends SubsystemBase {
   NetworkTableEntry tA = limeLightTable.getEntry("ta");
 
   NetworkTableEntry tID = limeLightTable.getEntry("tid");
-  String currentlyViewedAprilTag;
+  public String limeLight_currentlyViewedAprilTag;
   
   // NetworkTableEntry detectedTag = limeLightTable.getEntry("");
 
@@ -51,7 +51,7 @@ public class LimeLight extends SubsystemBase {
   double aprilTagToFloorInches = 17.12598;
 
  
-  double [] botPoseArray = botPose.getDoubleArray(new double[6]);
+  public double [] botPoseArray = botPose.getDoubleArray(new double[6]);
 
   boolean tagDetected;
 
@@ -64,31 +64,12 @@ public class LimeLight extends SubsystemBase {
     double area = tA.getDouble(0.0);
     double id = tID.getDouble(9.0);
 
-
-    if (id == 1) {
-    currentlyViewedAprilTag = "1";
-      } else if (id == 2) {
-      currentlyViewedAprilTag = "2";
-        } else if (id == 3) {
-        currentlyViewedAprilTag = "3";
-          } else if (id == 4) {
-          currentlyViewedAprilTag = "4";
-            } else if (id == 5) {
-            currentlyViewedAprilTag = "5";
-              } else if (id == 6) {
-              currentlyViewedAprilTag = "6";
-                } else if (id == 7) {
-                currentlyViewedAprilTag = "7";
-                  } else if (id == 8) {
-                  currentlyViewedAprilTag = "8";
-                    } else if (id == 9) {
-                    currentlyViewedAprilTag = "None";
-                      }
     
-   // botPose.getDoubleArray(new double [6]);
    if (id == 9) {
     tagDetected = false;
+    limeLight_currentlyViewedAprilTag = "None";
    } else {
+    limeLight_currentlyViewedAprilTag = Double.toString(id);
     tagDetected = true;
    }
 
