@@ -81,7 +81,7 @@ public class RobotContainer {
   private final TelescoperIn cmdTelescoperIn = new TelescoperIn(sysSolenoids, sysArm);
   private final TelescoperOut cmdTelescoperOut = new TelescoperOut(sysSolenoids, sysArm);
 
-  private final DumbAuton cmdDumbAuton = new DumbAuton(sysDriveTrain, sysArm);
+  private final DumbAuton cmdDumbAuton = new DumbAuton(sysDriveTrain, sysArm, sysSolenoids);
 
   private final BrakeUp cmdBrakeUp = new BrakeUp(sysSolenoids);
   private final BrakeDown cmdBrakeDown = new BrakeDown(sysSolenoids);

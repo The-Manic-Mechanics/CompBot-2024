@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.Arm;
 
 public class ArmDrive extends CommandBase {
@@ -30,8 +31,12 @@ public class ArmDrive extends CommandBase {
 
     double speed;
 
-    if ((sysArm.GetArmEnc() > 6100 && RobotContainer.driverSecondController.getLeftY() > 0) || (sysArm.GetArmEnc() <400 && RobotContainer.driverSecondController.getLeftY() < 0)) {
-      speed = 0;
+    if ((sysArm.GetArmEnc() > ArmConstants.MAX_ARM_BACK_ROT &&
+         RobotContainer.driverSecondController.getLeftY() > 0) ||
+         (sysArm.GetArmEnc() < 400 &&
+         RobotContainer.driverSecondController.getLeftY() < 0)) {
+          
+          speed = 0;
     } else {
       speed = -1 * RobotContainer.driverSecondController.getLeftY();
     }

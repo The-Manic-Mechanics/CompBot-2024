@@ -142,6 +142,8 @@ public final class Constants {
     public static final int TOP_ARM_MOTOR_PORT = 3;
     public static final int BOTTOM_ARM_MOTOR_PORT = 4;
 
+    public static final int MAX_ARM_BACK_ROT = 6100;
+    public static final int ARM_180_DEG = 3500;
     public static final int ARM_ENCODER_CHANNEL_A = 9;
     public static final int ARM_ENCODER_CHANNEL_B = 8;
   }
