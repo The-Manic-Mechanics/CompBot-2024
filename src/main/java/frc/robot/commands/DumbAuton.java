@@ -4,9 +4,6 @@
 
 package frc.robot.commands;
 
-import org.ejml.dense.row.linsol.qr.SolvePseudoInverseQrp_DDRM;
-
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ArmConstants;
@@ -19,7 +16,7 @@ public class DumbAuton extends CommandBase {
   private final Arm sysArm;
   private final Solenoids sysSolenoids;
   private final double auton_walk_feet = 4.5;
-  private int auton_block_placed = 0;
+  private boolean auton_block_placed;
 
   /** Creates a new DumbAuton. */
   public DumbAuton(DriveTrain inSysDriveTrain, Arm inSysArm, Solenoids inSysSolenoids) {
@@ -37,29 +34,21 @@ public class DumbAuton extends CommandBase {
     sysDriveTrain.frontRightEnc.reset();
     sysDriveTrain.backLeftEnc.reset();
     sysDriveTrain.backRightEnc.reset();
+    auton_block_placed = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if (auton_block_placed < 4) {
-    //   if (auton_block_placed == 0 && sysArm.GetArmEnc() >= ArmConstants.ARM_180_DEG) {
-    //     sysArm.SetArmSpeed(0, 0);
-    //     auton_block_placed = 1;
-    //   } else if (auton_block_placed == 1) {
-    //     sysSolenoids.ToggleClaw(Value.kForward);
-    //     auton_block_placed = 2;
-    //   } else if (auton_block_placed == 2) {
-    //     sysSolenoids.ToggleClaw(Value.kOff);
-    //     sysArm.SetArmSpeed(1, .40);
-    //     auton_block_placed = 3;
-    //   } else if (auton_block_placed == 3 && sysArm.GetArmEnc() <= 1000) {
-    //     sysArm.SetArmSpeed(0, 0);
-    //     auton_block_placed = 4; 
-    //   } else {
-    //     sysArm.SetArmSpeed(1, -.40);
-    //   }
-    // } else {
+    if (!auton_block_placed) {
+      if (sysArm.GetArmEnc() >= ArmConstants.ARM_180_DEG) {
+        sysArm.SetArmSpeed(0, 0);
+        sysSolenoids.ToggleClaw(Value.kForward);
+        auton_block_placed = true;
+      } else {
+        sysArm.SetArmSpeed(1, -.40);
+      }
+    } else {
       double inches = auton_walk_feet * 12.0d;
       if ((sysDriveTrain.frontLeftEnc.getDistance() >= inches || 
           (sysDriveTrain.frontRightEnc.getDistance() >= inches) || 
@@ -67,7 +56,7 @@ public class DumbAuton extends CommandBase {
           (sysDriveTrain.backRightEnc.getDistance() >= inches))) {
         sysDriveTrain.CartisianDrive(0, 0, 0);
       } else sysDriveTrain.CartisianDrive(-.5, 0, 0);
-    // }
+    }
   }
 
   // Called once the command ends or is interrupted.
