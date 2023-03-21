@@ -14,11 +14,17 @@ public class AutoBalance extends CommandBase {
   /** Creates a new AutoBalance. */
   private final VMXPi sysVmxPi;
   private final DriveTrain sysDriveTrain;
+  public boolean balanceOnOffset;
+  /*Offset Threshold*/
+  public double offSetThesh;
 
-  public AutoBalance(VMXPi inSysVMXPi, DriveTrain inSysDriveTrain) {
+  public AutoBalance(VMXPi inSysVMXPi, DriveTrain inSysDriveTrain, boolean inBalanceOnOffset, double inOffsetThresh) {
     // Use addRequirements() here to declare subsystem dependencies.
     sysVmxPi = inSysVMXPi;
     sysDriveTrain = inSysDriveTrain;
+    balanceOnOffset = inBalanceOnOffset;
+    offSetThesh = inOffsetThresh;
+
     addRequirements(sysVmxPi, sysDriveTrain);
   }
   
@@ -42,9 +48,21 @@ public class AutoBalance extends CommandBase {
   @Override
   public void execute() {
     // Getting the roll from the VMX Pi
-     currentRoll = sysVmxPi.GetRollVMXPI();
+    currentRoll = sysVmxPi.GetRollVMXPI();
 
-     speed = sysVmxPi.CalculateAutoBalancePID();
+    speed = sysVmxPi.CalculateAutoBalancePID();
+
+    if (balanceOnOffset && currentRoll > offSetThesh) {
+      if (!isBalanced) {
+        sysDriveTrain.CartisianDrive(0, speed, 0);
+      } 
+
+    } else {
+      if (!isBalanced) {
+        sysDriveTrain.CartisianDrive(0, speed, 0);
+      } 
+      
+    }
 
     // #TODO# Could be a problem (Stopping once VMX Pi reads zero)
     // Checks if AutoBalancing is complete
@@ -53,10 +71,7 @@ public class AutoBalance extends CommandBase {
     } else {
       isBalanced = false;
     }
-
-    if (!isBalanced) {
-      sysDriveTrain.CartisianDrive(0, speed, 0);
-    } 
+   
     
     // while (!isBalanced) {
 

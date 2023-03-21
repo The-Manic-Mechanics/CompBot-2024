@@ -11,15 +11,15 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Solenoids;
 
-public class DumbAuton extends CommandBase {
+public class PlaceDriveFwd extends CommandBase {
   private final DriveTrain sysDriveTrain;
   private final Arm sysArm;
   private final Solenoids sysSolenoids;
-  private final double auton_walk_feet = 4.5;
-  private boolean auton_block_placed;
+  private final double autonWalkFt = 18.833;
+  private boolean autonBlockPlaced;
 
   /** Creates a new DumbAuton. */
-  public DumbAuton(DriveTrain inSysDriveTrain, Arm inSysArm, Solenoids inSysSolenoids) {
+  public PlaceDriveFwd(DriveTrain inSysDriveTrain, Arm inSysArm, Solenoids inSysSolenoids) {
     sysDriveTrain = inSysDriveTrain;
     sysArm = inSysArm;
     sysSolenoids = inSysSolenoids;
@@ -34,26 +34,25 @@ public class DumbAuton extends CommandBase {
     sysDriveTrain.frontRightEnc.reset();
     sysDriveTrain.backLeftEnc.reset();
     sysDriveTrain.backRightEnc.reset();
-    auton_block_placed = false;
+    autonBlockPlaced = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!auton_block_placed) {
+    if (!autonBlockPlaced) {
       if (sysArm.GetArmEnc() >= ArmConstants.ARM_180_DEG) {
         sysArm.SetArmSpeed(0, 0);
         sysSolenoids.ToggleClaw(Value.kForward);
-        auton_block_placed = true;
+        autonBlockPlaced = true;
       } else {
         sysArm.SetArmSpeed(1, -.40);
       }
     } else {
-      double inches = auton_walk_feet * 12.0d;
-      if ((sysDriveTrain.frontLeftEnc.getDistance() >= inches || 
-          (sysDriveTrain.frontRightEnc.getDistance() >= inches) || 
-          (sysDriveTrain.backLeftEnc.getDistance() >= inches) || 
-          (sysDriveTrain.backRightEnc.getDistance() >= inches))) {
+      if ((sysDriveTrain.frontLeftEnc.getDistance() >= autonWalkFt || 
+          (sysDriveTrain.frontRightEnc.getDistance() >= autonWalkFt) || 
+          (sysDriveTrain.backLeftEnc.getDistance() >= autonWalkFt) || 
+          (sysDriveTrain.backRightEnc.getDistance() >= autonWalkFt))) {
         sysDriveTrain.CartisianDrive(0, 0, 0);
       } else sysDriveTrain.CartisianDrive(-.5, 0, 0);
     }
