@@ -11,14 +11,15 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.VMXPi;
 
 public class AutoBalance extends CommandBase {
-  /** Creates a new AutoBalance. */
   private final VMXPi sysVmxPi;
   private final DriveTrain sysDriveTrain;
   public boolean balanceOnOffset;
-  /*Offset Threshold*/
+  /*Offset Threshold in degrees from zero*/
   public double offSetThesh;
-
-  public AutoBalance(VMXPi inSysVMXPi, DriveTrain inSysDriveTrain, boolean inBalanceOnOffset, double inOffsetThresh) {
+   /** Creates a new AutoBalance. */
+  public AutoBalance(VMXPi inSysVMXPi, DriveTrain inSysDriveTrain, 
+  boolean inBalanceOnOffset, double inOffsetThresh
+  ) {
     // Use addRequirements() here to declare subsystem dependencies.
     sysVmxPi = inSysVMXPi;
     sysDriveTrain = inSysDriveTrain;
@@ -51,7 +52,8 @@ public class AutoBalance extends CommandBase {
     currentRoll = sysVmxPi.GetRollVMXPI();
 
     speed = sysVmxPi.CalculateAutoBalancePID();
-
+    // if: waits until the offset is passed to autobalance, 
+    // else: autobalance when the command is scheduled
     if (balanceOnOffset && currentRoll > offSetThesh) {
       if (!isBalanced) {
         sysDriveTrain.CartisianDrive(0, speed, 0);
