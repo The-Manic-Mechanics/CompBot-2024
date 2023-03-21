@@ -22,9 +22,8 @@ public class AutoBalanceAuton extends SequentialCommandGroup {
     sysVMXPi = inSysVMXPi;
     sysSolenoids = inSysSolenoids;
     addCommands(
-      /*#TODO# Add values */
-      new DriveAuton(sysDriveTrain, sysVMXPi, 40d, -.5, 0d, 0d, true, 0d),
-      new AutoBalance(sysVMXPi, sysDriveTrain, true, 0d15),
+      new DriveAuton(sysDriveTrain, sysVMXPi, 240d, -.5, 0d, 0d, true, 15),
+      new AutoBalance(sysVMXPi, sysDriveTrain, true, 15),
       new BrakeDown(inSysSolenoids)
     );
   }
