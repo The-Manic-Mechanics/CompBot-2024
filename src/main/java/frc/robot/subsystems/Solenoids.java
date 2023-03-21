@@ -29,8 +29,8 @@ public class Solenoids extends SubsystemBase {
     brake.set(value);
   }
 
-  public void GetBrake(DoubleSolenoid.Value value) {
-    brake.get();
+  public Value GetBrake() {
+    return brake.get();
   }
 
   public void ToggleTelescope(DoubleSolenoid.Value value) {
