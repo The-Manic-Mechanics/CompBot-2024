@@ -21,8 +21,9 @@ public class AutoBalanceAuton extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    new DriveAuton(sysDriveTrain, 0, -.5, 0, 0),
-    new AutoBalance(sysVMXPi, sysDriveTrain, true, )
+      /*#TODO# Add values */
+    new DriveAuton(sysDriveTrain, sysVMXPi, 0d, -.5, 0d, 0d, true, 0d),
+    new AutoBalance(sysVMXPi, sysDriveTrain, true, 0d)
     );
   }
 }
