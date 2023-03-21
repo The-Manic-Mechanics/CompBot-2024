@@ -52,36 +52,27 @@ public class AutoBalance extends CommandBase {
     currentRoll = sysVmxPi.GetRollVMXPI();
 
     speed = sysVmxPi.CalculateAutoBalancePID();
+
+    if (speed > 1) speed = 1;
+
     // if: waits until the offset is passed to autobalance, 
     // else: autobalance when the command is scheduled
-    if (balanceOnOffset && currentRoll > offSetThesh) {
-      if (!isBalanced) {
-        sysDriveTrain.CartisianDrive(0, speed, 0);
-      } 
 
+    if (balanceOnOffset && !isBalanced) {
+      if (currentRoll > offSetThesh) {
+        sysDriveTrain.CartisianDrive(speed, 0, 0);
+      }
     } else {
       if (!isBalanced) {
-        sysDriveTrain.CartisianDrive(0, speed, 0);
+        sysDriveTrain.CartisianDrive(speed, 0, 0);
       } 
-      
     }
 
-    // #TODO# Could be a problem (Stopping once VMX Pi reads zero)
-    // Checks if AutoBalancing is complete
     if (sysVmxPi.AutoBalancePIDAtSetpoint()) {
       isBalanced = true;
     } else {
       isBalanced = false;
     }
-   
-    
-    // while (!isBalanced) {
-
-    //   speed = sysDriveTrain.CalculateAutoBalancePID();
-
-    //   sysDriveTrain.DriveSpeeds(speed, speed);
-    // }
-    
   }
    
 
@@ -125,9 +116,4 @@ public class AutoBalance extends CommandBase {
       return false;
     }
   }
-
- 
-
-
-
 }
