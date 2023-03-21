@@ -32,7 +32,7 @@ public class AutoBalance extends CommandBase {
   public boolean isBalanced;
 
   // Current roll of the VMX Pi 
-  public double currentRoll;
+  public double currentPitch;
 
   // Speed for the motors
   double speed;
@@ -49,7 +49,7 @@ public class AutoBalance extends CommandBase {
   @Override
   public void execute() {
     // Getting the roll from the VMX Pi
-    currentRoll = sysVmxPi.GetRollVMXPI();
+    currentPitch = sysVmxPi.vmxPi.getPitch();
 
     speed = sysVmxPi.CalculateAutoBalancePID();
 
@@ -59,7 +59,7 @@ public class AutoBalance extends CommandBase {
     // else: autobalance when the command is scheduled
 
     if (balanceOnOffset && !isBalanced) {
-      if (currentRoll > offSetThesh) {
+      if (currentPitch > offSetThesh) {
         sysDriveTrain.CartisianDrive(speed, 0, 0);
       }
     } else {
@@ -87,9 +87,9 @@ public class AutoBalance extends CommandBase {
   public boolean isFinished() {
     double lgety = RobotContainer.driverMainController.getLeftY();
     double rgetx = RobotContainer.driverMainController.getLeftX();
-    if ((AutoBalanceConstants.DEADZONE_MIN >= currentRoll) 
+    if ((AutoBalanceConstants.DEADZONE_MIN >= currentPitch) 
     ||
-    (AutoBalanceConstants.DEADZONE_MAX <= currentRoll)) {
+    (AutoBalanceConstants.DEADZONE_MAX <= currentPitch)) {
       return true;
     } else if (isBalanced) {
       return true;

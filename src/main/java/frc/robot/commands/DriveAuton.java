@@ -74,7 +74,7 @@ public class DriveAuton extends CommandBase {
   @Override
   public boolean isFinished() {
     // #TODO# Make sure Math.abs makes sense in the context of how the navX gets roll
-    if (finishOnOffset && Math.abs(sysVMXPi.vmxPi.getRoll()) > offsetThresh) {
+    if (finishOnOffset && Math.abs(sysVMXPi.vmxPi.getPitch()) > offsetThresh) {
       return true;
     } else {
       return isFinished;

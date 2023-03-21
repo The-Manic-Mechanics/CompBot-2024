@@ -20,7 +20,7 @@ public class VMXPi extends SubsystemBase {
   // Defining VMX Pi
   public AHRS vmxPi;
   // Double to Store VMX Pi Roll
-  double vmxPiRoll;
+  double vmxPiPitch;
   // #TODO# Use the heading from the VMXPi to remain perpendicular to the switch when auto balancing
   double vmxPiHeading;
 
@@ -44,7 +44,7 @@ public class VMXPi extends SubsystemBase {
 
   // #TODO#: Restore autoBalancing PID values back to constants
     // Initialising autoBalancingPID
-    autoBalancingPID = new PIDController(kP, kI, kD, AutoBalanceConstants.PID_PERIOD);
+    autoBalancingPID = new PIDController(.5, kI, kD, AutoBalanceConstants.PID_PERIOD);
     // Setting the setpoint for the autoBalancingPID
     autoBalancingPID.setSetpoint(AutoBalanceConstants.SETPOINT);
     // Setting the tolerence for the setpoint
@@ -60,7 +60,7 @@ public class VMXPi extends SubsystemBase {
 
   // Function for Calculating AutoBalance PID
   public double CalculateAutoBalancePID() {
-    return  autoBalancingPID.calculate(vmxPi.getRoll());
+    return  autoBalancingPID.calculate(vmxPi.getPitch());
   }
 
   // Function for checking if AutoBalancePID is at SetPoint
@@ -90,12 +90,12 @@ public class VMXPi extends SubsystemBase {
     // This method will be called once per scheduler run
 
     // Getting VMX Pi Roll and reporting it to the Shuffleboard under "VMX Pi Roll"
-    vmxPiRoll = vmxPi.getRoll();
+    vmxPiPitch = vmxPi.getPitch();
 
-    SmartDashboard.putNumber("VMX Pi Roll (Less Fancy)", vmxPiRoll);
+    SmartDashboard.putNumber("VMX Pi Pitch (Less Fancy)", vmxPiPitch);
 
     // Putting PID value on the SmartDashboard
-    SmartDashboard.putNumber("AutoBalancing PID Loop Output", autoBalancingPID.calculate(vmxPiRoll));
+    SmartDashboard.putNumber("AutoBalancing PID Loop Output", autoBalancingPID.calculate(vmxPiPitch));
     // Putting all the data from the Autobalancing PID onto SmartDashboard
     SmartDashboard.putData("AutoBalancing PID", autoBalancingPID);
 

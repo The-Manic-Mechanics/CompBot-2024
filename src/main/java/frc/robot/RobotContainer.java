@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.ArmDrive;
+import frc.robot.commands.AutoBalanceAuton;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ClawClose;
 import frc.robot.commands.ClawOpen;
@@ -18,6 +19,7 @@ import frc.robot.commands.BrakeUp;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Solenoids;
+import frc.robot.subsystems.VMXPi;
 import frc.robot.subsystems.Arm;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -46,6 +48,7 @@ public class RobotContainer {
   private final Arm sysArm = new Arm();
 
   private final Solenoids sysSolenoids = new Solenoids();
+  private final VMXPi sysVMXPi = new VMXPi();
 
   // ----------------------------------------------------------------------------------
 
@@ -81,7 +84,7 @@ public class RobotContainer {
   private final TelescoperIn cmdTelescoperIn = new TelescoperIn(sysSolenoids, sysArm);
   private final TelescoperOut cmdTelescoperOut = new TelescoperOut(sysSolenoids, sysArm);
 
-  private final PlaceDriveFwd cmdDumbAuton = new PlaceDriveFwd(sysDriveTrain, sysArm, sysSolenoids);
+  private final AutoBalanceAuton cmdAutoBalanceAuton = new AutoBalanceAuton(sysDriveTrain, sysVMXPi, sysSolenoids);
 
   private final BrakeUp cmdBrakeUp = new BrakeUp(sysSolenoids);
   private final BrakeDown cmdBrakeDown = new BrakeDown(sysSolenoids);
@@ -179,6 +182,6 @@ public class RobotContainer {
   //  * @return the command to run in autonomous
   //  */
   public Command getAutonomousCommand() {
-    return cmdDumbAuton;
+    return cmdAutoBalanceAuton;
   }
 }
