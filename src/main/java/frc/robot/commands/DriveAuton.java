@@ -26,8 +26,7 @@ public class DriveAuton extends CommandBase {
   public DriveAuton(
     DriveTrain inSysDriveTrain, VMXPi inSysVMXPi,  double inDriveInches, 
     double inSpeedX, double inSpeedY, double inSpeedZ, 
-    boolean inFinishOnOffset,/*Threshold as an absolute*/ double inOffsetThresh
-    ) {
+    boolean inFinishOnOffset,/*Threshold as an absolute*/ double inOffsetThresh) {
     // Use addRequirements() here to declare subsystem dependencies.
     sysDriveTrain = inSysDriveTrain;
     sysVMXPi = inSysVMXPi;
@@ -73,7 +72,7 @@ public class DriveAuton extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // #TODO# Make sure Math.abs makes sense in the context of how the navX gets roll
+    // #TODO# Make sure Math.abs makes sense in the context of how the navX gets pitch
     if (finishOnOffset && Math.abs(sysVMXPi.vmxPi.getPitch()) > offsetThresh) {
       return true;
     } else {

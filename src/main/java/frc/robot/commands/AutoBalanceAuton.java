@@ -15,16 +15,14 @@ import frc.robot.subsystems.VMXPi;
 public class AutoBalanceAuton extends SequentialCommandGroup {
   private final DriveTrain sysDriveTrain;
   private final VMXPi sysVMXPi;
-  private final Solenoids sysSolenoids;
   /** Creates a new AutoBalanceAuton. */
   public AutoBalanceAuton(DriveTrain inSysDriveTrain, VMXPi inSysVMXPi, Solenoids inSysSolenoids) {
     sysDriveTrain = inSysDriveTrain;
     sysVMXPi = inSysVMXPi;
-    sysSolenoids = inSysSolenoids;
     addCommands(
-      new DriveAuton(sysDriveTrain, sysVMXPi, 240d, -.5, 0d, 0d, true, 5),
+      new DriveAuton(sysDriveTrain, sysVMXPi, 5000d, -.5, 0d, 0d, true, 5),
       new AutoBalance(sysVMXPi, sysDriveTrain, true, 5),
-      new BrakeDown(inSysSolenoids)
+      new BrakeUp(inSysSolenoids)
     );
   }
 }

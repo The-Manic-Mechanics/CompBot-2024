@@ -43,6 +43,7 @@ public class AutoBalance extends CommandBase {
   @Override
   public void initialize() {
     isBalanced = false;
+    sysVmxPi.autoBalanceCommandIsActive = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -58,20 +59,12 @@ public class AutoBalance extends CommandBase {
     // if: waits until the offset is passed to autobalance, 
     // else: autobalance when the command is scheduled
 
-    if (balanceOnOffset && !isBalanced) {
-      if (currentPitch > offSetThesh) {
-        sysDriveTrain.CartisianDrive(speed, 0, 0);
-      }
-    } else {
-      if (!isBalanced) {
-        sysDriveTrain.CartisianDrive(speed, 0, 0);
-      } 
-    }
-
-    if (sysVmxPi.AutoBalancePIDAtSetpoint()) {
+    if (!balanceOnOffset || currentPitch > offSetThesh)
+      sysDriveTrain.CartisianDrive(speed, 0, 0);
+    else {
+      
       isBalanced = true;
-    } else {
-      isBalanced = false;
+      speed = 0;
     }
   }
    
@@ -92,6 +85,7 @@ public class AutoBalance extends CommandBase {
     (AutoBalanceConstants.DEADZONE_MAX <= currentPitch)) {
       return true;
     } else if (isBalanced) {
+      sysVmxPi.autoBalanceCommandIsActive = false;
       return true;
 
     // #TODO# Move this shutoff into RobotContainer or make it faster in some other way

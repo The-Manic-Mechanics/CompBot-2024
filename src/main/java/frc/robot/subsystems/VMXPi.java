@@ -20,14 +20,14 @@ public class VMXPi extends SubsystemBase {
   // Defining VMX Pi
   public AHRS vmxPi;
   // Double to Store VMX Pi Roll
-  double vmxPiPitch;
+  double vmxPiPitch, vmxPiRoll, vmxPiYaw;
   // #TODO# Use the heading from the VMXPi to remain perpendicular to the switch when auto balancing
   double vmxPiHeading;
 
   // Defining autoBalancingPID
   PIDController autoBalancingPID;
 
-  boolean autoBalanceCommandIsActive;
+  public boolean autoBalanceCommandIsActive;
   
   double kP;
   double kI;
@@ -44,11 +44,13 @@ public class VMXPi extends SubsystemBase {
 
   // #TODO#: Restore autoBalancing PID values back to constants
     // Initialising autoBalancingPID
-    autoBalancingPID = new PIDController(.5, kI, kD, AutoBalanceConstants.PID_PERIOD);
+    autoBalancingPID = new PIDController(.025, kI, kD, AutoBalanceConstants.PID_PERIOD);
     // Setting the setpoint for the autoBalancingPID
-    autoBalancingPID.setSetpoint(AutoBalanceConstants.SETPOINT);
-    // Setting the tolerence for the setpoint
+    autoBalancingPID.setSetpoint(AutoBalanceConstants.SETPOINT); 
+    // Setting the tolerence for the spublic boolean balanceRunning;etpoint
     autoBalancingPID.setTolerance(AutoBalanceConstants.TARGET_TOLERANCE);
+
+    
   }
 
   //Function to get pitch from VMXPI
@@ -82,17 +84,17 @@ public class VMXPi extends SubsystemBase {
     }
   }
 
-
-
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
 
     // Getting VMX Pi Roll and reporting it to the Shuffleboard under "VMX Pi Roll"
     vmxPiPitch = vmxPi.getPitch();
-
+    vmxPiRoll = vmxPi.getRoll();
+    vmxPiYaw = vmxPi.getYaw();
     SmartDashboard.putNumber("VMX Pi Pitch (Less Fancy)", vmxPiPitch);
+    SmartDashboard.putNumber("VMX Pi Roll (Less Fancy)", vmxPiRoll);
+    SmartDashboard.putNumber("VMX Pi Yaw (Less Fancy)", vmxPiYaw);
 
     // Putting PID value on the SmartDashboard
     SmartDashboard.putNumber("AutoBalancing PID Loop Output", autoBalancingPID.calculate(vmxPiPitch));
@@ -111,5 +113,7 @@ public class VMXPi extends SubsystemBase {
     SmartDashboard.putNumber("Accel X", vmxPi.getWorldLinearAccelX());
     SmartDashboard.putNumber("Accel Y", vmxPi.getWorldLinearAccelY());
     SmartDashboard.putNumber("Accel Z", vmxPi.getWorldLinearAccelZ());
+
+    SmartDashboard.putBoolean("Autobalance Active", autoBalanceCommandIsActive);
   }
 }
