@@ -9,7 +9,6 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.DriveTrainConstants.DriveAuton;
 import frc.robot.Constants.AprilTagCoordinates;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.LimeLight;
