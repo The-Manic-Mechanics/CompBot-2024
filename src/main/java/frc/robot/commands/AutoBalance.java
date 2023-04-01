@@ -32,7 +32,7 @@ public class AutoBalance extends CommandBase {
   public boolean isBalanced;
 
   // Current roll of the VMX Pi 
-  public double currentRoll;
+  public double currentPitch;
 
   // Speed for the motors
   double speed;
@@ -43,45 +43,29 @@ public class AutoBalance extends CommandBase {
   @Override
   public void initialize() {
     isBalanced = false;
+    sysVmxPi.autoBalanceCommandIsActive = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     // Getting the roll from the VMX Pi
-    currentRoll = sysVmxPi.GetRollVMXPI();
+    currentPitch = sysVmxPi.vmxPi.getPitch();
 
     speed = sysVmxPi.CalculateAutoBalancePID();
+
+    if (speed > 1) speed = 1;
+
     // if: waits until the offset is passed to autobalance, 
     // else: autobalance when the command is scheduled
-    if (balanceOnOffset && currentRoll > offSetThesh) {
-      if (!isBalanced) {
-        sysDriveTrain.CartisianDrive(0, speed, 0);
-      } 
 
-    } else {
-      if (!isBalanced) {
-        sysDriveTrain.CartisianDrive(0, speed, 0);
-      } 
+    if (!balanceOnOffset || currentPitch > offSetThesh)
+      sysDriveTrain.CartisianDrive(speed, 0, 0);
+    else {
       
-    }
-
-    // #TODO# Could be a problem (Stopping once VMX Pi reads zero)
-    // Checks if AutoBalancing is complete
-    if (sysVmxPi.AutoBalancePIDAtSetpoint()) {
       isBalanced = true;
-    } else {
-      isBalanced = false;
+      speed = 0;
     }
-   
-    
-    // while (!isBalanced) {
-
-    //   speed = sysDriveTrain.CalculateAutoBalancePID();
-
-    //   sysDriveTrain.DriveSpeeds(speed, speed);
-    // }
-    
   }
    
 
@@ -96,11 +80,12 @@ public class AutoBalance extends CommandBase {
   public boolean isFinished() {
     double lgety = RobotContainer.driverMainController.getLeftY();
     double rgetx = RobotContainer.driverMainController.getLeftX();
-    if ((AutoBalanceConstants.DEADZONE_MIN >= currentRoll) 
+    if ((AutoBalanceConstants.DEADZONE_MIN >= currentPitch) 
     ||
-    (AutoBalanceConstants.DEADZONE_MAX <= currentRoll)) {
+    (AutoBalanceConstants.DEADZONE_MAX <= currentPitch)) {
       return true;
     } else if (isBalanced) {
+      sysVmxPi.autoBalanceCommandIsActive = false;
       return true;
 
     // #TODO# Move this shutoff into RobotContainer or make it faster in some other way
@@ -125,9 +110,4 @@ public class AutoBalance extends CommandBase {
       return false;
     }
   }
-
- 
-
-
-
 }

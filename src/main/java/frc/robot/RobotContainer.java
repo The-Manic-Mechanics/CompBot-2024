@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.ArmDrive;
+import frc.robot.commands.AutoBalanceAuton;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ClawClose;
 import frc.robot.commands.ClawOpen;
@@ -18,9 +19,12 @@ import frc.robot.commands.BrakeUp;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Solenoids;
+import frc.robot.subsystems.VMXPi;
 import frc.robot.subsystems.Arm;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -33,6 +37,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  // ---------------------------
+  // Misc Vars
+  // ---------------------------
+  SendableChooser<Command> autoRoutineChooser;
+
+  // ----------------------------------------------------------------------------------
 
   // ---------------------------
   // Subsystem
@@ -46,6 +56,7 @@ public class RobotContainer {
   private final Arm sysArm = new Arm();
 
   private final Solenoids sysSolenoids = new Solenoids();
+  private final VMXPi sysVMXPi = new VMXPi();
 
   // ----------------------------------------------------------------------------------
 
@@ -61,14 +72,7 @@ public class RobotContainer {
 
   //   // Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
     // MecanumAutoBuilder autoBuilder = new MecanumAutoBuilder(
-    //     sysDriveTrain.mecanumDriveOdometry::getPoseMeters, // Pose2d supplier
-    //     sysDriveTrain.mecanumDriveOdometry::resetPose, // Pose2d consumer,used to reset odometry at the beginning of auto
-    //     sysDriveTrain.mecanumDriveKinematics, // SwerveDriveKinematics
-    //     new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-    //     new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
-    //     Autonomous.MAX_METRES_PER_SEC, // Module states consumer used to output to the drive subsystem
-    //     sysDriveTrain :: setWheelSpeeds,
-    //     eventMap,
+    //     sysDriveTrain.mecanumDriveOdometry::getP SendableChooser<Command> autoRoutineChooser;
     //     true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
     //     Subsystem.sysDriveTrain // The drive subsystem. Used to properly set the requirements of path following commands
     // );
@@ -81,13 +85,12 @@ public class RobotContainer {
   private final TelescoperIn cmdTelescoperIn = new TelescoperIn(sysSolenoids, sysArm);
   private final TelescoperOut cmdTelescoperOut = new TelescoperOut(sysSolenoids, sysArm);
 
-  private final PlaceDriveFwd cmdDumbAuton = new PlaceDriveFwd(sysDriveTrain, sysArm, sysSolenoids);
+  private final PlaceDriveFwd cmdPlaceDriveFwd = new PlaceDriveFwd(sysDriveTrain, sysArm, sysSolenoids);
+
+  private final AutoBalanceAuton cmdAutoBalanceAuton = new AutoBalanceAuton(sysDriveTrain, sysVMXPi, sysSolenoids, sysArm);
 
   private final BrakeUp cmdBrakeUp = new BrakeUp(sysSolenoids);
   private final BrakeDown cmdBrakeDown = new BrakeDown(sysSolenoids);
-
-
-  // ----------------------------------------------------------------------------------
 
   // ---------------------------
   // Controller
@@ -104,7 +107,6 @@ public class RobotContainer {
   private final JoystickButton driverSecondLeftBump = new JoystickButton(driverSecondController, 5);
   private final JoystickButton driverSecondRghtBump = new JoystickButton(driverSecondController, 6);
   // ---------------------------------------------------------------------------------
-
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -125,7 +127,13 @@ public class RobotContainer {
   // -------------------------
   // SmartDashboard
   // -------------------------
+  
+  autoRoutineChooser = new SendableChooser<>();
+  
+  autoRoutineChooser.addOption("AutoBalanceAuton", cmdAutoBalanceAuton);
+  autoRoutineChooser.addOption("PlaceDriveForward", cmdPlaceDriveFwd);
 
+  SmartDashboard.putData("Auton Chooser", autoRoutineChooser);
 
   // ----------------------------------------------------------------------------------
   }
@@ -179,6 +187,6 @@ public class RobotContainer {
   //  * @return the command to run in autonomous
   //  */
   public Command getAutonomousCommand() {
-    return cmdDumbAuton;
+    return autoRoutineChooser.getSelected();
   }
 }

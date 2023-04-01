@@ -46,7 +46,7 @@ public class PlaceDriveFwd extends CommandBase {
         sysSolenoids.ToggleClaw(Value.kForward);
         autonBlockPlaced = true;
       } else {
-        sysArm.SetArmSpeed(1, -.40);
+        sysArm.SetArmSpeed(1, -.60);
       }
     } else {
       if ((sysDriveTrain.frontLeftEnc.getDistance() >= autonWalkFt || 

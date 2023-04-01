@@ -11,6 +11,7 @@ import frc.robot.subsystems.Arm;
 
 public class ArmDrive extends CommandBase {
   private final Arm sysArm;
+  private double armSpeedMultiplier = 0.6;
   // private final Solenoids sysSolenoids;
   /** Creates a new ArmDrive. */
   public ArmDrive(Arm inSysArm/*, Solenoids inSysSolenoids*/) {
@@ -43,7 +44,7 @@ public class ArmDrive extends CommandBase {
 
     
     
-    sysArm.SetArmSpeed(speed, .40);
+    sysArm.SetArmSpeed(speed, armSpeedMultiplier * ArmConstants.ARM_SPEED_MUL_MUL);
     // sysArm.SetArmSpeed(speed, 0.25);
   }
 

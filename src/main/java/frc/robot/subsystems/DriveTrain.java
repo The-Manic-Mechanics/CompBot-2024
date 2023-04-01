@@ -75,7 +75,7 @@ public class DriveTrain extends SubsystemBase {
   public Encoder backLeftEnc;
   public Encoder backRightEnc;
 
-  public SendableChooser<Command> autoRoutineChooser;
+  
   MecanumAutoBuilder autoBuilder;
 
   public DriveTrain() {
@@ -172,8 +172,6 @@ public class DriveTrain extends SubsystemBase {
         new PathConstraints(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL));
     List<PathPlannerTrajectory> LinkCommunitySideBlue = PathPlanner.loadPathGroup("Community Zone Side Link",
         DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL);
-
-    autoRoutineChooser = new SendableChooser<>();
     
     autoBuilder = new MecanumAutoBuilder(
       mecanumDriveOdometry::getPoseMeters,
@@ -188,10 +186,10 @@ public class DriveTrain extends SubsystemBase {
       this
     );
 
-    autoRoutineChooser.addOption("Link Loading Side Blue", autoBuilder.fullAuto(LinkLoadingSideBlue));
-    autoRoutineChooser.addOption("Link Community Side Blue", autoBuilder.fullAuto(LinkCommunitySideBlue));
-    autoRoutineChooser.setDefaultOption("Default", autoBuilder.fullAuto(LinkLoadingSideBlue));
-    SmartDashboard.putData("Auton Chooser", autoRoutineChooser);
+    // autoRoutineChooser.addOption("Link Loading Side Blue", autoBuilder.fullAuto(LinkLoadingSideBlue));
+    // autoRoutineChooser.addOption("Link Community Side Blue", autoBuilder.fullAuto(LinkCommunitySideBlue));
+    // autoRoutineChooser.setDefaultOption("Default", autoBuilder.fullAuto(LinkLoadingSideBlue));
+  
   }
 
   public void CartisianDrive(double speedX, double speedY, double speedZ) {

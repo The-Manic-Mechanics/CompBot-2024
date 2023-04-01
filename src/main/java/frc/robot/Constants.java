@@ -129,6 +129,9 @@ public final class Constants {
 
   public static class ArmConstants {
     public static final int PCM_PORT = CAN_PORT_0;
+    public static double ARM_SPEED_MUL_MUL = 1;
+    public static final double ARM_SPEED_MUL_MUL_IN = 1.0;
+    public static final double ARM_SPEED_MUL_MUL_OUT = 1.3;
 
     public static final int CLAW_FWD_PORT = 0;
     public static final int CLAW_RVRSE_PORT = 1;

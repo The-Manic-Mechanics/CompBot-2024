@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Solenoids;
 
@@ -39,7 +39,7 @@ public class TelescoperOut extends CommandBase {
     //   // sysSolenoids.ToggleTelescope(Value.kOff);
     //   finished = true;
     //  } else {
-      if ((sysArm.GetArmEnc() > 5500 ) || (sysArm.GetArmEnc() < 100 )) {
+      if ((sysArm.GetArmEnc() < 5500 ) || (sysArm.GetArmEnc() > 100 )) {
       sysSolenoids.ToggleTelescope(Value.kReverse);
       }
     //   finished = true;
@@ -57,6 +57,7 @@ public class TelescoperOut extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     sysSolenoids.ToggleTelescope(Value.kOff);
+    ArmConstants.ARM_SPEED_MUL_MUL = ArmConstants.ARM_SPEED_MUL_MUL_OUT;
   }
 
   // Returns true when the command should end.
