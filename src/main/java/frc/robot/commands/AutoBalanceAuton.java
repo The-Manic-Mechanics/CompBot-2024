@@ -28,7 +28,7 @@ public class AutoBalanceAuton extends SequentialCommandGroup {
     sysArm = inSysArm;
     addCommands(
       new ArmDriveAuton(sysArm, sysSolenoids, ArmConstants.ARM_180_DEG, Value.kForward, 1, -.40),
-      new ArmDriveAuton(sysArm, sysSolenoids, 900, Value.kOff, 1, .40),
+      new ArmDriveAuton  (sysArm, sysSolenoids, 900, Value.kOff, 1, .40),
       new DriveAuton(sysDriveTrain, sysVMXPi, 5000d, -.6, 0d, 0d, true, 5),
       new AutoBalance(sysVMXPi, sysDriveTrain, true, 5),
       new BrakeUp(inSysSolenoids)

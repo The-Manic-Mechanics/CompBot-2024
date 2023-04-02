@@ -51,6 +51,7 @@ public class LimeLight extends SubsystemBase {
   double aprilTagToFloorInches = 17.12598;
 
   boolean tagDetected;
+  public double id; // #TODO# Make sure this is updating properly
 
   @Override
   public void periodic() {
@@ -59,7 +60,7 @@ public class LimeLight extends SubsystemBase {
     double x = tX.getDouble(0.0);
     double y = tY.getDouble(0.0);
     double area = tA.getDouble(0.0);
-    double id = tID.getDouble(9.0);
+    id = tID.getDouble(9.0);
 
     botPoseArray = botPose.getDoubleArray(new double[6]);
    if (id == 9) {

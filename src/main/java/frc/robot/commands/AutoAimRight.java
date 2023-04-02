@@ -40,16 +40,18 @@ public class AutoAimRight extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // Generates a path to be followed 
     PathPlannerTrajectory path = sysDriveTrain.genPath(
-      DriveAuton.MAX_METRES_PER_SEC, 
-      DriveAuton.MAX_ACCEL, 
+      1, 
+      .97, 
       sysLimeLight.GetBotPose2d(), 
       0, 
       sysVMXPi.vmxPi.getAngle(), 
-      AprilTagCoordinates.AprilTagCoord_Trans2d(Double.parseDouble(sysLimeLight.limeLight_currentlyViewedAprilTag), 3),
+      AprilTagCoordinates.AprilTagCoord_Trans2d(sysLimeLight.id, 3),
       0,
       sysVMXPi.vmxPi.getAngle()
     );
+    
     sysDriveTrain.mecanumDriveOdometry.resetPosition(
       sysVMXPi.vmxPi.getRotation2d(), 
       sysDriveTrain.getCurMecWheelPos(), 
@@ -59,8 +61,10 @@ public class AutoAimRight extends CommandBase {
         sysVMXPi.vmxPi.getRotation2d()
       )
     );
+
+    // Follows var "path"
+    sysDriveTrain.followTrajectoryCommand(path, false);
     
-    CommandScheduler.getInstance().schedule(sysDriveTrain.followTrajectoryCommand(path, false));
     isAimed = true;
   }
 

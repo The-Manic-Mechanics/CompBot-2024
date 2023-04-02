@@ -43,11 +43,11 @@ public final class Constants {
       return new Translation2d(APRILTAG_COORDS[id][0], APRILTAG_COORDS[id][1] + 13.75);
       else if (direction == 3) //right
       return new Translation2d(APRILTAG_COORDS[id][0], APRILTAG_COORDS[id][1] - 13.75);
-
+      else
       return new Translation2d(APRILTAG_COORDS[id][0], APRILTAG_COORDS[id][1]);
     }
     
-
+    // X, Y, Z, Heading
     public static final double[][] APRILTAG_COORDS = {
       {
         610.77 - 28.28, 42.19, 18.22, 180

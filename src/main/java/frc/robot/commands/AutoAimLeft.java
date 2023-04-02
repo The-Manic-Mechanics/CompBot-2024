@@ -41,15 +41,16 @@ public class AutoAimLeft extends CommandBase {
   @Override
   public void execute() {
     PathPlannerTrajectory path = sysDriveTrain.genPath(
-      DriveAuton.MAX_METRES_PER_SEC, 
-      DriveAuton.MAX_ACCEL, 
+      1, 
+      .97, 
       sysLimeLight.GetBotPose2d(), 
       0, 
       sysVMXPi.vmxPi.getAngle(), 
-      AprilTagCoordinates.AprilTagCoord_Trans2d(Double.parseDouble(sysLimeLight.limeLight_currentlyViewedAprilTag), 2),
+      AprilTagCoordinates.AprilTagCoord_Trans2d(sysLimeLight.id, 2),
       0,
       sysVMXPi.vmxPi.getAngle()
     );
+
     sysDriveTrain.mecanumDriveOdometry.resetPosition(
       sysVMXPi.vmxPi.getRotation2d(), 
       sysDriveTrain.getCurMecWheelPos(), 
@@ -59,7 +60,10 @@ public class AutoAimLeft extends CommandBase {
         sysVMXPi.vmxPi.getRotation2d()
       )
     );
-    CommandScheduler.getInstance().schedule(sysDriveTrain.followTrajectoryCommand(path, false));
+    
+    // Follows var "path"
+    sysDriveTrain.followTrajectoryCommand(path, false);
+    
     isAimed = true;
   }
 

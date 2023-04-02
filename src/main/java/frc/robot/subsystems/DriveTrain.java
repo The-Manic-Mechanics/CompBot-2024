@@ -170,7 +170,7 @@ public class DriveTrain extends SubsystemBase {
 
     List<PathPlannerTrajectory> LinkLoadingSideBlue = PathPlanner.loadPathGroup("Loading Station Side Link",
         new PathConstraints(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL));
-    List<PathPlannerTrajectory> LinkCommunitySideBlue = PathPlanner.loadPathGroup("Community Zone Side Link",
+    List<PathPlannerTrajectory> LinkCommunitySideBlue = PathPlanner.loadPathGroup("Com Z Lnk",
         DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL);
     
     autoBuilder = new MecanumAutoBuilder(
