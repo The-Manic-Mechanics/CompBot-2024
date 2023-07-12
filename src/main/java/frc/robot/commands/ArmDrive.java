@@ -6,55 +6,43 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.ArmConstants;
-import frc.robot.subsystems.Arm;
+import frc.robot.Constants.Arm;
+import frc.robot.subsystems.ArmSys;
 
-public class ArmDrive extends CommandBase {
-  private final Arm sysArm;
-  private double armSpeedMultiplier = 0.6;
-  // private final Solenoids sysSolenoids;
-  /** Creates a new ArmDrive. */
-  public ArmDrive(Arm inSysArm/*, Solenoids inSysSolenoids*/) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    sysArm = inSysArm;
-    // sysSolenoids = inSysSolenoids;
+/**
+* Command used to drive the arm during teleoperation mode
+*/
+public final class ArmDrive extends CommandBase {
+	public ArmDrive(ArmSys inSysArm) {
+		addRequirements(inSysArm);
+	}
+	
+	@Override
+	public void execute() {
 
-    addRequirements(sysArm/* ,  sysSolenoids */);
-  }
+		double speed;
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
+		/* Checks the Arm Encoder Position and stops the motor if it's past the limits */
+		if (
+				(
+						ArmSys.armEncoder.get() > Arm.Limits.ARM_BACKWARDS_LIMIT
+						// FIXME: Are these checks needed?
+// 								&&
+//						RobotContainer.driverSecondController.getLeftY() > 0
+				)
+						||
+				(
+						ArmSys.armEncoder.get() < Arm.Limits.ARM_FORWARD_LIMIT
+// 								&&
+//						RobotContainer.driverSecondController.getLeftY() < 0
+				)
+		) {
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
+			speed = 0;
+		} else {
+			speed = -1 * RobotContainer.driverSecondController.getLeftY();
+		}
 
-    double speed;
-
-    if ((sysArm.GetArmEnc() > ArmConstants.MAX_ARM_BACK_ROT &&
-         RobotContainer.driverSecondController.getLeftY() > 0) ||
-         (sysArm.GetArmEnc() < 400 &&
-         RobotContainer.driverSecondController.getLeftY() < 0)) {
-          
-          speed = 0;
-    } else {
-      speed = -1 * RobotContainer.driverSecondController.getLeftY();
-    }
-
-    
-    
-    sysArm.SetArmSpeed(speed, armSpeedMultiplier * ArmConstants.ARM_SPEED_MUL_MUL);
-    // sysArm.SetArmSpeed(speed, 0.25);
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+		ArmSys.SetArmSpeed(speed, Arm.Speeds.MULTIPLIER);
+	}
 }

@@ -6,56 +6,22 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.Arm.Telescoper;
+import frc.robot.Constants.Arm.Claw;
+import frc.robot.Constants.Arm.Brake;
 
-public class Solenoids extends SubsystemBase {
-  private DoubleSolenoid armTelescoper;
-  private DoubleSolenoid claw;
-  private DoubleSolenoid brake;
-  boolean clawState;
-  
-  /** Creates a new Solenoids. */
-  public Solenoids() {
-    // Initialising Solenoids
-    armTelescoper = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ArmConstants.TELESCOPER_FWD_PORT, ArmConstants.TELESCOPER_RVRSE_PORT);
-    claw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ArmConstants.CLAW_FWD_PORT, ArmConstants.CLAW_RVRSE_PORT);
-    brake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ArmConstants.BRAKING_PORT_FWD, ArmConstants.BRAKING_PORT_BACK);
- 
-  }
+/**
+* Holds all solenoids' definitions
+*/
+public final class Solenoids extends SubsystemBase {
+	public static DoubleSolenoid armTelescoper, claw, brake;
 
-  public void ToggleBrake(DoubleSolenoid.Value value) {
-    brake.set(value);
-  }
+	public Solenoids() {
+		// Initialising Solenoids
+		armTelescoper = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Telescoper.FWD_PORT, Telescoper.REVERSE_PORT);
+		claw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Claw.FWD_PORT, Claw.REVERSE_PORT);
+		brake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Brake.PORT_FWD, Brake.PORT_BACK);
 
-  public Value GetBrake() {
-    return brake.get();
-  }
-
-  public void ToggleTelescope(DoubleSolenoid.Value value) {
-    armTelescoper.set(value);
-  }
-
-  public DoubleSolenoid.Value GetTelescope() {
-   return armTelescoper.get();
-  }
-
-  public void ToggleClaw(DoubleSolenoid.Value value) {
-    claw.set(value);
-  }
-
-  public DoubleSolenoid.Value GetClaw() {
-    return claw.get();
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    if (GetClaw() == Value.kForward) {
-      clawState = false;
-    } else {
-      clawState = true;
-    }
-  }
+	}
 }

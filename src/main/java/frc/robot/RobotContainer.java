@@ -4,24 +4,20 @@
 
 package frc.robot;
 
-import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.Controllers;
 import frc.robot.commands.ArmDrive;
 import frc.robot.commands.AutoBalanceAuton;
-import frc.robot.commands.Autos;
 import frc.robot.commands.ClawClose;
 import frc.robot.commands.ClawOpen;
 import frc.robot.commands.DriveMecanum;
-import frc.robot.commands.PlaceDriveFwd;
 import frc.robot.commands.TelescoperIn;
 import frc.robot.commands.TelescoperOut;
 import frc.robot.commands.BrakeDown;
 import frc.robot.commands.BrakeUp;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Solenoids;
-import frc.robot.subsystems.VMXPi;
-import frc.robot.subsystems.Arm;
-import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.subsystems.NavX;
+import frc.robot.subsystems.ArmSys;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -48,23 +44,15 @@ public class RobotContainer {
   // Subsystem
   // ---------------------------
 
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
-  private final DriveTrain sysDriveTrain = new DriveTrain();
-
-  private final Arm sysArm = new Arm();
+  private final ArmSys sysArm = new ArmSys();
 
   private final Solenoids sysSolenoids = new Solenoids();
-  private final VMXPi sysVMXPi = new VMXPi();
 
   // ----------------------------------------------------------------------------------
 
   // ---------------------------
   // Commands
   // ---------------------------
-
-  private final DriveMecanum cmdDriveMecanum = new DriveMecanum(sysDriveTrain);
 
   // This is just an example event map. It would be better to have a constant, global event map
   //   in your code that will be used by all path following commands.
@@ -77,17 +65,11 @@ public class RobotContainer {
     //     Subsystem.sysDriveTrain // The drive subsystem. Used to properly set the requirements of path following commands
     // );
 
-  private final ArmDrive cmdArmDrive = new ArmDrive(sysArm/* , sysSolenoids*/);
-
   private final ClawOpen cmdClawOpen = new ClawOpen(sysSolenoids);
   private final ClawClose cmdClawClose = new ClawClose(sysSolenoids);
 
   private final TelescoperIn cmdTelescoperIn = new TelescoperIn(sysSolenoids, sysArm);
   private final TelescoperOut cmdTelescoperOut = new TelescoperOut(sysSolenoids, sysArm);
-
-  private final PlaceDriveFwd cmdPlaceDriveFwd = new PlaceDriveFwd(sysDriveTrain, sysArm, sysSolenoids);
-
-  private final AutoBalanceAuton cmdAutoBalanceAuton = new AutoBalanceAuton(sysDriveTrain, sysVMXPi, sysSolenoids, sysArm);
 
   private final BrakeUp cmdBrakeUp = new BrakeUp(sysSolenoids);
   private final BrakeDown cmdBrakeDown = new BrakeDown(sysSolenoids);
@@ -97,11 +79,11 @@ public class RobotContainer {
   // ---------------------------
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  public static final XboxController driverMainController = new XboxController(ControllerConstants.DRIVERONE_PORT);
+  public static final XboxController driverMainController = new XboxController(Controllers.DRIVERONE_PORT);
   private final JoystickButton mainButton1 = new JoystickButton(driverMainController, 1);
   private final JoystickButton mainButton2 = new JoystickButton(driverMainController, 4);
 
-  public static final XboxController driverSecondController = new XboxController(ControllerConstants.DRIVERTWO_PORT);
+  public static final XboxController driverSecondController = new XboxController(Controllers.DRIVERTWO_PORT);
   private final JoystickButton driverSecondA = new JoystickButton(driverSecondController, 1);
   private final JoystickButton driverSecondY = new JoystickButton(driverSecondController, 4);
   private final JoystickButton driverSecondLeftBump = new JoystickButton(driverSecondController, 5);
@@ -115,8 +97,13 @@ public class RobotContainer {
   // SetDefaultCommand
   // --------------------------
 
-  sysDriveTrain.setDefaultCommand(cmdDriveMecanum);
-  sysArm.setDefaultCommand(cmdArmDrive);
+    // The robot's subsystems and commands are defined here...
+    DriveTrain sysDriveTrain = new DriveTrain();
+    DriveMecanum cmdDriveMecanum = new DriveMecanum(sysDriveTrain);
+    sysDriveTrain.setDefaultCommand(cmdDriveMecanum);
+    /* , sysSolenoids*/
+    ArmDrive cmdArmDrive = new ArmDrive(sysArm/* , sysSolenoids*/);
+    sysArm.setDefaultCommand(cmdArmDrive);
 
   // ----------------------------------------------------------------------------------
 
@@ -129,9 +116,10 @@ public class RobotContainer {
   // -------------------------
   
   autoRoutineChooser = new SendableChooser<>();
-  
-  autoRoutineChooser.addOption("AutoBalanceAuton", cmdAutoBalanceAuton);
-  autoRoutineChooser.addOption("PlaceDriveForward", cmdPlaceDriveFwd);
+
+    NavX sysNavX = new NavX();
+    AutoBalanceAuton cmdAutoBalanceAuton = new AutoBalanceAuton(sysDriveTrain, sysNavX, sysSolenoids, sysArm);
+    autoRoutineChooser.addOption("AutoBalanceAuton", cmdAutoBalanceAuton);
 
   SmartDashboard.putData("Auton Chooser", autoRoutineChooser);
 

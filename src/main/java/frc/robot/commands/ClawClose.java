@@ -8,40 +8,26 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Solenoids;
 
-public class ClawClose extends CommandBase {
-  /** Creates a new DriveMecanum. */
-  private final Solenoids sysSolenoids;
+/**
+ * Command that closes the claw mechanism.
+ */
+public final class ClawClose extends CommandBase {
+	public ClawClose(Solenoids inSysSolenoids) {
+		addRequirements(inSysSolenoids);
+	}
 
-  public ClawClose(Solenoids inSysSolenoids) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    sysSolenoids = inSysSolenoids;
+	@Override
+	public void execute() {
+		Solenoids.claw.set(Value.kReverse);
+	}
 
-    addRequirements(sysSolenoids);
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    sysSolenoids.ToggleClaw(Value.kReverse);
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    sysSolenoids.ToggleClaw(Value.kOff);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    if (sysSolenoids.GetTelescope() == Value.kForward) {
-      return true;
-      } else {
-        return false;
-      }
-  }
+	@Override
+	public void end(boolean interrupted) {
+		Solenoids.claw.set(Value.kOff);
+	}
+	
+	@Override
+	public boolean isFinished() {
+		return Solenoids.armTelescoper.get() == Value.kForward;
+	}
 }

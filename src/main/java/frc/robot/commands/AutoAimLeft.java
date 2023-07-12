@@ -8,72 +8,57 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.AprilTagCoordinates;
-import frc.robot.Constants.DriveTrainConstants.DriveAuton;
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.LimeLight;
-import frc.robot.subsystems.VMXPi;
+import frc.robot.subsystems.NavX;
 
-public class AutoAimLeft extends CommandBase {
-  /** Creates a new AutoAim. */
-  private final DriveTrain sysDriveTrain;
-  private final LimeLight sysLimeLight;
-  private final VMXPi sysVMXPi;
+/**
+* Class used in teleop to AutoAim to the left april tag
+*/
+public final class AutoAimLeft extends CommandBase {
+	public AutoAimLeft(DriveTrain inSysDriveTrain, LimeLight inSysLimeLight, NavX inSysNavX) {
+		addRequirements(inSysDriveTrain, inSysLimeLight, inSysNavX);
+	}
 
-  public AutoAimLeft(DriveTrain inSysDriveTrain, LimeLight inSysLimeLight, VMXPi inSysVMXPi) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    sysDriveTrain = inSysDriveTrain;
-    sysLimeLight = inSysLimeLight;
-    sysVMXPi = inSysVMXPi;
-    addRequirements(sysDriveTrain, sysLimeLight, sysVMXPi);
-  }
+	boolean isAimed;
 
-  boolean isAimed;
+	@Override
+	public void initialize() {
+		isAimed = false;
+	}
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    isAimed = false;
-  }
+	@Override
+	public void execute() {
+		PathPlannerTrajectory path = DriveTrain.genPath(
+				1,
+				.97,
+				LimeLight.GetBotPose2d(),
+				0,
+				NavX.sensor.getAngle(),
+				Constants.AprilTagCoords.TranslationFromAprilTagCoordinate(LimeLight.id, 2),
+				0,
+				NavX.sensor.getAngle()
+		);
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    PathPlannerTrajectory path = sysDriveTrain.genPath(
-      1, 
-      .97, 
-      sysLimeLight.GetBotPose2d(), 
-      0, 
-      sysVMXPi.vmxPi.getAngle(), 
-      AprilTagCoordinates.AprilTagCoord_Trans2d(sysLimeLight.id, 2),
-      0,
-      sysVMXPi.vmxPi.getAngle()
-    );
+		DriveTrain.mecanumDriveOdometry.resetPosition(
+				NavX.sensor.getRotation2d(),
+				DriveTrain.getWheelPositions(),
+				new Pose2d(
+						LimeLight.botPoseArray[1],
+						LimeLight.botPoseArray[2],
+						NavX.sensor.getRotation2d()
+				)
+		);
 
-    sysDriveTrain.mecanumDriveOdometry.resetPosition(
-      sysVMXPi.vmxPi.getRotation2d(), 
-      sysDriveTrain.getCurMecWheelPos(), 
-      new Pose2d(
-        sysLimeLight.botPoseArray[1], 
-        sysLimeLight.botPoseArray[2],
-        sysVMXPi.vmxPi.getRotation2d()
-      )
-    );
-    
-    // Follows var "path"
-    sysDriveTrain.followTrajectoryCommand(path, false);
-    
-    isAimed = true;
-  }
+		// Follows var "path"
+		DriveTrain.followTrajectoryCommand(path, false);
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
+		isAimed = true;
+	}
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return isAimed;
-  }
+	@Override
+	public boolean isFinished() {
+		return isAimed;
+	}
 }

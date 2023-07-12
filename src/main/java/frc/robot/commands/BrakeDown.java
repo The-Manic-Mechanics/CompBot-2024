@@ -8,37 +8,25 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Solenoids;
 
-public class BrakeDown extends CommandBase {
-  Solenoids sysSolenoids;
-  /** Creates a new AutoDrive. */
-  public BrakeDown(Solenoids inSysSolenoids) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    sysSolenoids = inSysSolenoids;
-    addRequirements(sysSolenoids);
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    sysSolenoids.ToggleBrake(Value.kForward);
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    sysSolenoids.ToggleBrake(Value.kOff);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    if (sysSolenoids.GetBrake() == Value.kForward) {
-      return true;
-    }
-    return false;
-  }
+/**
+ * Command that deactivates the brake mechanism.
+ */
+public final class BrakeDown extends CommandBase {
+	public BrakeDown(Solenoids inSysSolenoids) {
+		addRequirements(inSysSolenoids);
+	}
+	@Override
+	public void execute() {
+		Solenoids.brake.set(Value.kForward);
+	}
+	
+	@Override
+	public void end(boolean interrupted) {
+		Solenoids.brake.set(Value.kOff);
+	}
+	
+	@Override
+	public boolean isFinished() {
+		return Solenoids.brake.get() == Value.kForward;
+	}
 }
