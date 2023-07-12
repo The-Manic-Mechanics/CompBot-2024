@@ -11,59 +11,56 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.Arm;
 
-/** Creates a new GrabbyArm. */
-public class Arm extends SubsystemBase {
+/**
+* Stores all things pertaining to the arm (Arm motors, encoders)
+*/
+public final class ArmSys extends SubsystemBase {
 
-  private WPI_VictorSPX topArmMotor;
-  private WPI_VictorSPX bottomArmMotor;
+  private static WPI_VictorSPX topArmMotor;
+  private static WPI_VictorSPX bottomArmMotor;
 
-  MotorControllerGroup armGroup;
+  /**
+  * Used to work two motors in sync
+  */
+  public static MotorControllerGroup armGroup;
 
-  Encoder armEncoder;
+  public static Encoder armEncoder;
 
  
 
-  public Arm() {
+  public ArmSys() {
 
     // Initialising Motors
-    topArmMotor = new WPI_VictorSPX(ArmConstants.TOP_ARM_MOTOR_PORT);
-    bottomArmMotor = new WPI_VictorSPX(ArmConstants.BOTTOM_ARM_MOTOR_PORT);
+    topArmMotor = new WPI_VictorSPX(Arm.Ports.TOP_ARM);
+    bottomArmMotor = new WPI_VictorSPX(Arm.Ports.BOTTOM_ARM);
 
     topArmMotor.setInverted(true);
 
     armGroup = new MotorControllerGroup(topArmMotor, bottomArmMotor);
 
-    armEncoder = new Encoder(ArmConstants.ARM_ENCODER_CHANNEL_A, ArmConstants.ARM_ENCODER_CHANNEL_B);
+    armEncoder = new Encoder(Arm.Encoders.CHANNEL_A, Arm.Encoders.CHANNEL_B);
 
     // armEncoder.setDistancePerPulse(1);
-    // #FIXME# Could cause unwanted reset after auton
+    // FIXME: Could cause unwanted reset after auton
     armEncoder.reset();
 
     // armEncoder.setReverseDirection(true);
   }
 
-  public void SetArmSpeed(double indvSpeed, double speedMultiplier) {
+  /**
+  * Sets both arm motors to the inputted speed
+   * @param speed The speed to set the motors to
+   * @param speedMultiplier The percentage to cut the speed by
+  */  
+  public static void SetArmSpeed(double speed, double speedMultiplier) {
+    assert speedMultiplier < 1;
     if (speedMultiplier == 0) {
     speedMultiplier = 1;
     }
-    topArmMotor.set(indvSpeed * speedMultiplier);
-    bottomArmMotor.set(indvSpeed * speedMultiplier);
-  }
-
-  public void SetArmGroupSpeed(double speed, double speedMultiplier) {
-    // if (speedMultiplier == 0) {
-    //  speedMultiplier = 1;
-    // }
-    armGroup.set(speed /** speedMultiplier */);
-    
-    
-  }
-
-  // Gets the arm encoder from the current armEncoder instance.
-  public double GetArmEnc() {
-    return armEncoder.get();
+    topArmMotor.set(speed * speedMultiplier);
+    bottomArmMotor.set(speed * speedMultiplier);
   }
 
   @Override

@@ -11,111 +11,97 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+/**
+* Holds all things pertaining to the LimeLight
+*/
+public final class LimeLight extends SubsystemBase {
+	/**
+	* The limelight data from the Network Table
+	* See <a href="https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">...</a>
+	*/
+	private static final NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
-public class LimeLight extends SubsystemBase {
-  /** Creates a new LimeLight. */
-  public LimeLight() {
-    
-  }
-  
-  
+	/**
+	* The horizontal offset from the limelight crosshair to the target
+	* See <a href="https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">...</a>
+	*/
+	private final static NetworkTableEntry
+			tX = limeLightTable.getEntry("tx"),
 
-  NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
-  // Getting horizontal offset from target
-  NetworkTableEntry tX = limeLightTable.getEntry("tx");
-  // Getting vertical offset from target
-  NetworkTableEntry tY = limeLightTable.getEntry("ty");
-  /**  Getting distance from target 
-   * (Read as area that the target takes up 
-   * (If you still don't know remember that objects diminish with distance))
-   */ 
-  NetworkTableEntry tA = limeLightTable.getEntry("ta");
+            /**
+             * The limelight distance from target
+             * (Read as area that the target takes up
+             * (If you still don't know remember that objects diminish with distance))
+             * See <a href="https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">...</a>
+             */
+	        tA = limeLightTable.getEntry("ta"),
 
-  NetworkTableEntry tID = limeLightTable.getEntry("tid");
-  public String limeLight_currentlyViewedAprilTag;
-  
-  // NetworkTableEntry detectedTag = limeLightTable.getEntry("");
+	        /**
+	        * The april tag id identified by the limelight
+	        * See <a href="https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">...</a>
+	        */
+	        tID = limeLightTable.getEntry("tid"),
 
-  // Current position of the robot on the field in (X, Y, Z)
-  NetworkTableEntry botPose = limeLightTable.getEntry("botpose");
+			/**
+			 * Current position of the robot on the field in (X, Y, Z)
+			 * See <a href="https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">...</a>
+			 */
+			botPose = limeLightTable.getEntry("botpose");
+	/**
+    * The vertical offset from the limelight crosshair to the target
+    * See <a href="https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">...</a>
+    */
+	public final static NetworkTableEntry tY = limeLightTable.getEntry("ty");
 
-  NetworkTableEntry ledMode = limeLightTable.getEntry("ledMode");
-  
-  public double [] botPoseArray;
+    /**
+    * Holds the bot pose calculated based off of the april tag (X, Y, Z, Roll, Pitch, and Yaw respectivly)
+    * See <a href="https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">...</a>
+    */
+	public static double[] botPoseArray;
 
-  // how many degrees the limelight is mounted from perfectly vertical
-  double limelightMountAngleDegrees = 90;
-  // distance from the center of the Limelight lens to the floor
-  double limelightLensHeightInches = 20;
-  // distance from the april tag to the floor
-  double aprilTagToFloorInches = 17.12598;
+	boolean tagDetected;
+	// TODO: Make sure this is updating properly
+	public static double id;
 
-  boolean tagDetected;
-  public double id; // #TODO# Make sure this is updating properly
+	@Override
+	public void periodic() {
+		// This method will be called once per scheduler run
+		// Getting the Limelight values from the Network tables periodically
+		id = tID.getDouble(9.0);
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    // Getting the Limelight values from the Network tables periodically
-    double x = tX.getDouble(0.0);
-    double y = tY.getDouble(0.0);
-    double area = tA.getDouble(0.0);
-    id = tID.getDouble(9.0);
+		botPoseArray = botPose.getDoubleArray(new double[6]);
 
-    botPoseArray = botPose.getDoubleArray(new double[6]);
-   if (id == 9) {
-    tagDetected = false;
-    limeLight_currentlyViewedAprilTag = "None";
-   } else {
-    limeLight_currentlyViewedAprilTag = Double.toString(id);
-    tagDetected = true;
-   }
+		// Putting LimeLight values onto SmartDashboard
+		SmartDashboard.putNumber("LimeLight X", tX.getDouble(0.0));
+		SmartDashboard.putNumber("LimeLight Y", tY.getDouble(0.0));
+		SmartDashboard.putNumber("LimeLight Area", tA.getDouble(0.0));
+		// SmartDashboard.putString("Currently Viewed AprilTag", currentlyViewedAprilTag);
+		SmartDashboard.putNumber("BotPose Z", botPoseArray[2]);
 
-    // Putting LimeLight values onto SmartDashboard
-    SmartDashboard.putNumber("LimeLight X", botPoseArray[1]);
-    SmartDashboard.putNumber("LimeLight Y", y);
-    SmartDashboard.putNumber("LimeLight Area", area);
-    // SmartDashboard.putString("Currently Viewed AprilTag", currentlyViewedAprilTag);
-    SmartDashboard.putNumber("BotPose Z", this.GetBotPoseX());
+		SmartDashboard.putBoolean("AprilTag Detected", tagDetected);
+		//SmartDashboard.putString("Currently Viewed AprilTag", currentlyViewedAprilTag);
 
-    SmartDashboard.putBoolean("AprilTag Detected", tagDetected);
-    //SmartDashboard.putString("Currently Viewed AprilTag", currentlyViewedAprilTag);
-   
-  }
+	}
 
-  
+    /**
+     * @return The bot pose as a <b>Translation2d</b>
+    */
+	public static Translation2d GetBotPose2d() {
+		return new Translation2d(botPoseArray[0], botPoseArray[1]);
+	}
+//    /**
+//     * @return The distance from the bot to the april tag
+//    */
+//  public static double GetPOIDistance() {
+// 		return (LimeLightOffsets.aprilTagToFloorInches - LimeLightOffsets.lensHeightInches) / Math.tan(LimeLightOffsets.angleToAprilTagRadians);
+// 	}
+//
+// 	public static double GetCurrentAprilTag() {
+// 		return tID.getDouble(9.0);
+// 	}
+//
+// 	public static double GetTX() {
+// 		return tX.getDouble(42);
+// 	}
 
-  public double [] GetBotPoseArray() {
-    return botPose.getDoubleArray(new double[6]);
-  }
-
-  public Translation2d GetBotPose2d() {
-    return new Translation2d(botPoseArray [1], botPoseArray [2]);
-  }
-
-  public double GetBotPoseX() {
-    
-    return botPoseArray [1];
-  }
-
-  public double GetPOIDistance() {
-    // How far offset the robot is from colinear with the apriltag (Vertical)
-    double aprilTagOffsetAngle = tY.getDouble(0.0);
-
-    double angleToAprilTagDegrees = limelightMountAngleDegrees + aprilTagOffsetAngle;
-    double angleToAprilTagRadians = angleToAprilTagDegrees * (3.14159 / 180.0);
-
-    //calculate distance
-    double limelightToPOIInches = (aprilTagToFloorInches - limelightLensHeightInches)/Math.tan(angleToAprilTagRadians);
-
-    return limelightToPOIInches;
-  }
-
-  public double GetCurrentAprilTag() {
-    return tID.getDouble(9.0);
-  }
-
-  public double GetTX() {
-    return tX.getDouble(42);
-  }
 }

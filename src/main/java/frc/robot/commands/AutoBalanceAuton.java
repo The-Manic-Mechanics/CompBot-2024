@@ -6,32 +6,24 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.ArmConstants;
-import frc.robot.subsystems.Arm;
+import frc.robot.Constants.Arm;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Solenoids;
-import frc.robot.subsystems.VMXPi;
+import frc.robot.subsystems.ArmSys;
+import frc.robot.subsystems.NavX;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoBalanceAuton extends SequentialCommandGroup {
-  private final DriveTrain sysDriveTrain;
-  private final VMXPi sysVMXPi;
-  private final Solenoids sysSolenoids;
-  private final Arm sysArm;
-  /** Creates a new AutoBalanceAuton. */
-  public AutoBalanceAuton(DriveTrain inSysDriveTrain, VMXPi inSysVMXPi, Solenoids inSysSolenoids, Arm inSysArm) {
-    sysDriveTrain = inSysDriveTrain;
-    sysVMXPi = inSysVMXPi;
-    sysSolenoids = inSysSolenoids;
-    sysArm = inSysArm;
-    addCommands(
-      new ArmDriveAuton(sysArm, sysSolenoids, ArmConstants.ARM_180_DEG, Value.kForward, 1, -.40),
-      new ArmDriveAuton  (sysArm, sysSolenoids, 900, Value.kOff, 1, .40),
-      new DriveAuton(sysDriveTrain, sysVMXPi, 5000d, -.6, 0d, 0d, true, 5),
-      new AutoBalance(sysVMXPi, sysDriveTrain, true, 5),
-      new BrakeUp(inSysSolenoids)
-    );
-  }
+// TODO: Turn some of these params into constants? (addCommands params params)
+/**
+* Sequential command for autonomous that places a piece and auto-balances
+*/
+public final class AutoBalanceAuton extends SequentialCommandGroup {
+	public AutoBalanceAuton(DriveTrain inSysDriveTrain, NavX inSysNavX, Solenoids inSysSolenoids, ArmSys inSysArm) {
+		addCommands(
+				new ArmDriveAuton(inSysArm, inSysSolenoids, Arm.Limits.POS_180_DEG, Value.kForward, 1, -.40),
+				new ArmDriveAuton(inSysArm, inSysSolenoids, 900, Value.kOff, 1, .40),
+				new DriveAuton(inSysDriveTrain, inSysNavX, 5000d, -.6, 0d, 0d, true, 5),
+				new AutoBalance(inSysNavX, inSysDriveTrain, true, 5),
+				new BrakeUp(inSysSolenoids)
+		);
+	}
 }

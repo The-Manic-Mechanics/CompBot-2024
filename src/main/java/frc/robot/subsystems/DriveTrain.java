@@ -4,334 +4,252 @@
 
 package frc.robot.subsystems;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Collections;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
-import com.pathplanner.lib.auto.MecanumAutoBuilder;
-import com.pathplanner.lib.auto.PIDConstants;
-import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPMecanumControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.DriveTrainConstants;
-import frc.robot.Constants.DriveTrainConstants.DriveAuton;
+import frc.robot.Constants.DriveTrain.*;
+import frc.robot.Constants.Auton;
 
-public class DriveTrain extends SubsystemBase {
-  VMXPi sysVMXPi;
-  LimeLight sysLimelight;
+/**
+* The subsystem that holds all the motors and functions pertaining to the DriveTrain
+*/
+public final class DriveTrain extends SubsystemBase {
+	/**
+	* Represents the MecanumDrive (Used for driving the robot)
+	*/
+	public static MecanumDrive mecanum;
 
-  /** Creates a new DriveTrain. */
-  MecanumDrive mecanumDrive;
+	/**
+	* Used for keeping track of the robot's position while it drives
+	*/
+	public static MecanumDriveOdometry mecanumDriveOdometry;
 
-  WPI_VictorSPX frontLeft;
-  WPI_VictorSPX frontRight;
-  WPI_VictorSPX backLeft;
-  WPI_VictorSPX backRight;
+    /**
+    * Stores the position of the wheels in robot space (Used for kinematics and odometry)
+    */
+	private static MecanumDriveWheelPositions wheelPositions;
 
-  public ADXRS450_Gyro gyro;
+	/**
+	* Used for tracking how far the robot actually goes compared to what values are being inputed
+	*/
+	private static MecanumDriveKinematics mecanumDriveKinematics;
 
-  ChassisSpeeds mecanumChassisSpeeds;
-  public MecanumDriveWheelSpeeds mecanumDriveWheelSpeeds;
+	public static class Motors {
+		public static WPI_VictorSPX frontLeft, frontRight, backLeft, backRight;
 
-  MecanumDriveWheelPositions wheelPositions;
+        /**
+        * Sets the speeds of all the drive motors to inSpeeds
+         * @param inSpeeds The speed to set the drive motors to
+        */
+		public static void setSpeeds(MecanumDriveWheelSpeeds inSpeeds) {
+			assert inSpeeds != null;
+			Motors.frontLeft.set(inSpeeds.frontLeftMetersPerSecond);
+			Motors.frontRight.set(inSpeeds.frontRightMetersPerSecond);
+			Motors.backLeft.set(inSpeeds.rearLeftMetersPerSecond);
+			Motors.backRight.set(inSpeeds.rearRightMetersPerSecond);
+		}
 
-  public MecanumDriveKinematics mecanumDriveKinematics;
+        /**
+        * Sets the voltages of all the drive motors to inVolts
+         * @param inVolts The voltage to set the drive motors to
+        */
+		public static void setVolts(MecanumDriveMotorVoltages inVolts) {
+			assert inVolts != null;
+			Motors.frontLeft.setVoltage(inVolts.frontLeftVoltage);
+			Motors.frontRight.setVoltage(inVolts.frontRightVoltage);
+			Motors.backLeft.setVoltage(inVolts.rearLeftVoltage);
+			Motors.backRight.setVoltage(inVolts.rearRightVoltage);
+		}
+	}
 
-  Translation2d frontLeftLocation;
-  Translation2d frontRightLocation;
-  Translation2d backLeftLocation;
-  Translation2d backRightLocation;
+	public static class Encoders {
+		public static Encoder frontLeft, frontRight, backLeft, backRight;
+	}
 
-  public MecanumDriveOdometry mecanumDriveOdometry;
+	public DriveTrain() {
+		Motors.frontLeft = new WPI_VictorSPX(MotorPorts.FRONT_LEFT);
+		Motors.frontRight = new WPI_VictorSPX(MotorPorts.FRONT_RIGHT);
+		Motors.backLeft = new WPI_VictorSPX(MotorPorts.BACK_LEFT);
+		Motors.backRight = new WPI_VictorSPX(MotorPorts.BACK_RIGHT);
 
-  public Encoder frontLeftEnc;
-  public Encoder frontRightEnc;
-  public Encoder backLeftEnc;
-  public Encoder backRightEnc;
+		Encoders.frontLeft = new Encoder(
+				EncoderPorts.FRONT_LEFT_A,
+				EncoderPorts.FRONT_LEFT_B
+		);
 
-  
-  MecanumAutoBuilder autoBuilder;
+		Encoders.frontRight = new Encoder(
+				EncoderPorts.FRONT_RIGHT_A,
+				EncoderPorts.FRONT_RIGHT_B
+		);
 
-  public DriveTrain() {
+		Encoders.backLeft = new Encoder(
+				EncoderPorts.BACK_LEFT_A,
+				EncoderPorts.BACK_LEFT_A
+		);
 
-    sysLimelight = new LimeLight();
-    sysVMXPi = new VMXPi();
+		Encoders.backRight = new Encoder(
+				EncoderPorts.BACK_RIGHT_A,
+				EncoderPorts.BACK_RIGHT_B
+		);
+		Encoders.frontLeft.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
+		Encoders.frontRight.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
+		Encoders.backLeft.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
+		Encoders.backRight.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
 
-    frontLeft = new WPI_VictorSPX(DriveTrainConstants.FRONT_LEFT_MOTOR_PORT);
-    frontRight = new WPI_VictorSPX(DriveTrainConstants.FRONT_RIGHT_MOTOR_PORT);
-    backLeft = new WPI_VictorSPX(DriveTrainConstants.BACK_LEFT_MOTOR_PORT);
-    backRight = new WPI_VictorSPX(DriveTrainConstants.BACK_RIGHT_MOTOR_PORT);
+		Motors.frontLeft.setInverted(true);
+		// frontRight.setInverted(true);
+		Motors.backLeft.setInverted(true);
 
-    frontLeftLocation = new Translation2d(DriveTrainConstants.FRONT_LEFT_LOCATION,
-        DriveTrainConstants.FRONT_LEFT_LOCATION);
-    frontRightLocation = new Translation2d(DriveTrainConstants.FRONT_RIGHT_LOCATION,
-        -1 * DriveTrainConstants.FRONT_RIGHT_LOCATION);
-    backLeftLocation = new Translation2d(-1 * DriveTrainConstants.BACK_LEFT_LOCATION,
-        DriveTrainConstants.BACK_LEFT_LOCATION);
-    backRightLocation = new Translation2d(-1 * DriveTrainConstants.BACK_RIGHT_LOCATION,
-        -1 * DriveTrainConstants.BACK_RIGHT_LOCATION);
+		mecanum = new MecanumDrive(Motors.frontLeft, Motors.backLeft, Motors.frontRight, Motors.backRight);
 
-    gyro = new ADXRS450_Gyro();
+		mecanumDriveKinematics = new MecanumDriveKinematics
+	    (
+			new Translation2d(MotorLocations.FRONT_LEFT, MotorLocations.FRONT_LEFT),
+			new Translation2d(MotorLocations.FRONT_RIGHT, -1 * MotorLocations.FRONT_RIGHT),
+			new Translation2d(-1 * MotorLocations.BACK_LEFT, MotorLocations.BACK_LEFT),
+			new Translation2d(-1 * MotorLocations.BACK_RIGHT, -1 * MotorLocations.BACK_RIGHT)
+		);
 
-    frontLeftEnc = new Encoder(
-        DriveTrainConstants.FRONT_LEFT_ENCODER_A,
-        DriveTrainConstants.FRONT_LEFT_ENCODER_B);
+		wheelPositions = new MecanumDriveWheelPositions(
+				Encoders.frontLeft.getDistance(),
+				Encoders.frontRight.getDistance(),
+				Encoders.backLeft.getDistance(),
+				Encoders.backRight.getDistance()
+		);
 
-    frontRightEnc = new Encoder(
-        DriveTrainConstants.FRONT_RIGHT_ENCODER_A,
-        DriveTrainConstants.FRONT_RIGHT_ENCODER_B);
+		double[] currentPose = LimeLight.botPoseArray;
 
-    backLeftEnc = new Encoder(
-        DriveTrainConstants.BACK_LEFT_ENCODER_A,
-        DriveTrainConstants.BACK_LEFT_ENCODER_B);
+		Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], NavX.sensor.getRotation2d());
 
-    backRightEnc = new Encoder(
-        DriveTrainConstants.BACK_RIGHT_ENCODER_A,
-        DriveTrainConstants.BACK_RIGHT_ENCODER_B);
+		mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics, NavX.sensor.getRotation2d(), wheelPositions,
+				initPose);
+	}
 
-    // frontRight.setInverted(true);
-    // backRight.setInverted(true);
-    frontLeftEnc.setDistancePerPulse(DriveAuton.DISTANCE_PER_PULSE);
-    frontRightEnc.setDistancePerPulse(DriveAuton.DISTANCE_PER_PULSE);
-    backLeftEnc.setDistancePerPulse(DriveAuton.DISTANCE_PER_PULSE);
-    backRightEnc.setDistancePerPulse(DriveAuton.DISTANCE_PER_PULSE);
+    /**
+     * Gets the current mecanum wheel positions.
+	 *
+	 * @return <i>(type MecanumDriveWheelPositions)</i> filled out
+    */
+	public static MecanumDriveWheelPositions getWheelPositions() {
+		return new MecanumDriveWheelPositions(
+				Encoders.frontLeft.getDistance(), Encoders.frontRight.getDistance(),
+				Encoders.backLeft.getDistance(), Encoders.backRight.getDistance());
+	}
 
-    frontLeft.setInverted(true);
-    // frontRight.setInverted(true);
-    backLeft.setInverted(true);
+	/**
+	 * Generates a movement path for the robot, from point A to B <i>(transPx)</i>
+	 * @param maxVel The maximum velocity to use while driving this path
+	 * @param maxAccel The maximum acceleration to use while driving this path
+	 * @param transP1 The initial pose of the robot before path is driven as a <b>Translation2d</b>
+	 * @param rotHead1 The initial heading of the robot before the path is driven
+	 * @param rotHolo1 The initial holonomic rotation of the robot before the path is driven
+	 * @param transP2 The destination pose of the robot as a <b>Translation2d</b>
+	 * @param rotHead2 The destination heading of the robot
+	 * @param rotHolo2 The destination holonomic rotation of the robot
+	 *
+	 * @return  The generated path. <i>(type PathPlannerTrajectory)</i>
+	 * @see #followTrajectoryCommand(PathPlannerTrajectory, boolean) to create a command to follow this path.
+	 */
+	public static PathPlannerTrajectory genPath (
+		    double maxVel,
+			double maxAccel,
+			Translation2d transP1,
+			double rotHead1,
+		    double rotHolo1,
+			Translation2d transP2,
+			double rotHead2,
+			double rotHolo2
+	) {
+		return PathPlanner.generatePath(
+				new PathConstraints(maxVel, maxAccel),
+				new PathPoint // position, heading, holonomic rotation
+                        (
+                                transP1,
+                                Rotation2d.fromDegrees(rotHead1),
+                                Rotation2d.fromDegrees(rotHolo1)
+                        ),
+				new PathPoint // position, heading, holonomic rotation
+                        (
+                                transP2,
+                                Rotation2d.fromDegrees(rotHead2),
+                                Rotation2d.fromDegrees(rotHolo2)
+                        )
+		);
+	}
 
-    mecanumDrive = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
+    /**
+    * Resets the mecanumDriveOdometry using the resetPosition method
+     * @param odoResetPose The <b>Pose2d</b> representing where the robot currently is
+    */
 
-    mecanumDriveKinematics = new MecanumDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation,
-        backRightLocation);
+	private static void resetOdometry(Pose2d odoResetPose) {
+		mecanumDriveOdometry.resetPosition(NavX.sensor.getRotation2d(), getWheelPositions(), odoResetPose);
+	}
 
-    mecanumChassisSpeeds = new ChassisSpeeds(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_METRES_PER_SEC * .5,
-        DriveAuton.MAX_METRES_PER_SEC);
+    /**
+    * Generates a command that follows the inputed trajectory
+     * @param trajectory The PathPlannerTrajectory to be followed
+     * @return A command that follows the inputed trajectory
+    */
+	public static Command followTrajectoryCommand(PathPlannerTrajectory trajectory, boolean isFirstPath) {
 
-    mecanumDriveWheelSpeeds = mecanumDriveKinematics.toWheelSpeeds(mecanumChassisSpeeds);
+		return new SequentialCommandGroup(
+				new InstantCommand(() -> {
+					// Reset odometry for the first path you run during auto
+					if (isFirstPath) {
+						mecanumDriveOdometry.resetPosition(null, wheelPositions, mecanumDriveOdometry.getPoseMeters());
+					}
+				}),
+				new PPMecanumControllerCommand(
+						trajectory,
+						mecanumDriveOdometry::getPoseMeters, // Pose supplier
+						mecanumDriveKinematics, // MecanumDriveKinematics
+						new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use
+						// feedforwards.
+						new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
+						new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will
+						// only use feedforwards.
+						Auton.MAX_METRES_PER_SEC, // Max wheel velocity meters per second
+						Motors::setSpeeds, // MecanumDriveWheelSpeeds consumer
+						true, // Should the path be automatically mirrored depending on alliance color.
+						// Optional, defaults to true
+						new DriveTrain() // Requires this drive subsystem
+				)
+		);
+	}
 
-    // double frontLeftSpeed = mecanumDriveWheelSpeeds.frontLeftMetersPerSecond;
-    // double frontRightSpeed = mecanumDriveWheelSpeeds.frontRightMetersPerSecond;
-    // double backLeftSpeed = mecanumDriveWheelSpeeds.rearLeftMetersPerSecond;
-    // double backRightSpeed = mecanumDriveWheelSpeeds.rearRightMetersPerSecond;
+	@Override
+	public void periodic() {
+		// This method will be called once per scheduler run
 
-    wheelPositions = new MecanumDriveWheelPositions(
-        frontLeftEnc.getDistance(),
-        frontRightEnc.getDistance(),
-        backLeftEnc.getDistance(),
-        backRightEnc.getDistance());
+		mecanumDriveOdometry.update(NavX.sensor.getRotation2d(), wheelPositions);
 
-    double[] currentPose = sysLimelight.GetBotPoseArray();
-    // #FIXME# Make sure all values are what you think they are in API (Like the
-    // value used for rot)
-    Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], sysVMXPi.vmxPi.getRotation2d());
+		SmartDashboard.putData("frontLeft", Motors.frontLeft);
+		SmartDashboard.putData("frontRight", Motors.frontRight);
+		SmartDashboard.putData("backLeft", Motors.backLeft);
+		SmartDashboard.putData("backRight", Motors.backRight);
 
-    // #TODO# Use apriltags to caculate initial pose
-    mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics, sysVMXPi.getRotation2d(), wheelPositions,
-        initPose);
-
-    // This will load the file "Example Path.path" and generate it with a max
-    // velocity of 4 m/s and a max acceleration of 3 m/s^2
-    // PathPlannerTrajectory examplePath = PathPlanner.loadPath("Example Path", new
-    // PathConstrains(4, 3));
-
-    // This is just an example event map. It would be better to have a constant,
-    // global event map
-    // in your code that will be used by all path following commands.
-
-    // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
-    // eventMap.put("intakeDown", new IntakeDown());
-
-    List<PathPlannerTrajectory> LinkLoadingSideBlue = PathPlanner.loadPathGroup("Loading Station Side Link",
-        new PathConstraints(DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL));
-    List<PathPlannerTrajectory> LinkCommunitySideBlue = PathPlanner.loadPathGroup("Com Z Lnk",
-        DriveAuton.MAX_METRES_PER_SEC, DriveAuton.MAX_ACCEL);
-    
-    autoBuilder = new MecanumAutoBuilder(
-      mecanumDriveOdometry::getPoseMeters,
-      this::resetOdometry,
-      mecanumDriveKinematics,
-      new PIDConstants(.5, 0, 0), // Constants for the translation controller
-      new PIDConstants(.5, 0, 0), // Constants for the rot controller
-      DriveAuton.MAX_METRES_PER_SEC,
-      this::setWheelSpeeds,
-      DriveAuton.EVENT_MAP,
-      true,
-      this
-    );
-
-    // autoRoutineChooser.addOption("Link Loading Side Blue", autoBuilder.fullAuto(LinkLoadingSideBlue));
-    // autoRoutineChooser.addOption("Link Community Side Blue", autoBuilder.fullAuto(LinkCommunitySideBlue));
-    // autoRoutineChooser.setDefaultOption("Default", autoBuilder.fullAuto(LinkLoadingSideBlue));
-  
-  }
-
-  public void CartisianDrive(double speedX, double speedY, double speedZ) {
-    mecanumDrive.driveCartesian(speedX, speedY, speedZ);
-  }
-
-  public void MecanumDriveVolts(
-      double frontLeftVolts,
-      double frontRightVolts,
-      double backLeftVolts,
-      double backRightVolts) {
-    frontLeft.setVoltage(frontLeftVolts);
-    frontRight.setVoltage(frontRightVolts);
-    backLeft.setVoltage(backLeftVolts);
-    backRight.setVoltage(backRightVolts);
-  }
-
-  public MecanumDriveWheelSpeeds getCurMecWheelSpeeds() {
-    return new MecanumDriveWheelSpeeds(
-        frontLeft.get(), frontRight.get(),
-        backLeft.get(), backRight.get());
-  }
-
-  public MecanumDriveWheelPositions getCurMecWheelPos() {
-    return new MecanumDriveWheelPositions(
-        frontLeftEnc.getDistance(), frontRightEnc.getDistance(),
-        backLeftEnc.getDistance(), backRightEnc.getDistance());
-  }
-
-  public void setWheelSpeeds(MecanumDriveWheelSpeeds inSpeeds) {
-    frontLeft.set(inSpeeds.frontLeftMetersPerSecond);
-    frontRight.set(inSpeeds.frontRightMetersPerSecond);
-    backLeft.set(inSpeeds.rearLeftMetersPerSecond);
-    backRight.set(inSpeeds.rearRightMetersPerSecond);
-  }
-
-  public void setDriveMotsVolts(MecanumDriveMotorVoltages inVolts) {
-    frontLeft.setVoltage(inVolts.frontLeftVoltage);
-    frontRight.setVoltage(inVolts.frontRightVoltage);
-    backLeft.setVoltage(inVolts.rearLeftVoltage);
-    backRight.setVoltage(inVolts.rearRightVoltage);
-  }
-
-  public Pose2d getPoseOd() {
-    return mecanumDriveOdometry.getPoseMeters();
-  }
-
-  /* For on the fly path generation */
-  public PathPlannerTrajectory genPath(
-      double maxVel, double maxAccel, Translation2d transP1, double rotHead1, double rotHolo1, Translation2d transP2,
-      double rotHead2, double rotHolo2) {
-    PathPlannerTrajectory traj1 = PathPlanner.generatePath(
-
-        new PathConstraints(maxVel, maxAccel),
-
-        new PathPoint(
-            transP1,
-            Rotation2d.fromDegrees(rotHead1),
-            Rotation2d.fromDegrees(rotHolo1)), // position, heading, holonomic rotation
-
-        new PathPoint(
-            transP2,
-            Rotation2d.fromDegrees(rotHead2),
-            Rotation2d.fromDegrees(rotHolo2)) // position, heading, holonomic rotation
-    );
-
-    return traj1;
-  }
-
-  public Pose2d currentAprilTag(int aimTo) {
-    List<Pose2d> aprilTagCords = new ArrayList<>();
-    Collections.addAll(aprilTagCords,
-        new Pose2d(610.77, 42.19, new Rotation2d(3.14159)),
-        new Pose2d(610.77, 108.19, new Rotation2d(3.14159)),
-        new Pose2d(610.77, 174.19, new Rotation2d(3.14159)),
-        new Pose2d(aimTo, aimTo, new Rotation2d(0)),
-        new Pose2d(aimTo, aimTo, new Rotation2d(0)),
-        new Pose2d(aimTo, aimTo, new Rotation2d(0)));
-    return aprilTagCords.get(aimTo);
-  }
-
-  public void resetOdometry(Pose2d odoResetPose) {
-    mecanumDriveOdometry.resetPosition(sysVMXPi.vmxPi.getRotation2d(), getCurMecWheelPos(), odoResetPose);
-  }
-
-  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-    // Pose2d initHoloPose = traj.getInitialHolonomicPose();
-
-    return new SequentialCommandGroup(
-        new InstantCommand(() -> {
-          // Reset odometry for the first path you run during auto
-          if (isFirstPath) {
-            mecanumDriveOdometry.resetPosition(null, wheelPositions, mecanumDriveOdometry.getPoseMeters());
-          }
-        }),
-        new PPMecanumControllerCommand(
-            traj,
-            mecanumDriveOdometry::getPoseMeters, // Pose supplier
-            this.mecanumDriveKinematics, // MecanumDriveKinematics
-            new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use
-                                        // feedforwards.
-            new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
-            new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will
-                                        // only use feedforwards.
-            DriveAuton.MAX_METRES_PER_SEC, // Max wheel velocity meters per second
-            this::setWheelSpeeds, // MecanumDriveWheelSpeeds consumer
-            true, // Should the path be automatically mirrored depending on alliance color.
-                  // Optional, defaults to true
-            this // Requires this drive subsystem
-        ));
-  }
-
-  public Command buildAuto(List<PathPlannerTrajectory> pathGroup) {
-    Command out = autoBuilder.fullAuto(pathGroup);
-    return out;
-  }
-
-  public FollowPathWithEvents followPathEvents(PathPlannerTrajectory inPath) {
-    FollowPathWithEvents command = new FollowPathWithEvents(
-        followTrajectoryCommand(inPath, false),
-        inPath.getMarkers(),
-        DriveAuton.EVENT_MAP);
-
-    return command;
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-
-    Rotation2d curRot2d = sysVMXPi.getRotation2d();
-
-    mecanumDriveOdometry.update(curRot2d, wheelPositions);
-
-    SmartDashboard.putData("frontLeft", frontLeft);
-    SmartDashboard.putData("frontRight", frontRight);
-    SmartDashboard.putData("backLeft", backLeft);
-    SmartDashboard.putData("backRight", backRight);
-
-    // Putting Controller Left and Right Stick Values
-    SmartDashboard.putNumber("X Value", RobotContainer.driverMainController.getLeftX());
-    SmartDashboard.putNumber("Y Value", RobotContainer.driverMainController.getLeftY());
-    SmartDashboard.putNumber("Z Value", RobotContainer.driverMainController.getRightX());
-  }
+		// Putting Controller Left and Right Stick Values
+		SmartDashboard.putNumber("X Value", RobotContainer.driverMainController.getLeftX());
+		SmartDashboard.putNumber("Y Value", RobotContainer.driverMainController.getLeftY());
+		SmartDashboard.putNumber("Z Value", RobotContainer.driverMainController.getRightX());
+	}
 }
