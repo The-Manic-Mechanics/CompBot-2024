@@ -7,18 +7,19 @@ package frc.robot.commands;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AprilTagCoords;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.LimeLight;
-import frc.robot.subsystems.NavX;
+import frc.robot.subsystems.Gyroscope;
 
 /**
 * Command used in teleoperation to AutoAim to the right april tag
 */
 public final class AutoAimRight extends CommandBase {
-	public AutoAimRight(DriveTrain inSysDriveTrain, LimeLight inSysLimeLight, NavX inSysNavX) {
-		addRequirements(inSysDriveTrain, inSysLimeLight, inSysNavX);
+	public AutoAimRight(DriveTrain inSysDriveTrain, LimeLight inSysLimeLight, Gyroscope inSysGyroscope) {
+		addRequirements(inSysDriveTrain, inSysLimeLight, inSysGyroscope);
 	}
 
 	boolean isAimed;
@@ -36,19 +37,19 @@ public final class AutoAimRight extends CommandBase {
 				.97,
 				LimeLight.GetBotPose2d(),
 				0,
-				NavX.sensor.getAngle(),
+				Gyroscope.sensor.getAngle(),
 				AprilTagCoords.TranslationFromAprilTagCoordinate(LimeLight.id, 3),
 				0,
-				NavX.sensor.getAngle()
+				Gyroscope.sensor.getAngle()
 		);
 
 		DriveTrain.mecanumDriveOdometry.resetPosition(
-				NavX.sensor.getRotation2d(),
+				Gyroscope.sensor.getRotation2d(),
 				DriveTrain.getWheelPositions(),
 				new Pose2d(
 						LimeLight.botPoseArray[1],
 						LimeLight.botPoseArray[2],
-						NavX.sensor.getRotation2d()
+						Gyroscope.sensor.getRotation2d()
 				)
 		);
 

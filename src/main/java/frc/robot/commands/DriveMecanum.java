@@ -2,9 +2,10 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+// FIXME: This entire file needs to be reworked.
+
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
@@ -18,9 +19,13 @@ public final class DriveMecanum extends CommandBase {
 	/**
 	 * d = drift, ct = current time, o = old
 	 */
-	double moveSpeedX, xvar;
-	double moveSpeedY, yvar;
-	double moveSpeedZ, zvar;
+	double 
+		moveSpeedX, 
+		xvar,
+		moveSpeedY, 
+		yvar,
+		moveSpeedZ,
+		zvar;
 
 
 	public DriveMecanum(DriveTrain inSysDriveTrain) {
@@ -29,36 +34,19 @@ public final class DriveMecanum extends CommandBase {
 
 	@Override
 	public void execute() {
-
-		xvar = RobotContainer.driverMainController.getLeftX();
-		yvar = RobotContainer.driverMainController.getLeftY();
-		zvar = RobotContainer.driverMainController.getRightX();
-
-        // The commented conditional statements were a shoddy solution to prevent stick drift. (deadbands)
-// 		if (Math.abs(yvar) > .15) {
-			moveSpeedY = speedMultThrot * yvar;
-// 		} else {
-// 			moveSpeedY = 0;
-// 		}
-
-// 		if (Math.abs(xvar) > .32) {
-			moveSpeedX = -speedMultThrot * xvar;
-//		} else {
-//			moveSpeedX = 0;
-//		}
-
-// 		if (Math.abs(zvar) > .062) {
-			moveSpeedZ = -speedMultThrot * zvar;
-//		} else {
-//			moveSpeedZ = 0;
-//		}
-
-		// The swapped variables were swapped on purpose. FIXME by hooking up the connections correctly.
-		DriveTrain.mecanum.driveCartesian(moveSpeedY, moveSpeedX, moveSpeedZ);
+		xvar = RobotContainer.driverOneController.getLeftX();
+		yvar = RobotContainer.driverOneController.getLeftY();
+		zvar = RobotContainer.driverOneController.getRightX();
+		moveSpeedY = speedMultThrot * yvar;
+		moveSpeedX = -speedMultThrot * xvar;
+		moveSpeedZ = -speedMultThrot * zvar;
+		// Feed thhe 
+		DriveTrain.mecanum.driveCartesian(moveSpeedX, moveSpeedY, moveSpeedZ);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
+		// Stop the robot.
 		DriveTrain.mecanum.driveCartesian(0, 0, 0);
 	}
 

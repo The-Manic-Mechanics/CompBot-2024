@@ -137,9 +137,9 @@ public final class DriveTrain extends SubsystemBase {
 
 		double[] currentPose = LimeLight.botPoseArray;
 
-		Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], NavX.sensor.getRotation2d());
+		Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], Gyroscope.sensor.getRotation2d());
 
-		mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics, NavX.sensor.getRotation2d(), wheelPositions,
+		mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics, Gyroscope.sensor.getRotation2d(), wheelPositions,
 				initPose);
 	}
 
@@ -199,9 +199,8 @@ public final class DriveTrain extends SubsystemBase {
     * Resets the mecanumDriveOdometry using the resetPosition method
      * @param odoResetPose The <b>Pose2d</b> representing where the robot currently is
     */
-
 	private static void resetOdometry(Pose2d odoResetPose) {
-		mecanumDriveOdometry.resetPosition(NavX.sensor.getRotation2d(), getWheelPositions(), odoResetPose);
+		mecanumDriveOdometry.resetPosition(Gyroscope.sensor.getRotation2d(), getWheelPositions(), odoResetPose);
 	}
 
     /**
@@ -240,7 +239,7 @@ public final class DriveTrain extends SubsystemBase {
 	public void periodic() {
 		// This method will be called once per scheduler run
 
-		mecanumDriveOdometry.update(NavX.sensor.getRotation2d(), wheelPositions);
+		mecanumDriveOdometry.update(Gyroscope.sensor.getRotation2d(), wheelPositions);
 
 		SmartDashboard.putData("frontLeft", Motors.frontLeft);
 		SmartDashboard.putData("frontRight", Motors.frontRight);
@@ -248,8 +247,8 @@ public final class DriveTrain extends SubsystemBase {
 		SmartDashboard.putData("backRight", Motors.backRight);
 
 		// Putting Controller Left and Right Stick Values
-		SmartDashboard.putNumber("X Value", RobotContainer.driverMainController.getLeftX());
-		SmartDashboard.putNumber("Y Value", RobotContainer.driverMainController.getLeftY());
-		SmartDashboard.putNumber("Z Value", RobotContainer.driverMainController.getRightX());
+		SmartDashboard.putNumber("X Value", RobotContainer.driverOneController.getLeftX());
+		SmartDashboard.putNumber("Y Value", RobotContainer.driverOneController.getLeftY());
+		SmartDashboard.putNumber("Z Value", RobotContainer.driverOneController.getRightX());
 	}
 }

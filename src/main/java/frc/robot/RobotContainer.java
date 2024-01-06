@@ -5,19 +5,10 @@
 package frc.robot;
 
 import frc.robot.Constants.Controllers;
-import frc.robot.commands.ArmDrive;
-import frc.robot.commands.AutoBalanceAuton;
-import frc.robot.commands.ClawClose;
-import frc.robot.commands.ClawOpen;
 import frc.robot.commands.DriveMecanum;
-import frc.robot.commands.TelescoperIn;
-import frc.robot.commands.TelescoperOut;
-import frc.robot.commands.BrakeDown;
-import frc.robot.commands.BrakeUp;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Gyroscope;
 import frc.robot.subsystems.Solenoids;
-import frc.robot.subsystems.NavX;
-import frc.robot.subsystems.ArmSys;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -33,81 +25,32 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // ---------------------------
-  // Misc Vars
-  // ---------------------------
   SendableChooser<Command> autoRoutineChooser;
 
-  // ----------------------------------------------------------------------------------
-
-  // ---------------------------
-  // Subsystem
-  // ---------------------------
-
-  private final ArmSys sysArm = new ArmSys();
-
   private final Solenoids sysSolenoids = new Solenoids();
-
-  // ----------------------------------------------------------------------------------
-
-  // ---------------------------
-  // Commands
-  // ---------------------------
-
-  // This is just an example event map. It would be better to have a constant, global event map
-  //   in your code that will be used by all path following commands.
-  //   HashMap<String, Command> eventMap = new HashMap<>();
-
-  //   // Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
-    // MecanumAutoBuilder autoBuilder = new MecanumAutoBuilder(
-    //     sysDriveTrain.mecanumDriveOdometry::getP SendableChooser<Command> autoRoutineChooser;
-    //     true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-    //     Subsystem.sysDriveTrain // The drive subsystem. Used to properly set the requirements of path following commands
-    // );
-
-  private final ClawOpen cmdClawOpen = new ClawOpen(sysSolenoids);
-  private final ClawClose cmdClawClose = new ClawClose(sysSolenoids);
-
-  private final TelescoperIn cmdTelescoperIn = new TelescoperIn(sysSolenoids, sysArm);
-  private final TelescoperOut cmdTelescoperOut = new TelescoperOut(sysSolenoids, sysArm);
-
-  private final BrakeUp cmdBrakeUp = new BrakeUp(sysSolenoids);
-  private final BrakeDown cmdBrakeDown = new BrakeDown(sysSolenoids);
-
-  // ---------------------------
-  // Controller
-  // ---------------------------
+  private final Gyroscope sysGyroscope = new Gyroscope();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  public static final XboxController driverMainController = new XboxController(Controllers.DRIVERONE_PORT);
-  private final JoystickButton mainButton1 = new JoystickButton(driverMainController, 1);
-  private final JoystickButton mainButton2 = new JoystickButton(driverMainController, 4);
+  public static final XboxController driverOneController = new XboxController(Controllers.DRIVERONE_PORT);
+  public static final JoystickButton 
+    mainButton1 = new JoystickButton(driverOneController, 1),
+    mainButton2 = new JoystickButton(driverOneController, 4);
 
-  public static final XboxController driverSecondController = new XboxController(Controllers.DRIVERTWO_PORT);
-  private final JoystickButton driverSecondA = new JoystickButton(driverSecondController, 1);
-  private final JoystickButton driverSecondY = new JoystickButton(driverSecondController, 4);
-  private final JoystickButton driverSecondLeftBump = new JoystickButton(driverSecondController, 5);
-  private final JoystickButton driverSecondRghtBump = new JoystickButton(driverSecondController, 6);
+  public static final XboxController driverTwoController = new XboxController(Controllers.DRIVERTWO_PORT);
+  public static final JoystickButton 
+    driverSecondA = new JoystickButton(driverTwoController, 1),
+    driverSecondY = new JoystickButton(driverTwoController, 4),
+    driverSecondLeftBump = new JoystickButton(driverTwoController, 5),
+    driverSecondRghtBump = new JoystickButton(driverTwoController, 6);
   // ---------------------------------------------------------------------------------
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
-  // --------------------------
-  // SetDefaultCommand
-  // --------------------------
-
     // The robot's subsystems and commands are defined here...
     DriveTrain sysDriveTrain = new DriveTrain();
     DriveMecanum cmdDriveMecanum = new DriveMecanum(sysDriveTrain);
     sysDriveTrain.setDefaultCommand(cmdDriveMecanum);
-    /* , sysSolenoids*/
-    ArmDrive cmdArmDrive = new ArmDrive(sysArm/* , sysSolenoids*/);
-    sysArm.setDefaultCommand(cmdArmDrive);
 
-  // ----------------------------------------------------------------------------------
-
-  
     // Configure the trigger bindings
     configureBindings();
 
@@ -115,15 +58,9 @@ public class RobotContainer {
   // SmartDashboard
   // -------------------------
   
-  autoRoutineChooser = new SendableChooser<>();
+    autoRoutineChooser = new SendableChooser<>();
 
-    NavX sysNavX = new NavX();
-    AutoBalanceAuton cmdAutoBalanceAuton = new AutoBalanceAuton(sysDriveTrain, sysNavX, sysSolenoids, sysArm);
-    autoRoutineChooser.addOption("AutoBalanceAuton", cmdAutoBalanceAuton);
-
-  SmartDashboard.putData("Auton Chooser", autoRoutineChooser);
-
-  // ----------------------------------------------------------------------------------
+    SmartDashboard.putData("Auton Chooser", autoRoutineChooser);
   }
 
   /**
@@ -136,44 +73,13 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    // Configure controller bindings here.
+    // mainButton1.onTrue(cmdMove);
+    // mainButton2.onTrue(cmdBrakeUp);
 
-  // ----------------------------
-  // Driver (Main)
-  // ----------------------------
-    // Assigning driver main button X to cmdAutoBalance
-    mainButton1.onTrue(cmdBrakeDown);
-    mainButton2.onTrue(cmdBrakeUp);
-
-
-
-  // -------------------------------------------------------------------------------------
-
-  
-  // ----------------------------
-  // Driver (Secondary)
-  // ----------------------------
-
-    driverSecondA.onTrue(cmdTelescoperIn);
-   
-    driverSecondY.onTrue(cmdTelescoperOut);
-
-    
-
-    driverSecondLeftBump.onTrue(cmdClawOpen);
-    driverSecondRghtBump.onTrue(cmdClawClose);
-
-    
-
-
-  
-  // -------------------------------------------------------------------------------------
+    // The DriveMecanum command periodically checks the controller's joysticks for acceleration.
   }
 
-  // /**
-  //  * Use this to pass the autonomous command to the main {@link Rob
-    
-  //  * @return the command to run in autonomous
-  //  */
   public Command getAutonomousCommand() {
     return autoRoutineChooser.getSelected();
   }

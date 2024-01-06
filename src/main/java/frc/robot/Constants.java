@@ -19,90 +19,93 @@ import frc.robot.subsystems.LimeLight;
 public final class Constants {
 	public static class Controllers {
 		/**
-		 * The port which the first drivers controller is on
+		 * TODO: Change accordingly.
+		 * The port which the first driver's controller is connected to.
 		 */
 		public static final int
             DRIVERONE_PORT = 0,
             /**
-            * The port which the second drivers controller is on
-            */
+			 * TODO: Change accordingly.
+             * The port which the second driver's controller is connected to.
+             */
             DRIVERTWO_PORT = 1;
 	}
 	
 	public static class LimeLightOffsets {
 		/**
-        * How far offset the robot is from collinear with the april tag (Vertical)
-        */
+		 * TODO: Change accordingly.
+         * How far offset the robot is from being collinear with the AprilTag (Vertical).
+         */
 	    public static final double
 	        aprilTagOffsetAngle = LimeLight.tY.getDouble(0.0),
 	        
 	         /**
-             * How many degrees the limelight is mounted from perfectly vertical
-             */
+			  * TODO: Change accordingly.
+              * How many degrees the limelight is mounted from perfectly vertical.
+              */
             limelightMountAngleDegrees = 90,
 
             /**
-            * The angle to the apriltag to the robot in degrees
+            * The angle to the AprilTag to the robot in degrees.
             */
             angleToAprilTagDegrees = limelightMountAngleDegrees + aprilTagOffsetAngle,
-            
             /**
-            * The angle to the apriltag in radians
+            * The angle to the AprilTag to the robot in radians.
             */
             angleToAprilTagRadians = angleToAprilTagDegrees * (3.14159 / 180.0),
 
             /**
-            * Distance from the center of the Limelight lens to the floor
-            */
-			lensHeightInches = 20,
-            
-            /** 
-            * Distance from the april tag to the floor
-            */
-            aprilTagToFloorInches = 17.12598;
+			 * TODO: Change accordingly.
+             * The amount of inches from the center of the LimeLight lens to the floor.
+             */
+			lensHeightInches = 20;
 	}
 
 	public static class AprilTagCoords {
 		/**
-		 * direction: 1 (or !(2 or 3)) is fwd, 2 is left, 3 is right
+		 * FIXME: What is this?
+		 * Direction: 1 (or !(2 or 3)) is Forward, 2 is Left, 3 is Right
 		 */
 		public static Translation2d TranslationFromAprilTagCoordinate(double in_id, int direction) {
 			int id = (int) in_id;
-			if (direction == 2) //left
+			if (direction == 2) // Left
+				// TODO: Change accordingly. (the added constant)
 				return new Translation2d(MAP[id][0], MAP[id][1] + 13.75);
-			else if (direction == 3) //right
+			else if (direction == 3) // Right
+				// TODO: Change accordingly. (the subtracted constant)
 				return new Translation2d(MAP[id][0], MAP[id][1] - 13.75);
 			else
 				return new Translation2d(MAP[id][0], MAP[id][1]);
 		}
 
 		/**
+		 * TODO: Change accordingly.
 		 * X, Y, Z, Heading (In that order)
 		 */
 		public static final double[][] MAP = {
 				{
-						582.49, 42.19, 18.22, 180
+						0.0, 0.0, 0.0, 0.0
 				},
 				{
-						582.49, 108.19, 18.22, 180
+						0.0, 0.0, 0.0, 0.0
 				},
 				{
-						582.49, 174.19, 18.22, 180
+						0.0, 0.0, 0.0, 0.0
 				},
 				{
-						636.96, 265.74, 27.38, 180
+						0.0, 0.0, 0.0, 0.0
 				},
 				{
-						14.25, 265.74, 27.38, 0
+						0.0, 0.0, 0.0, 0.0
 				},
 				{
-						68.73, 174.19, 18.22, 0
+						0.0, 0.0, 0.0, 0.0
 				},
 				{
-						68.73, 108.19, 18.22, 0
+						0.0, 0.0, 0.0, 0.0
 				},
 				{
-						68.73, 42.19, 18.22, 0
+						0.0, 0.0, 0.0, 0.0
 				}
 		};
 	}
@@ -168,226 +171,69 @@ public final class Constants {
 
 		public static class MotorLocations {
 			/**
-			 * Where the front left wheel is located in robot space
+			 * TODO: Change accordingly.
+			 * Where the front left wheel is located relative to the center of the robot.
 			 */
 			public static final double
-			FRONT_LEFT = 0.391,
+			FRONT_LEFT = 0.0,
 			/**
-			 * Where the front right wheel is located in robot space
+			 * TODO: Change accordingly.
+			 * Where the front right wheel is located relative to the center of the robot.
 			 */
-			FRONT_RIGHT = 0.391,
+			FRONT_RIGHT = 0.0,
 			/**
-			 * Where the back left  wheel is located in robot space
+			 * TODO: Change accordingly.
+			 * Where the back left  wheel is located relative to the center of the robot in metres.
 			 */
-			BACK_LEFT = 0.391,
+			BACK_LEFT = 0.0,
 			/**
-			 * Where the back right wheel is located in robot space
+			 * TODO: Change accordingly.
+			 * Where the back right wheel is located relative to the center of the robot in metres.
 			 */
-			BACK_RIGHT = 0.391;
+			BACK_RIGHT = 0.0;
 		}
 	}
 
 
 	public static class Auton {
 		/**
-		 * The max forward speed of the robot in meters per second
+		 * TODO: Change accordingly.
+		 * The max forward speed of the robot in meters per second.
 		 */
 		public static final double
-		MAX_METRES_PER_SEC = .30, // 3.87096,
+		MAX_METRES_PER_SEC = 0, 
 		/**
-		 * The max acceleration of the robot in meters per second
+		 * TODO: Change accordingly.
+		 * The max acceleration of the robot in meters per second.
 		 */
-		MAX_ACCEL = .30, // 2
+		MAX_ACCEL = 0,
 		/**
-		 * The prefered velocity in meters per second (The velocity the robot will use for auton)
+		 * TODO: Change accordingly.
+		 * The prefered velocity of the robot in autonomous mode in meters per second.
 		 */
-		DRIVE_VEL = 8.5,
+		DRIVE_VEL = 0,
 		/**
-		 * The distance between the left and right wheels
+		 * TODO: Change accordingly.
+		 * The distance between the left and right wheels.
 		 */
 		TRACK_WIDTH_METRES = 0,
 
-		// TODO: Figure out this variable is used for
+		// TODO: Figure out this variable is used for.
 		VOLTS = 0.22,
-		// TODO: Figure out this variable is used for
+		// TODO: Figure out this variable is used for.
 		VOLT_SECS_PER_M = 1.98,
-		// TODO: Figure out this variable is used for
+		// TODO: Figure out this variable is used for.
 		VOLT_SECS_SQURED_PER_M = 1.98,
-		// TODO: Figure out this variable is used for
+		// TODO: Figure out this variable is used for.
 		RAMSETE_B = 2,
-		// TODO: Figure out this variable is used for
+		// TODO: Figure out this variable is used for.
 		RAMSETE_ZETA = 0.7,
 		/**
+		 * TODO: Change accordingly.
 		 * The distance (In feet) per each pulse on the encoder
 		 */
-		DISTANCE_PER_PULSE = 25.132741228718 / 8192;
+		DISTANCE_PER_PULSE = 0;
 
 		public static final java.util.HashMap<String, Command> EVENT_MAP = new java.util.HashMap<>();
 	}
-
-
-	public static class Arm {
-		public static class Speeds {
-			/**
-			 * The arm speed multiplier
-			 */
-			public static final double
-			MULTIPLIER = 1,
-			// TODO: Figure out if this variable is used
-			MULTIPLIER_IN = 1.0,
-			// TODO: Figure out if this variable is used
-			MULTIPLIER_OUT = 1.3;
-		}
-
-		public static class Ports {
-			/**
-			 * The CAN port the Pneumatics Control Module is on
-			 */
-			public static final int
-			PCM = 0,
-			/**
-			 *  The CAN port the Top Arm Motor is on
-			 */
-			TOP_ARM = 3,
-			/**
-			 * The CAN port the Bottom Arm Motor is on
-			 */
-			BOTTOM_ARM = 4;
-		}
-
-		public static class Encoders {
-			/**
-			 * Channel A of the Arm Encoder
-			 */
-			public static final int
-			CHANNEL_A = 0,
-			/**
-			 * Channel B of the Arm Encoder
-			 */
-			CHANNEL_B = 0;
-		}
-
-		public static class Limits {
-			/**
-			 * Encoder value that represents 180 degrees on the arm in physical space
-			 */
-			public static final int
-			POS_180_DEG = 3500,
-			/**
-			 * Encoder value that represents the limit to which the arm can rotate backwards
-			 */
-			ARM_BACKWARDS_LIMIT = 6100,
-
-			/**
-			 * Encoder value that represents the limit to which the arm can rotate forwards
-			 */
-			ARM_FORWARD_LIMIT = 400;
-		}
-
-		public static class Claw {
-			/**
-			 * The port to the air valve that engages the solenoid.
-			 */
-			public static final int
-			FWD_PORT = 0,
-			/**
-			 * The port to the air valve that disengages the solenoid.
-			 */
-			REVERSE_PORT = 0;
-		}
-
-		public static class Telescoper {
-			/**
-			 * The port to the air valve that disengages the solenoid.
-			 */
-			public static final int
-			FWD_PORT = 0,
-			/**
-			 * The port to the air valve that disengages the solenoid.
-			 */
-			REVERSE_PORT = 0;
-		}
-
-		public static class Brake {
-			/**
-			 * The port to the air valve that disengages the solenoid.
-			 */
-			public static final int
-			PORT_FWD = 0,
-			/**
-			 * The port to the air valve that disengages the solenoid.
-			 */
-			PORT_BACK = 0;
-		}
-	}
-
-
-	public static class AutoBalance {
-		/**
-        * Rotation deadzone where the robot won't try to auto-balance
-        */
-		public static final double
-		DEADZONE_MAX = 30,
-		/**
-        * Rotation deadzone where the robot won't try to auto-balance
-        */
-		DEADZONE_MIN = -30;
-
-		public static class PID {
-			/**
-			 * The proportial gain of the auto balancing PID loop
-			 */
-			public static final double
-			KP = .25, // Previous .7
-			/**
-			 * The integral gain of the auto balancing PID loop
-			 */
-			KI = 0,
-			/**
-			 * The derivative gain of the auto balancing PID loop
-			 */
-			KD = 0,
-			/**
-			 * The period between PID controller updates
-			 */
-			PERIOD = 0.02,
-
-			/**
-			* The tolerance the PID loops gives to be consided at the setpoint
-			*/
-			TARGET_TOLERANCE = 2,
-
-			/**
-            * The set value where the robot is level
-            */
-            SETPOINT = 0;
-		}
-
-		/**
-		 * The range where if you push the controller joystick during AutoBalancing it will stop
-		 */
-		public static class DisableThresholds {
-			/**
-			 * The minimum/maximum values you can push the controller sticks to before canceling auto-balance
-			 */
-			public static final double
-			LEFTSTICK_MAX = 0.1,
-			LEFTSTICK_MIN = -0.1,
-			RIGHTSTICK_MAX = 0.1,
-			RIGHTSTICK_MIN = -0.1;
-		}
-
-		public static class Thresholds {
-			/**
-			 * Target Threshold Max
-			 */
-			public static final double
-			TARGET_PITCH_MAX = 0,
-			/**
-			 * Target Threshold Min
-			 */
-			TARGET_PITCH_MIN = 0;
-		}
-	}
-
 }

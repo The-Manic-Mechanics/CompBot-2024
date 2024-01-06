@@ -6,34 +6,33 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.NavX;
+import frc.robot.subsystems.Gyroscope;
 
 /**
 * Used to Drive the robot during auton via the inputed speeds and distance
 */
 public final class DriveAuton extends CommandBase {
-	double driveInches, speedX, speedY, speedZ, inclineThresh;
-	boolean isFinished, finishOnIncline;
+	double 
+		driveInches, 
+		speedX, 
+		speedY, 
+		speedZ;
+	boolean isFinished;
 
     /**
      * @param inDriveInches The amount of inches to drive
      * @param inSpeedX The speed to travel in the X direction
      * @param inSpeedY The speed to travel in the Y direction
      * @param inSpeedZ The speed to travel in the Z direction
-     * @param inFinishOnIncline Whether to finish when an incline is detected
-     * @param inInclineThreshold The threshold for FinishOnIncline (Absolute)
     */
 	public DriveAuton(
-			DriveTrain inSysDriveTrain, NavX inSysNavX, double inDriveInches, double inSpeedX,
-			double inSpeedY, double inSpeedZ, boolean inFinishOnIncline,
-			/*Threshold as an absolute*/ double inInclineThreshold) {
-		addRequirements(inSysDriveTrain, inSysNavX);
+			DriveTrain inSysDriveTrain, Gyroscope inSysGyroscope, double inDriveInches, double inSpeedX,
+			double inSpeedY, double inSpeedZ, boolean inFinishOnIncline) {
+		addRequirements(inSysDriveTrain, inSysGyroscope);
 		driveInches = inDriveInches;
 		speedX = inSpeedX;
 		speedY = inSpeedY;
 		speedZ = inSpeedZ;
-		finishOnIncline = inFinishOnIncline;
-		inclineThresh = inInclineThreshold;
 	}
 
 	@Override
@@ -62,12 +61,6 @@ public final class DriveAuton extends CommandBase {
 
 	@Override
 	public boolean isFinished() {
-		// TODO: Make sure Math.abs makes sense in the context of how the navX gets pitch
-		// Checks if finishOnIncline is true and if the current pitch has exceeded the inclineThresh
-		if (finishOnIncline && Math.abs(NavX.sensor.getPitch()) > inclineThresh) {
-			return true;
-		} else {
-			return isFinished;
-		}
+		return isFinished;
 	}
 }
