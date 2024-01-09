@@ -5,15 +5,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPoint;
-import com.pathplanner.lib.commands.PPMecanumControllerCommand;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
@@ -153,84 +146,6 @@ public final class DriveTrain extends SubsystemBase {
 		return new MecanumDriveWheelPositions(
 				Encoders.frontLeft.getDistance(), Encoders.frontRight.getDistance(),
 				Encoders.backLeft.getDistance(), Encoders.backRight.getDistance());
-	}
-
-	/**
-	 * Generates a movement path for the robot, from point A to B <i>(transPx)</i>
-	 * @param maxVel The maximum velocity to use while driving this path
-	 * @param maxAccel The maximum acceleration to use while driving this path
-	 * @param transP1 The initial pose of the robot before path is driven as a <b>Translation2d</b>
-	 * @param rotHead1 The initial heading of the robot before the path is driven
-	 * @param rotHolo1 The initial holonomic rotation of the robot before the path is driven
-	 * @param transP2 The destination pose of the robot as a <b>Translation2d</b>
-	 * @param rotHead2 The destination heading of the robot
-	 * @param rotHolo2 The destination holonomic rotation of the robot
-	 *
-	 * @return  The generated path. <i>(type PathPlannerTrajectory)</i>
-	 * @see #followTrajectoryCommand(PathPlannerTrajectory, boolean) to create a command to follow this path.
-	 */
-	public static PathPlannerTrajectory genPath (
-		    double maxVel,
-			double maxAccel,
-			Translation2d transP1,
-			double rotHead1,
-		    double rotHolo1,
-			Translation2d transP2,
-			double rotHead2,
-			double rotHolo2
-	) {
-		return PathPlanner.generatePath(
-				new PathConstraints(maxVel, maxAccel),
-				new PathPoint // Position, heading, holonomic rotation.
-                        (
-                                transP1,
-                                Rotation2d.fromDegrees(rotHead1),
-                                Rotation2d.fromDegrees(rotHolo1)
-                        ),
-				new PathPoint // Position, heading, holonomic rotation.
-                        (
-                                transP2,
-                                Rotation2d.fromDegrees(rotHead2),
-                                Rotation2d.fromDegrees(rotHolo2)
-                        )
-		);
-	}
-
-    /**
-    * Resets the mecanumDriveOdometry using the resetPosition method
-     * @param odoResetPose The <b>Pose2d</b> representing where the robot currently is
-    */
-	// private static void resetOdometry(Pose2d odoResetPose) {
-	// 	mecanumDriveOdometry.resetPosition(Gyroscope.sensor.getRotation2d(), getWheelPositions(), odoResetPose);
-	// }
-
-    /**
-    * Generates a command that follows the inputed trajectory
-     * @param trajectory The PathPlannerTrajectory to be followed
-     * @return A command that follows the inputed trajectory
-    */
-	public static Command followTrajectoryCommand(PathPlannerTrajectory trajectory, boolean isFirstPath) {
-
-		return new SequentialCommandGroup(
-				new InstantCommand(() -> {
-					// Reset odometry for the first path you run during auto
-					if (isFirstPath) {
-						mecanumDriveOdometry.resetPosition(null, wheelPositions, mecanumDriveOdometry.getPoseMeters());
-					}
-				}),
-				new PPMecanumControllerCommand(
-						trajectory,
-						mecanumDriveOdometry::getPoseMeters, // Pose supplier
-						mecanumDriveKinematics, // MecanumDriveKinematics
-						new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-						new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
-						new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will nly use feedforwards.
-						Auton.MAX_METRES_PER_SEC, // Max wheel velocity meters per second
-						Motors::setSpeeds, // MecanumDriveWheelSpeeds consumer
-						true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true.
-						new DriveTrain() // Requires this drive subsystem (Java FRC API funny moment)
-				)
-		);
 	}
 
 	@Override
