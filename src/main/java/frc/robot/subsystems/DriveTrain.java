@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -53,7 +53,7 @@ public final class DriveTrain extends SubsystemBase {
 	private static MecanumDriveKinematics mecanumDriveKinematics;
 
 	public static class Motors {
-		public static WPI_VictorSPX frontLeft, frontRight, backLeft, backRight;
+		public static /* WPI_VictorSPX */ Spark frontLeft, frontRight, backLeft, backRight;
 
         /**
         * Sets the speeds of all the drive motors to inSpeeds
@@ -61,6 +61,7 @@ public final class DriveTrain extends SubsystemBase {
         */
 		public static void setSpeeds(MecanumDriveWheelSpeeds inSpeeds) {
 			assert inSpeeds != null;
+			// TODO: See the new documentation for this (set) function.
 			Motors.frontLeft.set(inSpeeds.frontLeftMetersPerSecond);
 			Motors.frontRight.set(inSpeeds.frontRightMetersPerSecond);
 			Motors.backLeft.set(inSpeeds.rearLeftMetersPerSecond);
@@ -73,6 +74,7 @@ public final class DriveTrain extends SubsystemBase {
         */
 		public static void setVolts(MecanumDriveMotorVoltages inVolts) {
 			assert inVolts != null;
+			// TODO: See the new documentation for this (set) function.
 			Motors.frontLeft.setVoltage(inVolts.frontLeftVoltage);
 			Motors.frontRight.setVoltage(inVolts.frontRightVoltage);
 			Motors.backLeft.setVoltage(inVolts.rearLeftVoltage);
@@ -85,10 +87,11 @@ public final class DriveTrain extends SubsystemBase {
 	}
 
 	public DriveTrain() {
-		Motors.frontLeft = new WPI_VictorSPX(MotorPorts.FRONT_LEFT);
-		Motors.frontRight = new WPI_VictorSPX(MotorPorts.FRONT_RIGHT);
-		Motors.backLeft = new WPI_VictorSPX(MotorPorts.BACK_LEFT);
-		Motors.backRight = new WPI_VictorSPX(MotorPorts.BACK_RIGHT);
+		// TODO: Test this.
+		Motors.frontLeft = new Spark(MotorPorts.FRONT_LEFT);
+		Motors.frontRight = new Spark(MotorPorts.FRONT_RIGHT);
+		Motors.backLeft = new Spark(MotorPorts.BACK_LEFT);
+		Motors.backRight = new Spark(MotorPorts.BACK_RIGHT);
 
 		Encoders.frontLeft = new Encoder(
 				EncoderPorts.FRONT_LEFT_A,
@@ -115,7 +118,6 @@ public final class DriveTrain extends SubsystemBase {
 		Encoders.backRight.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
 
 		Motors.frontLeft.setInverted(true);
-		// frontRight.setInverted(true);
 		Motors.backLeft.setInverted(true);
 
 		mecanum = new MecanumDrive(Motors.frontLeft, Motors.backLeft, Motors.frontRight, Motors.backRight);
@@ -139,8 +141,7 @@ public final class DriveTrain extends SubsystemBase {
 
 		Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], Gyroscope.sensor.getRotation2d());
 
-		mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics, Gyroscope.sensor.getRotation2d(), wheelPositions,
-				initPose);
+		mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics, Gyroscope.sensor.getRotation2d(), wheelPositions, initPose);
 	}
 
     /**
@@ -180,13 +181,13 @@ public final class DriveTrain extends SubsystemBase {
 	) {
 		return PathPlanner.generatePath(
 				new PathConstraints(maxVel, maxAccel),
-				new PathPoint // position, heading, holonomic rotation
+				new PathPoint // Position, heading, holonomic rotation.
                         (
                                 transP1,
                                 Rotation2d.fromDegrees(rotHead1),
                                 Rotation2d.fromDegrees(rotHolo1)
                         ),
-				new PathPoint // position, heading, holonomic rotation
+				new PathPoint // Position, heading, holonomic rotation.
                         (
                                 transP2,
                                 Rotation2d.fromDegrees(rotHead2),
@@ -199,9 +200,9 @@ public final class DriveTrain extends SubsystemBase {
     * Resets the mecanumDriveOdometry using the resetPosition method
      * @param odoResetPose The <b>Pose2d</b> representing where the robot currently is
     */
-	private static void resetOdometry(Pose2d odoResetPose) {
-		mecanumDriveOdometry.resetPosition(Gyroscope.sensor.getRotation2d(), getWheelPositions(), odoResetPose);
-	}
+	// private static void resetOdometry(Pose2d odoResetPose) {
+	// 	mecanumDriveOdometry.resetPosition(Gyroscope.sensor.getRotation2d(), getWheelPositions(), odoResetPose);
+	// }
 
     /**
     * Generates a command that follows the inputed trajectory
@@ -221,16 +222,13 @@ public final class DriveTrain extends SubsystemBase {
 						trajectory,
 						mecanumDriveOdometry::getPoseMeters, // Pose supplier
 						mecanumDriveKinematics, // MecanumDriveKinematics
-						new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use
-						// feedforwards.
+						new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
 						new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
-						new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will
-						// only use feedforwards.
+						new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will nly use feedforwards.
 						Auton.MAX_METRES_PER_SEC, // Max wheel velocity meters per second
 						Motors::setSpeeds, // MecanumDriveWheelSpeeds consumer
-						true, // Should the path be automatically mirrored depending on alliance color.
-						// Optional, defaults to true
-						new DriveTrain() // Requires this drive subsystem
+						true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true.
+						new DriveTrain() // Requires this drive subsystem (Java FRC API funny moment)
 				)
 		);
 	}
@@ -238,15 +236,13 @@ public final class DriveTrain extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-
 		mecanumDriveOdometry.update(Gyroscope.sensor.getRotation2d(), wheelPositions);
 
+		// DEBUG: SmartDashboard entries
 		SmartDashboard.putData("frontLeft", Motors.frontLeft);
 		SmartDashboard.putData("frontRight", Motors.frontRight);
 		SmartDashboard.putData("backLeft", Motors.backLeft);
 		SmartDashboard.putData("backRight", Motors.backRight);
-
-		// Putting Controller Left and Right Stick Values
 		SmartDashboard.putNumber("X Value", RobotContainer.driverOneController.getLeftX());
 		SmartDashboard.putNumber("Y Value", RobotContainer.driverOneController.getLeftY());
 		SmartDashboard.putNumber("Z Value", RobotContainer.driverOneController.getRightX());
