@@ -47,32 +47,6 @@ public final class DriveTrain extends SubsystemBase {
 
 	public static class Motors {
 		public static /* WPI_VictorSPX */ Spark frontLeft, frontRight, backLeft, backRight;
-
-        /**
-        * Sets the speeds of all the drive motors to inSpeeds
-         * @param inSpeeds The speed to set the drive motors to
-        */
-		public static void setSpeeds(MecanumDriveWheelSpeeds inSpeeds) {
-			assert inSpeeds != null;
-			// TODO: See the new documentation for this (set) function.
-			Motors.frontLeft.set(inSpeeds.frontLeftMetersPerSecond);
-			Motors.frontRight.set(inSpeeds.frontRightMetersPerSecond);
-			Motors.backLeft.set(inSpeeds.rearLeftMetersPerSecond);
-			Motors.backRight.set(inSpeeds.rearRightMetersPerSecond);
-		}
-
-        /**
-        * Sets the voltages of all the drive motors to inVolts
-         * @param inVolts The voltage to set the drive motors to
-        */
-		public static void setVolts(MecanumDriveMotorVoltages inVolts) {
-			assert inVolts != null;
-			// TODO: See the new documentation for this (set) function.
-			Motors.frontLeft.setVoltage(inVolts.frontLeftVoltage);
-			Motors.frontRight.setVoltage(inVolts.frontRightVoltage);
-			Motors.backLeft.setVoltage(inVolts.rearLeftVoltage);
-			Motors.backRight.setVoltage(inVolts.rearRightVoltage);
-		}
 	}
 
 	public static class Encoders {

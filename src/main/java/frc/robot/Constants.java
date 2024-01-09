@@ -217,17 +217,6 @@ public final class Constants {
 		 * The distance between the left and right wheels.
 		 */
 		TRACK_WIDTH_METRES = 0,
-
-		// TODO: Figure out this variable is used for.
-		VOLTS = 0.22,
-		// TODO: Figure out this variable is used for.
-		VOLT_SECS_PER_M = 1.98,
-		// TODO: Figure out this variable is used for.
-		VOLT_SECS_SQURED_PER_M = 1.98,
-		// TODO: Figure out this variable is used for.
-		RAMSETE_B = 2,
-		// TODO: Figure out this variable is used for.
-		RAMSETE_ZETA = 0.7,
 		/**
 		 * TODO: Change accordingly.
 		 * The distance (In feet) per each pulse on the encoder

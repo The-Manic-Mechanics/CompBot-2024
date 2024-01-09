@@ -2,8 +2,6 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-// FIXME: This entire file needs to be reworked.
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,17 +13,20 @@ import frc.robot.subsystems.DriveTrain;
 */
 public final class DriveMecanum extends Command {
 
-	double speedMultThrot = 1;
-	/**
-	 * d = drift, ct = current time, o = old
-	 */
 	double 
+		/**
+		 * The robot's movement speed along the X axis (Usually stafing)
+		 */
 		moveSpeedX, 
-		xvar,
+		/**
+		 * The robot's movement speed along the Y axis (Usually forward/backward)
+		 */
 		moveSpeedY, 
-		yvar,
+		/**
+		 * The robot's movement speed along the Z axis (Rotation)
+		 */
 		moveSpeedZ,
-		zvar;
+		speedMultiplier = 1;
 
 
 	public DriveMecanum(DriveTrain inSysDriveTrain) {
@@ -34,19 +35,18 @@ public final class DriveMecanum extends Command {
 
 	@Override
 	public void execute() {
-		xvar = RobotContainer.driverOneController.getLeftX();
-		yvar = RobotContainer.driverOneController.getLeftY();
-		zvar = RobotContainer.driverOneController.getRightX();
-		moveSpeedY = speedMultThrot * yvar;
-		moveSpeedX = -speedMultThrot * xvar;
-		moveSpeedZ = -speedMultThrot * zvar;
-		// Feed thhe 
+		// TODO Driver prefrence specific, change accordingly
+		// Get the speeds from controller and multiply it by the speed 
+		moveSpeedY = speedMultiplier * RobotContainer.driverOneController.getLeftX();
+		moveSpeedX = -speedMultiplier * RobotContainer.driverOneController.getLeftY();
+		moveSpeedZ = -speedMultiplier * RobotContainer.driverOneController.getRightX();
+		// Put in controller inputs and drive the motors accordingly
 		DriveTrain.mecanum.driveCartesian(moveSpeedX, moveSpeedY, moveSpeedZ);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		// Stop the robot.
+		// Set the motor speeds to zero on interupt
 		DriveTrain.mecanum.driveCartesian(0, 0, 0);
 	}
 
