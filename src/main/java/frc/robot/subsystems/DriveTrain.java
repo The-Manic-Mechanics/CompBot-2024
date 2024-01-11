@@ -9,10 +9,8 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
-import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
-import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -54,7 +52,6 @@ public final class DriveTrain extends SubsystemBase {
 	}
 
 	public DriveTrain() {
-		// TODO: Test this.
 		Motors.frontLeft = new Spark(MotorPorts.FRONT_LEFT);
 		Motors.frontRight = new Spark(MotorPorts.FRONT_RIGHT);
 		Motors.backLeft = new Spark(MotorPorts.BACK_LEFT);

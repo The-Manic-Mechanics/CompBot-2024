@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.LimeLight;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -37,23 +36,12 @@ public final class Constants {
          * How far offset the robot is from being collinear with the AprilTag (Vertical).
          */
 	    public static final double
-	        aprilTagOffsetAngle = LimeLight.tY.getDouble(0.0),
-	        
 	         /**
 			  * TODO: Change accordingly.
               * How many degrees the limelight is mounted from perfectly vertical.
               */
             limelightMountAngleDegrees = 90,
-
-            /**
-            * The angle to the AprilTag to the robot in degrees.
-            */
-            angleToAprilTagDegrees = limelightMountAngleDegrees + aprilTagOffsetAngle,
-            /**
-            * The angle to the AprilTag to the robot in radians.
-            */
-            angleToAprilTagRadians = angleToAprilTagDegrees * (3.14159 / 180.0),
-
+			
             /**
 			 * TODO: Change accordingly.
              * The amount of inches from the center of the LimeLight lens to the floor.

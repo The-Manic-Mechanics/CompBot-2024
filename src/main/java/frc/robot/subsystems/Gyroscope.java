@@ -33,7 +33,6 @@ public class Gyroscope extends SubsystemBase {
 		SmartDashboard.putNumber("Roll (Less Fancy)", roll);
 		SmartDashboard.putNumber("Yaw (Less Fancy)", yaw);
 
-		// FIXME: Possibly an off number (Check to make sure it's right)
 		SmartDashboard.putNumber("Accel X", sensor.getWorldLinearAccelX());
 		SmartDashboard.putNumber("Accel Y", sensor.getWorldLinearAccelY());
 		SmartDashboard.putNumber("Accel Z", sensor.getWorldLinearAccelZ());
