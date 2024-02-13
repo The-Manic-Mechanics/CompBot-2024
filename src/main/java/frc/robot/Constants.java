@@ -98,90 +98,168 @@ public final class Constants {
 		};
 	}
 
+	public static class Motors {
+		public static class Ports {
+			public static class DriveTrain {
+				// TODO: Fill in port traffic information once we have it.
+				/**
+				 * Front Left CAN Port
+				 */
+				public static final int
+					FRONT_LEFT = 1,
+					/**
+					 * Front Right CAN Port
+					 */
+					FRONT_RIGHT = 2,
+					/**
+					 * Back Left CAN Port
+					 */
+					BACK_LEFT = 3,
+					/**
+					 * Back Right CAN Port
+					 */
+					BACK_RIGHT = 4;
+			}
+
+			public static class Intake {
+				public static int
+					/**
+					 * Intake lift motor CAN port
+					 */
+					LIFT = 8,
+					/**
+					 * Intake left motor CAN port
+					 */
+					LEFT= 9,
+					/**
+					 * Intake right motor CAN port 
+					 */
+					RIGHT = 10;
+			}
+
+			public static class Climber {
+				public static int
+					/**
+					 * First climber motor CAN port
+					 */
+					ONE = 0,
+					/**
+					 * Second climber motor CAN port
+					 */
+					TWO = 0;
+			}
+
+			public static class Shooter {
+				public static int
+					/**
+					 * Shooter left motor CAN port
+					 */
+					LEFT = 11,
+					/**
+					 * Shooter right motor CAN port
+					 */
+					RIGHT = 12;
+			}
+		}
+
+	}
+
+	public static class Encoders {
+		public static class Ports {
+			public static class DriveTrain {
+				// TODO: Fill in port traffic information once we have it.
+				/**
+				 * Front Left Encoder Channel A
+				 */
+				public static final int
+					FRONT_LEFT_A = 0,
+					/**
+					 * Front Left Encoder Channel B
+					 */
+					FRONT_LEFT_B = 0,
+					/**
+					 * Front Right Encoder Channel A
+					 */
+					FRONT_RIGHT_A = 0,
+					/**
+					 * Front Right Encoder Channel B
+					 */
+					FRONT_RIGHT_B = 0,
+					/**
+					 * Back Left Encoder Channel A
+					 */
+					BACK_LEFT_A = 0,
+					/**
+					 * Back Left Encoder Channel B
+					 */
+					BACK_LEFT_B = 0,
+					/**
+					 * Back Right Encoder Channel A
+					 */
+					BACK_RIGHT_A = 0,
+					/**
+					 * Back Right Encoder Channel B
+					 */
+					BACK_RIGHT_B = 0;
+			}
+
+			public static class Intake {
+				public static int
+					/**
+					 * Lift encoder channel A
+					 */
+					LIFT_A = 0,
+					/**
+					 * Lift encoder channel B
+					 */
+					LIFT_B = 1;
+			}
+		}
+	}
+
 	public static class DriveTrain {
-		public static class MotorPorts {
-			// TODO: Fill in port traffic information once we have it.
-			/**
-			 * Front Left CAN Port
-			 */
-			public static final int
-			FRONT_LEFT = 0,
-			/**
-			 * Front Right CAN Port
-			 */
-			FRONT_RIGHT = 0,
-			/**
-			 * Back Left CAN Port
-			 */
-			BACK_LEFT = 0,
-			/**
-			 * Back Right CAN Port
-			 */
-			BACK_RIGHT = 0;
-		}
-
-		public static class EncoderPorts {
-			// TODO: Fill in port traffic information once we have it.
-			/**
-			 * Front Left Encoder Channel A
-			 */
-			public static final int
-			FRONT_LEFT_A = 0,
-			/**
-			 * Front Left Encoder Channel B
-			 */
-			FRONT_LEFT_B = 0,
-			/**
-			 * Front Right Encoder Channel A
-			 */
-			FRONT_RIGHT_A = 0,
-			/**
-			 * Front Right Encoder Channel B
-			 */
-			FRONT_RIGHT_B = 0,
-			/**
-			 * Back Left Encoder Channel A
-			 */
-			BACK_LEFT_A = 0,
-			/**
-			 * Back Left Encoder Channel B
-			 */
-			BACK_LEFT_B = 0,
-			/**
-			 * Back Right Encoder Channel A
-			 */
-			BACK_RIGHT_A = 0,
-			/**
-			 * Back Right Encoder Channel B
-			 */
-			BACK_RIGHT_B = 0;
-		}
-
 		public static class MotorLocations {
 			/**
 			 * TODO: Change accordingly.
 			 * Where the front left wheel is located relative to the center of the robot.
 			 */
 			public static final double
-			FRONT_LEFT = 0.0,
-			/**
-			 * TODO: Change accordingly.
-			 * Where the front right wheel is located relative to the center of the robot.
-			 */
-			FRONT_RIGHT = 0.0,
-			/**
-			 * TODO: Change accordingly.
-			 * Where the back left  wheel is located relative to the center of the robot in metres.
-			 */
-			BACK_LEFT = 0.0,
-			/**
-			 * TODO: Change accordingly.
-			 * Where the back right wheel is located relative to the center of the robot in metres.
-			 */
-			BACK_RIGHT = 0.0;
+				FRONT_LEFT = 0.0,
+				/**
+				 * TODO: Change accordingly.
+				 * Where the front right wheel is located relative to the center of the robot.
+				 */
+				FRONT_RIGHT = 0.0,
+				/**
+				 * TODO: Change accordingly.
+				 * Where the back left  wheel is located relative to the center of the robot in metres.
+				 */
+				BACK_LEFT = 0.0,
+				/**
+				 * TODO: Change accordingly.
+				 * Where the back right wheel is located relative to the center of the robot in metres.
+				 */
+				BACK_RIGHT = 0.0;
 		}
 	}
 
+	public static class Shooter {
+		public static double
+			/**
+			 * The speed that the shooter spins at (As a percentage)
+			 */
+			SPEED = 0;
+	}
+
+	public static class Intake {
+		public static int
+			/**
+			 * The intake lift encoder's distance per pulse
+			 */
+			LIFT_DISTANCE_PER_PULSE = 0;
+	}
+
+	public static class Climber {}
 
 	public static class Auton {
 		/**

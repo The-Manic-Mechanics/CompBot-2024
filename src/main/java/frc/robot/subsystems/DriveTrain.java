@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveTrain.*;
 import frc.robot.Constants.Auton;
@@ -44,7 +45,7 @@ public final class DriveTrain extends SubsystemBase {
 	private static MecanumDriveKinematics mecanumDriveKinematics;
 
 	public static class Motors {
-		public static /* WPI_VictorSPX */ Spark frontLeft, frontRight, backLeft, backRight;
+		public static Spark frontLeft, frontRight, backLeft, backRight;
 	}
 
 	public static class Encoders {
@@ -52,29 +53,29 @@ public final class DriveTrain extends SubsystemBase {
 	}
 
 	public DriveTrain() {
-		Motors.frontLeft = new Spark(MotorPorts.FRONT_LEFT);
-		Motors.frontRight = new Spark(MotorPorts.FRONT_RIGHT);
-		Motors.backLeft = new Spark(MotorPorts.BACK_LEFT);
-		Motors.backRight = new Spark(MotorPorts.BACK_RIGHT);
+		Motors.frontLeft = new Spark(Constants.Motors.Ports.DriveTrain.FRONT_LEFT);
+		Motors.frontRight = new Spark(Constants.Motors.Ports.DriveTrain.FRONT_RIGHT);
+		Motors.backLeft = new Spark(Constants.Motors.Ports.DriveTrain.BACK_LEFT);
+		Motors.backRight = new Spark(Constants.Motors.Ports.DriveTrain.BACK_RIGHT);
 
 		Encoders.frontLeft = new Encoder(
-				EncoderPorts.FRONT_LEFT_A,
-				EncoderPorts.FRONT_LEFT_B
+				Constants.Encoders.Ports.DriveTrain.FRONT_LEFT_A,
+				Constants.Encoders.Ports.DriveTrain.FRONT_LEFT_B
 		);
 
 		Encoders.frontRight = new Encoder(
-				EncoderPorts.FRONT_RIGHT_A,
-				EncoderPorts.FRONT_RIGHT_B
+				Constants.Encoders.Ports.DriveTrain.FRONT_RIGHT_A,
+				Constants.Encoders.Ports.DriveTrain.FRONT_RIGHT_B
 		);
 
 		Encoders.backLeft = new Encoder(
-				EncoderPorts.BACK_LEFT_A,
-				EncoderPorts.BACK_LEFT_A
+				Constants.Encoders.Ports.DriveTrain.BACK_LEFT_A,
+				Constants.Encoders.Ports.DriveTrain.BACK_LEFT_A
 		);
 
 		Encoders.backRight = new Encoder(
-				EncoderPorts.BACK_RIGHT_A,
-				EncoderPorts.BACK_RIGHT_B
+				Constants.Encoders.Ports.DriveTrain.BACK_RIGHT_A,
+				Constants.Encoders.Ports.DriveTrain.BACK_RIGHT_B
 		);
 		Encoders.frontLeft.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
 		Encoders.frontRight.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
