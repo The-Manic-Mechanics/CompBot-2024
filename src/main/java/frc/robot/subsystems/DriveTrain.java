@@ -4,9 +4,9 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
@@ -44,7 +44,7 @@ public final class DriveTrain extends SubsystemBase {
 	private static MecanumDriveKinematics mecanumDriveKinematics;
 
 	public static class Motors {
-		public static Spark frontLeft, frontRight, backLeft, backRight;
+		public static CANSparkMax frontLeft, frontRight, backLeft, backRight;
 	}
 
 	public static class Encoders {
@@ -52,10 +52,10 @@ public final class DriveTrain extends SubsystemBase {
 	}
 
 	public DriveTrain() {
-		Motors.frontLeft = new Spark(Constants.Motors.Ports.DriveTrain.FRONT_LEFT);
-		Motors.frontRight = new Spark(Constants.Motors.Ports.DriveTrain.FRONT_RIGHT);
-		Motors.backLeft = new Spark(Constants.Motors.Ports.DriveTrain.BACK_LEFT);
-		Motors.backRight = new Spark(Constants.Motors.Ports.DriveTrain.BACK_RIGHT);
+		Motors.frontLeft = new CANSparkMax(Constants.Motors.Ports.DriveTrain.FRONT_LEFT, MotorType.kBrushless);
+		Motors.frontRight = new CANSparkMax(Constants.Motors.Ports.DriveTrain.FRONT_RIGHT, MotorType.kBrushless);
+		Motors.backLeft = new CANSparkMax(Constants.Motors.Ports.DriveTrain.BACK_LEFT, MotorType.kBrushless);
+		Motors.backRight = new CANSparkMax(Constants.Motors.Ports.DriveTrain.BACK_RIGHT, MotorType.kBrushless);
 
 		// Encoders.frontLeft = new Encoder(
 		// 		Constants.Encoders.Ports.DriveTrain.FRONT_LEFT_A,
@@ -125,10 +125,6 @@ public final class DriveTrain extends SubsystemBase {
 		// mecanumDriveOdometry.update(Gyroscope.sensor.getRotation2d(), wheelPositions);
 
 		// DEBUG: SmartDashboard entries
-		SmartDashboard.putData("frontLeft", Motors.frontLeft);
-		SmartDashboard.putData("frontRight", Motors.frontRight);
-		SmartDashboard.putData("backLeft", Motors.backLeft);
-		SmartDashboard.putData("backRight", Motors.backRight);
 		SmartDashboard.putNumber("X Value", RobotContainer.driverOneController.getLeftX());
 		SmartDashboard.putNumber("Y Value", RobotContainer.driverOneController.getLeftY());
 		SmartDashboard.putNumber("Z Value", RobotContainer.driverOneController.getRightX());

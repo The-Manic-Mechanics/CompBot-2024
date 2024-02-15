@@ -8,7 +8,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class Shooter extends SubsystemBase {
   public static class Motors {
@@ -24,15 +23,12 @@ public class Shooter extends SubsystemBase {
     Motors.right.setInverted(true);
   }
 
-  public static void On(double speed) {
+  public static void setSpeed(double speed) {
     Motors.left.set(speed);
     Motors.right.set(speed);
   }
 
   @Override
   public void periodic() {
-    if (RobotContainer.driverTwoController.getAButtonPressed()) {
-      On(Constants.Shooter.SPEED);
-    }
   }
 }

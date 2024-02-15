@@ -37,7 +37,7 @@ public class Intake extends SubsystemBase {
   /**
    * Turns on the intake at "speed"
    */
-  public static void On(double speed) {
+  public static void setSpeed(double speed) {
     Motors.left.set(speed);
     Motors.right.set(speed);
   }
@@ -45,27 +45,21 @@ public class Intake extends SubsystemBase {
   /**
    * Drives the lift at "speed"
    */
-  public static void DriveLift(double speed) {
+  public static void driveLift(double speed) {
     // TODO: Fill this in
-    if ((Encoders.lift.get() >= Constants.Encoders.Intake.INTAKE_LOWER_LIMIT) && (RobotContainer.driverTwoController.getLeftY() < 0)) 
-      Motors.lift.set(0);
-    else if ((Encoders.lift.get() <= Constants.Encoders.Intake.INTAKE_HIGH_LIMIT) && (RobotContainer.driverTwoController.getLeftY() > 0)) 
-      Motors.lift.set(0);
-    else 
+    // if ((Encoders.lift.get() >= Constants.Encoders.Intake.INTAKE_LOWER_LIMIT) && (RobotContainer.driverTwoController.getLeftY() < 0)) 
+      // Motors.lift.set(0);
+    // else if ((Encoders.lift.get() <= Constants.Encoders.Intake.INTAKE_HIGH_LIMIT) && (RobotContainer.driverTwoController.getLeftY() > 0)) 
+      // Motors.lift.set(0);
+    // else 
       Motors.lift.set(speed); 
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    DriveLift(RobotContainer.driverTwoController.getLeftY() * Constants.Intake.LIFT_SPEED_MULTIPLIER);
-
-    if (RobotContainer.driverTwoController.getAButton())
-      On(Constants.Intake.SPEED);
-    
-    if (RobotContainer.driverTwoController.getYButton())
-      On(-1 * Constants.Intake.SPEED);
-
     SmartDashboard.putNumber("Intake Lift Encoder Pos", Encoders.lift.get());
+    SmartDashboard.putBoolean("A Button", RobotContainer.driverTwoController.getAButton());
+    
   }
 }

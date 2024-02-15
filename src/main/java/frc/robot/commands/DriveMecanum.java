@@ -12,6 +12,8 @@ import frc.robot.subsystems.DriveTrain;
 * Used for driving the robot during teleop by taking in the controller values and giving them to the motors
 */
 public final class DriveMecanum extends Command {
+	
+	DriveTrain sysDriveTrain;
 
 	double 
 		/**
@@ -30,15 +32,15 @@ public final class DriveMecanum extends Command {
 
 
 	public DriveMecanum(DriveTrain inSysDriveTrain) {
-		addRequirements(inSysDriveTrain);
+		sysDriveTrain = inSysDriveTrain;
+		addRequirements(sysDriveTrain);
 	}
 
 	@Override
 	public void execute() {
-		// TODO Driver prefrence specific, change accordingly
 		// Get the speeds from controller and multiply it by the speed 
 		moveSpeedY = speedMultiplier * RobotContainer.driverOneController.getLeftX();
-		moveSpeedX = -speedMultiplier * RobotContainer.driverOneController.getLeftY();
+		moveSpeedX = speedMultiplier * RobotContainer.driverOneController.getLeftY();
 		moveSpeedZ = -speedMultiplier * RobotContainer.driverOneController.getRightX();
 		// Put in controller inputs and drive the motors accordingly
 		DriveTrain.mecanum.driveCartesian(moveSpeedX, moveSpeedY, moveSpeedZ);

@@ -27,7 +27,11 @@ public final class Constants {
 			 * TODO: Change accordingly.
              * The port which the second driver's controller is connected to.
              */
-            DRIVERTWO_PORT = 1;
+            DRIVERTWO_PORT = 1,
+			/**
+			 * The port which the saxophone controller is connected to
+			 */
+			SAX_PORT = 2;
 	}
 	
 	public static class LimeLightOffsets {
@@ -267,7 +271,7 @@ public final class Constants {
 			/**
 			 * The speed multiplier for the intake lift
 			 */
-			LIFT_SPEED_MULTIPLIER = 0.5,
+			LIFT_SPEED_MULTIPLIER = 1,
 			/**
 			 * The speed of the actual intake motors
 			 */

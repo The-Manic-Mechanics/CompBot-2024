@@ -6,9 +6,15 @@ package frc.robot;
 
 import frc.robot.Constants.Controllers;
 import frc.robot.commands.DriveMecanum;
+import frc.robot.commands.IntakeDrive;
+import frc.robot.commands.ShooterDrive;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Gyroscope;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Solenoids;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,15 +48,24 @@ public class RobotContainer {
     driverSecondY = new JoystickButton(driverTwoController, 4),
     driverSecondLeftBump = new JoystickButton(driverTwoController, 5),
     driverSecondRghtBump = new JoystickButton(driverTwoController, 6);
+
+  public static final GenericHID saxController = new GenericHID(Constants.Controllers.SAX_PORT);
   // ---------------------------------------------------------------------------------
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // The robot's subsystems and commands are defined here...
     DriveTrain sysDriveTrain = new DriveTrain();
-    DriveMecanum cmdDriveMecanum = new DriveMecanum(sysDriveTrain);
-    sysDriveTrain.setDefaultCommand(cmdDriveMecanum);
+    Intake sysIntake = new Intake();
+    Shooter sysShooter = new Shooter();
 
+    ShooterDrive cmdShooterDrive = new ShooterDrive(sysShooter);
+    IntakeDrive cmdIntakeDrive = new IntakeDrive(sysIntake);
+    DriveMecanum cmdDriveMecanum = new DriveMecanum(sysDriveTrain);
+
+    sysShooter.setDefaultCommand(cmdShooterDrive);
+    sysDriveTrain.setDefaultCommand(cmdDriveMecanum);
+    sysIntake.setDefaultCommand(cmdIntakeDrive);
     // Configure the trigger bindings
     configureBindings();
 
