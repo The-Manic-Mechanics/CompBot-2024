@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveTrain.*;
-import frc.robot.Constants.Auton;
 
 /**
 * The subsystem that holds all the motors and functions pertaining to the DriveTrain
@@ -58,29 +57,29 @@ public final class DriveTrain extends SubsystemBase {
 		Motors.backLeft = new Spark(Constants.Motors.Ports.DriveTrain.BACK_LEFT);
 		Motors.backRight = new Spark(Constants.Motors.Ports.DriveTrain.BACK_RIGHT);
 
-		Encoders.frontLeft = new Encoder(
-				Constants.Encoders.Ports.DriveTrain.FRONT_LEFT_A,
-				Constants.Encoders.Ports.DriveTrain.FRONT_LEFT_B
-		);
+		// Encoders.frontLeft = new Encoder(
+		// 		Constants.Encoders.Ports.DriveTrain.FRONT_LEFT_A,
+		// 		Constants.Encoders.Ports.DriveTrain.FRONT_LEFT_B
+		// );
 
-		Encoders.frontRight = new Encoder(
-				Constants.Encoders.Ports.DriveTrain.FRONT_RIGHT_A,
-				Constants.Encoders.Ports.DriveTrain.FRONT_RIGHT_B
-		);
+		// Encoders.frontRight = new Encoder(
+		// 		Constants.Encoders.Ports.DriveTrain.FRONT_RIGHT_A,
+		// 		Constants.Encoders.Ports.DriveTrain.FRONT_RIGHT_B
+		// );
 
-		Encoders.backLeft = new Encoder(
-				Constants.Encoders.Ports.DriveTrain.BACK_LEFT_A,
-				Constants.Encoders.Ports.DriveTrain.BACK_LEFT_A
-		);
+		// Encoders.backLeft = new Encoder(
+		// 		Constants.Encoders.Ports.DriveTrain.BACK_LEFT_A,
+		// 		Constants.Encoders.Ports.DriveTrain.BACK_LEFT_A
+		// );
 
-		Encoders.backRight = new Encoder(
-				Constants.Encoders.Ports.DriveTrain.BACK_RIGHT_A,
-				Constants.Encoders.Ports.DriveTrain.BACK_RIGHT_B
-		);
-		Encoders.frontLeft.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
-		Encoders.frontRight.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
-		Encoders.backLeft.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
-		Encoders.backRight.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
+		// Encoders.backRight = new Encoder(
+		// 		Constants.Encoders.Ports.DriveTrain.BACK_RIGHT_A,
+		// 		Constants.Encoders.Ports.DriveTrain.BACK_RIGHT_B
+		// );
+		// Encoders.frontLeft.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
+		// Encoders.frontRight.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
+		// Encoders.backLeft.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
+		// Encoders.backRight.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
 
 		Motors.frontLeft.setInverted(true);
 		Motors.backLeft.setInverted(true);
@@ -95,18 +94,18 @@ public final class DriveTrain extends SubsystemBase {
 			new Translation2d(-1 * MotorLocations.BACK_RIGHT, -1 * MotorLocations.BACK_RIGHT)
 		);
 
-		wheelPositions = new MecanumDriveWheelPositions(
-				Encoders.frontLeft.getDistance(),
-				Encoders.frontRight.getDistance(),
-				Encoders.backLeft.getDistance(),
-				Encoders.backRight.getDistance()
-		);
+		// wheelPositions = new MecanumDriveWheelPositions(
+		// 		Encoders.frontLeft.getDistance(),
+		// 		Encoders.frontRight.getDistance(),
+		// 		Encoders.backLeft.getDistance(),
+		// 		Encoders.backRight.getDistance()
+		// );
 
-		double[] currentPose = LimeLight.botPoseArray;
+		// double[] currentPose = LimeLight.botPoseArray;
 
-		Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], Gyroscope.sensor.getRotation2d());
+		// Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], Gyroscope.sensor.getRotation2d());
 
-		mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics, Gyroscope.sensor.getRotation2d(), wheelPositions, initPose);
+		// mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics, Gyroscope.sensor.getRotation2d(), wheelPositions, initPose);
 	}
 
     /**
@@ -114,16 +113,16 @@ public final class DriveTrain extends SubsystemBase {
 	 *
 	 * @return <i>(type MecanumDriveWheelPositions)</i> filled out
     */
-	public static MecanumDriveWheelPositions getWheelPositions() {
-		return new MecanumDriveWheelPositions(
-				Encoders.frontLeft.getDistance(), Encoders.frontRight.getDistance(),
-				Encoders.backLeft.getDistance(), Encoders.backRight.getDistance());
-	}
+	// public static MecanumDriveWheelPositions getWheelPositions() {
+	// 	return new MecanumDriveWheelPositions(
+	// 			Encoders.frontLeft.getDistance(), Encoders.frontRight.getDistance(),
+	// 			Encoders.backLeft.getDistance(), Encoders.backRight.getDistance());
+	// }
 
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		mecanumDriveOdometry.update(Gyroscope.sensor.getRotation2d(), wheelPositions);
+		// mecanumDriveOdometry.update(Gyroscope.sensor.getRotation2d(), wheelPositions);
 
 		// DEBUG: SmartDashboard entries
 		SmartDashboard.putData("frontLeft", Motors.frontLeft);
