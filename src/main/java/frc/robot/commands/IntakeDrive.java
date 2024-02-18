@@ -26,22 +26,19 @@ public class IntakeDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // TODO: Add encoder stops and add controller 
     Intake.driveLift(RobotContainer.driverTwoController.getLeftY() * Constants.Intake.LIFT_SPEED_MULTIPLIER);
 
-    if (RobotContainer.driverTwoController.getAButton()) 
+    Intake.driveIntakeAuto();    
+
+    if (RobotContainer.saxController.getRawButton(Constants.Controllers.Sax.ButtonsPort.ORANGE))
       Intake.setSpeed(-1 * Constants.Intake.SPEED);
-    else if (RobotContainer.driverTwoController.getYButton())
-     Intake.setSpeed(Constants.Intake.SPEED);
-    else 
-      Intake.setSpeed(0);
-    
-    
   }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     Intake.setSpeed(0);
-    Intake.driveLift(0);
+    Intake.Motors.lift.set(0);
   }
 
   // Returns true when the command should end.

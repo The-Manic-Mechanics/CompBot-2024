@@ -43,16 +43,62 @@ public class Intake extends SubsystemBase {
   }
 
   /**
-   * Drives the lift at "speed"
+   * Drives the lift at "speed" 
+   * @param speed The speed to drive the lift at
    */
   public static void driveLift(double speed) {
     // TODO: Fill this in
-    // if ((Encoders.lift.get() >= Constants.Encoders.Intake.INTAKE_LOWER_LIMIT) && (RobotContainer.driverTwoController.getLeftY() < 0)) 
-      // Motors.lift.set(0);
-    // else if ((Encoders.lift.get() <= Constants.Encoders.Intake.INTAKE_HIGH_LIMIT) && (RobotContainer.driverTwoController.getLeftY() > 0)) 
-      // Motors.lift.set(0);
-    // else 
-      Motors.lift.set(speed); 
+    if ((Encoders.lift.get() >= Constants.Encoders.Intake.LOWER_LIMIT) && (RobotContainer.driverTwoController.getLeftY() < 0)) 
+      Motors.lift.set(0);
+    else if ((Encoders.lift.get() <= Constants.Encoders.Intake.HIGH_LIMIT) && (RobotContainer.driverTwoController.getLeftY() > 0)) 
+      Motors.lift.set(0);
+    else 
+      Motors.lift.set(speed);
+  }
+
+  /**
+   * Drives the lift to whatever position is specified
+   * @param position Which position to set the intake to (1 is pickup, 2 is amp scoring, and 3 is shooter feeding)
+   * @param speed The speed the lift motor drives at
+   */
+  public static void driveLiftToPos(int position, double speed) {
+    switch (position) {
+      // Pickup position
+      case 1:
+      if (Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT)
+        driveLift(0);
+      else
+        driveLift(speed);
+
+      break;
+
+      // Amp scoring position
+      case 2:
+      if (Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT)
+        driveLift(0);
+      else
+        driveLift(speed);
+      
+      break;
+
+      // Shooter feeding position
+      case 3:
+      break;
+
+      // No position fed
+      default:
+    }
+  }
+
+  /**
+   * Turns on the intake if the lift encoder goes past a certain threshold
+   */
+  public static void driveIntakeAuto() {
+    // FIXME: Signs may be backwards
+    if (Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT)
+      setSpeed(Constants.Intake.SPEED);
+    else if (Motors.left.get() > 0)
+      setSpeed(0); 
   }
 
   @Override

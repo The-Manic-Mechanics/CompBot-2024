@@ -27,11 +27,25 @@ public final class Constants {
 			 * TODO: Change accordingly.
              * The port which the second driver's controller is connected to.
              */
-            DRIVERTWO_PORT = 1,
+            DRIVERTWO_PORT = 1;
+		public static class Sax {
 			/**
 			 * The port which the saxophone controller is connected to
 			 */
-			SAX_PORT = 2;
+			public static final int
+				SAX_PORT = 2;
+			public static class ButtonsPort {
+				public static final int       
+					ORANGE = 0,
+					RED = 1,
+					BLUE = 2,
+					GREEN = 3,
+					LIGH_RED = 4,
+					YELLOW = 5,
+					PINK = 6,
+					PURPLE = 7;
+			}
+		}
 	}
 	
 	public static class LimeLightOffsets {
@@ -225,18 +239,28 @@ public final class Constants {
 					/**
 					 * The intake lift encoder's distance per pulse
 					 */
-					LIFT_DISTANCE_PER_PULSE = 0,
+					LIFT_DISTANCE_PER_PULSE = 1,
 		
 					// TODO: Fill this in
 					/**
 					 * The lowest point the intake can be driven to
 					 */
-					INTAKE_LOWER_LIMIT = 0,
+					LOWER_LIMIT = 0,
 		
 					/**
-					 * The highest point the intakev can be driven to
+					 * The highest point the intake can be driven to
 					 */
-					INTAKE_HIGH_LIMIT = 0;
+					HIGH_LIMIT = 0,
+					/**
+					 * The upper limit below which the intake will turn on
+					 * (The lift goes below this limit and the intake motors turn on)
+					 */
+					ON_LIMIT = 0,
+					/**
+					 *  The upper limit above which the shooter turns on 
+					 * (The lift goes above this threshold and the shooter motors activate)
+					 */
+					SHOOTER_ON_LIMIT = 0;
 		}
 	}
 
