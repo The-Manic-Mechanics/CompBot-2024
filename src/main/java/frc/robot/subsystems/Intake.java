@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
   public static class Motors {
@@ -48,11 +47,11 @@ public class Intake extends SubsystemBase {
    */
   public static void driveLift(double speed) {
     // TODO: Fill this in
-    if ((Encoders.lift.get() >= Constants.Encoders.Intake.LOWER_LIMIT) && (RobotContainer.driverTwoController.getLeftY() < 0)) 
-      Motors.lift.set(0);
-    else if ((Encoders.lift.get() <= Constants.Encoders.Intake.HIGH_LIMIT) && (RobotContainer.driverTwoController.getLeftY() > 0)) 
-      Motors.lift.set(0);
-    else 
+    // if ((Encoders.lift.get() >= Constants.Encoders.Intake.LOWER_LIMIT) && (RobotContainer.driverTwoController.getLeftY() < 0)) 
+    //   Motors.lift.set(0);
+    // else if ((Encoders.lift.get() <= Constants.Encoders.Intake.HIGH_LIMIT) && (RobotContainer.driverTwoController.getLeftY() > 0)) 
+    //   Motors.lift.set(0);
+    // else 
       Motors.lift.set(speed);
   }
 
@@ -74,15 +73,20 @@ public class Intake extends SubsystemBase {
 
       // Amp scoring position
       case 2:
-      if (Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT)
-        driveLift(0);
-      else
+      if ((Encoders.lift.get() <= Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER) && (Encoders.lift.get() >= Constants.Encoders.Intake.AMP_SCORING_POSITION_LOWER))
         driveLift(speed);
+      else
+        driveLift(0);
       
       break;
 
       // Shooter feeding position
       case 3:
+      if (Encoders.lift.get() <= Constants.Encoders.Intake.SHOOTER_ON_LIMIT)
+        driveLift(0);
+      else
+        driveLift(speed);
+
       break;
 
       // No position fed
@@ -104,8 +108,6 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Intake Lift Encoder Pos", Encoders.lift.get());
-    SmartDashboard.putBoolean("A Button", RobotContainer.driverTwoController.getAButton());
-    
+    SmartDashboard.putNumber("Intake Lift Encoder Pos", Encoders.lift.get());    
   }
 }

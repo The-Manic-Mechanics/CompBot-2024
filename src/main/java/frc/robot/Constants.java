@@ -40,10 +40,21 @@ public final class Constants {
 					RED = 1,
 					BLUE = 2,
 					GREEN = 3,
-					LIGH_RED = 4,
+					SALMON = 4,
 					YELLOW = 5,
 					PINK = 6,
-					PURPLE = 7;
+					PURPLE = 7,
+					JOYSTICK = 12;
+			}
+
+			public static class AxisPort {
+				/**
+				 * X is towards the bell for positive and away for negative
+				 * Y is towards the buttons for positive and away for negative
+				 */
+				public static final int
+					X = 0,
+					Y = 1;
 			}
 		}
 	}
@@ -164,7 +175,11 @@ public final class Constants {
 					/**
 					 * Second climber motor CAN port
 					 */
-					TWO = 0;
+					TWO = 0,
+					/**
+					 * The hook positioner motor CAN port
+					 */
+					HOOK_POSITIONER = 0;
 			}
 
 			public static class Shooter {
@@ -260,7 +275,15 @@ public final class Constants {
 					 *  The upper limit above which the shooter turns on 
 					 * (The lift goes above this threshold and the shooter motors activate)
 					 */
-					SHOOTER_ON_LIMIT = 0;
+					SHOOTER_ON_LIMIT = 0,
+					/**
+					 * The upper limit to the amp scoring area
+					 */
+					AMP_SCORING_POSITION_UPPER = 0,
+					/**
+					 * The lower limit to the amp scoring area
+					 */
+					AMP_SCORING_POSITION_LOWER = 0;
 		}
 	}
 
@@ -302,7 +325,13 @@ public final class Constants {
 			SPEED = 1;
 	}
 
-	public static class Climber {}
+	public static class Climber {
+		public static double SPEED = 1;
+		/**
+		 * The average speed of the hook positioner
+		 */
+		public static double HOOK_POSITIONER_SPEED = 1;
+	}
 
 	public static class Auton {
 		/**

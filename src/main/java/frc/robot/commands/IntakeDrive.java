@@ -4,9 +4,10 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.Controllers.Sax.AxisPort;
+import frc.robot.Constants.Controllers.Sax.ButtonsPort;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 
@@ -27,12 +28,21 @@ public class IntakeDrive extends Command {
   @Override
   public void execute() {
     // TODO: Add encoder stops and add controller 
-    Intake.driveLift(RobotContainer.driverTwoController.getLeftY() * Constants.Intake.LIFT_SPEED_MULTIPLIER);
+    Intake.driveLift(RobotContainer.saxController.getRawAxis(AxisPort.X) * -Constants.Intake.LIFT_SPEED_MULTIPLIER);
 
-    Intake.driveIntakeAuto();    
+    Intake.driveIntakeAuto();  
 
-    if (RobotContainer.saxController.getRawButton(Constants.Controllers.Sax.ButtonsPort.ORANGE))
+    if (RobotContainer.saxController.getRawButton(ButtonsPort.ORANGE))
       Intake.setSpeed(-1 * Constants.Intake.SPEED);
+
+    if (RobotContainer.saxController.getRawButton(ButtonsPort.RED))
+      Intake.driveLiftToPos(1, Constants.Intake.LIFT_SPEED_MULTIPLIER);
+    
+    if (RobotContainer.saxController.getRawButton(ButtonsPort.BLUE))
+      Intake.driveLiftToPos(2, Constants.Intake.LIFT_SPEED_MULTIPLIER);
+     
+    if (RobotContainer.saxController.getRawButton(ButtonsPort.GREEN))
+      Intake.driveLiftToPos(3, Constants.Intake.LIFT_SPEED_MULTIPLIER);
   }
   // Called once the command ends or is interrupted.
   @Override
