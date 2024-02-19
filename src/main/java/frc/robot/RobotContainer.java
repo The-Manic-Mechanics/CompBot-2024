@@ -12,7 +12,6 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Gyroscope;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Solenoids;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
@@ -33,7 +32,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   SendableChooser<Command> autoRoutineChooser;
 
-  private final Solenoids sysSolenoids = new Solenoids();
   private final Gyroscope sysGyroscope = new Gyroscope();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -49,7 +47,7 @@ public class RobotContainer {
     driverSecondLeftBump = new JoystickButton(driverTwoController, 5),
     driverSecondRghtBump = new JoystickButton(driverTwoController, 6);
 
-  public static final GenericHID saxController = new GenericHID(Constants.Controllers.SAX_PORT);
+  public static final GenericHID saxController = new GenericHID(Constants.Controllers.Sax.SAX_PORT);
   // ---------------------------------------------------------------------------------
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
