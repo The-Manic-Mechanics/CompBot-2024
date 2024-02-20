@@ -33,6 +33,8 @@ public class Intake extends SubsystemBase {
     Encoders.lift = new Encoder(Constants.Encoders.Ports.Intake.LIFT_A, Constants.Encoders.Ports.Intake.LIFT_B);
 
     Encoders.lift.setDistancePerPulse(frc.robot.Constants.Encoders.Intake.LIFT_DISTANCE_PER_PULSE);
+
+    Encoders.lift.reset();
   }
 
   /**
@@ -49,9 +51,9 @@ public class Intake extends SubsystemBase {
    */
   public static void driveLift(double speed) {
     // TODO: Fill this in
-    if ((Encoders.lift.get() >= Constants.Encoders.Intake.LOWER_LIMIT) && (-RobotContainer.saxController.getRawAxis(AxisPort.X) < 0)) 
+    if ((Encoders.lift.get() >= Constants.Encoders.Intake.LOWER_LIMIT) && (RobotContainer.saxController.getRawAxis(AxisPort.X) < 0)) 
       Motors.lift.set(0);
-    else if ((Encoders.lift.get() <= Constants.Encoders.Intake.HIGH_LIMIT) && (RobotContainer.driverTwoController.getLeftY() > 0)) 
+    else if ((Encoders.lift.get() <= Constants.Encoders.Intake.HIGH_LIMIT) && (RobotContainer.saxController.getRawAxis(AxisPort.X) > 0)) 
       Motors.lift.set(0);
     else 
       Motors.lift.set(speed);
@@ -66,33 +68,30 @@ public class Intake extends SubsystemBase {
     switch (position) {
       // Pickup position
       case 1:
-      if (Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT)
-        driveLift(0);
-      else
-        driveLift(speed);
+        if (Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT)
+          driveLift(0);
+        else
+          driveLift(speed);
 
       break;
 
       // Amp scoring position
       case 2:
-      if ((Encoders.lift.get() <= Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER) && (Encoders.lift.get() >= Constants.Encoders.Intake.AMP_SCORING_POSITION_LOWER))
-        driveLift(speed);
-      else
-        driveLift(0);
+        if ((Encoders.lift.get() <= Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER) && (Encoders.lift.get() >= Constants.Encoders.Intake.AMP_SCORING_POSITION_LOWER))
+          driveLift(speed);
+        else
+          driveLift(0);
       
       break;
 
       // Shooter feeding position
       case 3:
-      if (Encoders.lift.get() <= Constants.Encoders.Intake.SHOOTER_ON_LIMIT)
-        driveLift(0);
-      else
-        driveLift(speed);
+        if (Encoders.lift.get() <= Constants.Encoders.Intake.SHOOTER_ON_LIMIT)
+          driveLift(0);
+        else
+          driveLift(speed);
 
       break;
-
-      // No position fed
-      default:
     }
   }
 
@@ -100,8 +99,7 @@ public class Intake extends SubsystemBase {
    * Turns on the intake if the lift encoder goes past a certain threshold
    */
   public static void driveIntakeAuto() {
-    // FIXME: Signs may be backwards
-    if (Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT)
+    if (Encoders.lift.get() >= Constants.Encoders.Intake.ON_LIMIT)
       setSpeed(Constants.Intake.SPEED);
     else if (Motors.left.get() > 0)
       setSpeed(0); 

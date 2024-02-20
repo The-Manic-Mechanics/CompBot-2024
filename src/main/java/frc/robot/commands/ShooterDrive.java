@@ -7,7 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Intake;
+import frc.robot.Constants.Controllers.Sax.ButtonsPort;
 import frc.robot.subsystems.Shooter;
 
 public class ShooterDrive extends Command {
@@ -26,11 +26,11 @@ public class ShooterDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-  // TODO: Signs may be wrong
-    if (Intake.Encoders.lift.get() <= Constants.Encoders.Intake.SHOOTER_ON_LIMIT) 
-      Shooter.setSpeed(Constants.Shooter.SPEED);
-    else
-      Shooter.setSpeed(0);
+    // if (Intake.Encoders.lift.get() <= Constants.Encoders.Intake.SHOOTER_ON_LIMIT) 
+      if (RobotContainer.saxController.getRawButton(ButtonsPort.RED))
+        Shooter.setSpeed(Constants.Shooter.SPEED);
+      else
+        Shooter.setSpeed(0);
   }
 
   // Called once the command ends or is interrupted.

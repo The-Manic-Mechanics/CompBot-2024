@@ -28,20 +28,30 @@ public class IntakeDrive extends Command {
   @Override
   public void execute() {
     // TODO: Add encoder stops and add controller 
-    Intake.driveLift(RobotContainer.saxController.getRawAxis(AxisPort.X) * -Constants.Intake.LIFT_SPEED_MULTIPLIER);
+    Intake.driveLift(RobotContainer.saxController.getRawAxis(AxisPort.X) * Constants.Intake.LIFT_SPEED_MULTIPLIER);
 
-    Intake.driveIntakeAuto();  
+    Intake.driveIntakeAuto();
+    
+    // Activate intake
+    if (RobotContainer.saxController.getRawButton(ButtonsPort.BLUE))
+      Intake.setSpeed(Constants.Intake.SPEED);
+    else
+      Intake.setSpeed(0);
 
+    // Reverse intake
     if (RobotContainer.saxController.getRawButton(ButtonsPort.ORANGE))
       Intake.setSpeed(-1 * Constants.Intake.SPEED);
 
-    if (RobotContainer.saxController.getRawButton(ButtonsPort.RED))
+    // Intake position
+    if (RobotContainer.saxController.getRawButton(ButtonsPort.SALMON))
       Intake.driveLiftToPos(1, Constants.Intake.LIFT_SPEED_MULTIPLIER);
     
-    if (RobotContainer.saxController.getRawButton(ButtonsPort.BLUE))
+    // Amp scoring position
+    if (RobotContainer.saxController.getRawButton(ButtonsPort.YELLOW))
       Intake.driveLiftToPos(2, Constants.Intake.LIFT_SPEED_MULTIPLIER);
      
-    if (RobotContainer.saxController.getRawButton(ButtonsPort.GREEN))
+    // Shooting position
+    if (RobotContainer.saxController.getRawButton(ButtonsPort.PINK))
       Intake.driveLiftToPos(3, Constants.Intake.LIFT_SPEED_MULTIPLIER);
   }
   // Called once the command ends or is interrupted.
