@@ -27,7 +27,6 @@ public class IntakeDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // TODO: Add encoder stops and add controller 
     Intake.driveLift(RobotContainer.saxController.getRawAxis(AxisPort.X) * Constants.Intake.LIFT_SPEED_MULTIPLIER);
 
     Intake.driveIntakeAuto();
@@ -35,12 +34,14 @@ public class IntakeDrive extends Command {
     // Activate intake
     if (RobotContainer.saxController.getRawButton(ButtonsPort.BLUE))
       Intake.setSpeed(Constants.Intake.SPEED);
-    else
+    else if (Intake.Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT)
       Intake.setSpeed(0);
 
     // Reverse intake
     if (RobotContainer.saxController.getRawButton(ButtonsPort.ORANGE))
       Intake.setSpeed(-1 * Constants.Intake.SPEED);
+    else
+      Intake.setSpeed(0);
 
     // Intake position
     if (RobotContainer.saxController.getRawButton(ButtonsPort.SALMON))

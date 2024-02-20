@@ -57,29 +57,7 @@ public final class DriveTrain extends SubsystemBase {
 		Motors.backLeft = new CANSparkMax(Constants.Motors.Ports.DriveTrain.BACK_LEFT, MotorType.kBrushless);
 		Motors.backRight = new CANSparkMax(Constants.Motors.Ports.DriveTrain.BACK_RIGHT, MotorType.kBrushless);
 
-		// Encoders.frontLeft = new Encoder(
-		// 		Constants.Encoders.Ports.DriveTrain.FRONT_LEFT_A,
-		// 		Constants.Encoders.Ports.DriveTrain.FRONT_LEFT_B
-		// );
-
-		// Encoders.frontRight = new Encoder(
-		// 		Constants.Encoders.Ports.DriveTrain.FRONT_RIGHT_A,
-		// 		Constants.Encoders.Ports.DriveTrain.FRONT_RIGHT_B
-		// );
-
-		// Encoders.backLeft = new Encoder(
-		// 		Constants.Encoders.Ports.DriveTrain.BACK_LEFT_A,
-		// 		Constants.Encoders.Ports.DriveTrain.BACK_LEFT_A
-		// );
-
-		// Encoders.backRight = new Encoder(
-		// 		Constants.Encoders.Ports.DriveTrain.BACK_RIGHT_A,
-		// 		Constants.Encoders.Ports.DriveTrain.BACK_RIGHT_B
-		// );
-		// Encoders.frontLeft.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
-		// Encoders.frontRight.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
-		// Encoders.backLeft.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
-		// Encoders.backRight.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
+		Motors.frontLeft.getAlternateEncoder(0);
 
 		Motors.frontLeft.setInverted(true);
 		Motors.backLeft.setInverted(true);

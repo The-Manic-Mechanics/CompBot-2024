@@ -27,7 +27,7 @@ public class ClimberDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (RobotContainer.saxController.getRawButton(ButtonsPort.SALMON))
+    if (RobotContainer.saxController.getRawButton(ButtonsPort.PURPLE))
       Climber.Motors.one.set(Constants.Climber.HOOK_POSITIONER_SPEED);
     else
       Climber.Motors.one.set(0);
