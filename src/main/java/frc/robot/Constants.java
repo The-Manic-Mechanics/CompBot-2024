@@ -171,15 +171,15 @@ public final class Constants {
 					/**
 					 * First climber motor CAN port
 					 */
-					ONE = 0,
+					ONE = 5,
 					/**
 					 * Second climber motor CAN port
 					 */
-					TWO = 0,
+					TWO = 6,
 					/**
 					 * The hook positioner motor CAN port
 					 */
-					HOOK_POSITIONER = 0;
+					HOOK_POSITIONER = 13;
 			}
 
 			public static class Shooter {
@@ -260,7 +260,7 @@ public final class Constants {
 					/**
 					 * The lowest point the intake can be driven to
 					 */
-					LOWER_LIMIT = 0,
+					LOWER_LIMIT = 717,
 		
 					/**
 					 * The highest point the intake can be driven to
@@ -270,20 +270,20 @@ public final class Constants {
 					 * The upper limit below which the intake will turn on
 					 * (The lift goes below this limit and the intake motors turn on)
 					 */
-					ON_LIMIT = 0,
+					ON_LIMIT = 486,
 					/**
 					 *  The upper limit above which the shooter turns on 
 					 * (The lift goes above this threshold and the shooter motors activate)
 					 */
-					SHOOTER_ON_LIMIT = 0,
+					SHOOTER_ON_LIMIT = 267,
 					/**
 					 * The upper limit to the amp scoring area
 					 */
-					AMP_SCORING_POSITION_UPPER = 0,
+					AMP_SCORING_POSITION_UPPER = 200,
 					/**
 					 * The lower limit to the amp scoring area
 					 */
-					AMP_SCORING_POSITION_LOWER = 0;
+					AMP_SCORING_POSITION_LOWER = 300;
 		}
 	}
 

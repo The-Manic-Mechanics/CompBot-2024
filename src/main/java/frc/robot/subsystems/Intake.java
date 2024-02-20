@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.Constants.Controllers.Sax.AxisPort;
 
 public class Intake extends SubsystemBase {
   public static class Motors {
@@ -47,11 +49,11 @@ public class Intake extends SubsystemBase {
    */
   public static void driveLift(double speed) {
     // TODO: Fill this in
-    // if ((Encoders.lift.get() >= Constants.Encoders.Intake.LOWER_LIMIT) && (RobotContainer.driverTwoController.getLeftY() < 0)) 
-    //   Motors.lift.set(0);
-    // else if ((Encoders.lift.get() <= Constants.Encoders.Intake.HIGH_LIMIT) && (RobotContainer.driverTwoController.getLeftY() > 0)) 
-    //   Motors.lift.set(0);
-    // else 
+    if ((Encoders.lift.get() >= Constants.Encoders.Intake.LOWER_LIMIT) && (-RobotContainer.saxController.getRawAxis(AxisPort.X) < 0)) 
+      Motors.lift.set(0);
+    else if ((Encoders.lift.get() <= Constants.Encoders.Intake.HIGH_LIMIT) && (RobotContainer.driverTwoController.getLeftY() > 0)) 
+      Motors.lift.set(0);
+    else 
       Motors.lift.set(speed);
   }
 
