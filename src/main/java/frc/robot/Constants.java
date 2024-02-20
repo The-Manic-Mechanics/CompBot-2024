@@ -256,16 +256,15 @@ public final class Constants {
 					 */
 					LIFT_DISTANCE_PER_PULSE = 1,
 		
-					// TODO: Fill this in
 					/**
 					 * The lowest point the intake can be driven to
 					 */
-					LOWER_LIMIT = 717,
+					LOWER_LIMIT = 690,
 		
 					/**
 					 * The highest point the intake can be driven to
 					 */
-					HIGH_LIMIT = 0,
+					HIGH_LIMIT = 40,
 					/**
 					 * The upper limit below which the intake will turn on
 					 * (The lift goes below this limit and the intake motors turn on)
@@ -284,6 +283,16 @@ public final class Constants {
 					 * The lower limit to the amp scoring area
 					 */
 					AMP_SCORING_POSITION_LOWER = 300;
+
+					/**
+					 * The upper limit to the pickup position
+					 */
+					public static final int PICKUP_POSITION_HIGHER = 600;
+
+					/**
+					 * The lower limit to the shooting position
+					 */
+					public static final int SHOOTING_POSITION_LOWER = 100;
 		}
 	}
 
@@ -318,7 +327,7 @@ public final class Constants {
 			/**
 			 * The speed multiplier for the intake lift
 			 */
-			LIFT_SPEED_MULTIPLIER = 1,
+			LIFT_SPEED_MULTIPLIER = .8,
 			/**
 			 * The speed of the actual intake motors
 			 */
