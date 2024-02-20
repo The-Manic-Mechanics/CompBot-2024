@@ -65,31 +65,37 @@ public class Intake extends SubsystemBase {
    * @param speed The speed the lift motor drives at
    */
   public static void driveLiftToPos(int position, double speed) {
+
+    speed = Math.abs(speed);
+
     switch (position) {
       // Pickup position
       case 1:
-        if (Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT)
-          driveLift(0);
-        else
-          driveLift(speed);
+      if (Encoders.lift.get() >= Constants.Encoders.Intake.PICKUP_POSITION_HIGHER)
+        driveLift(0);
+      else
+        driveLift(-speed);
 
       break;
 
       // Amp scoring position
       case 2:
-        if ((Encoders.lift.get() <= Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER) && (Encoders.lift.get() >= Constants.Encoders.Intake.AMP_SCORING_POSITION_LOWER))
-          driveLift(speed);
+      if ((Encoders.lift.get() <= Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER) && (Encoders.lift.get() >= Constants.Encoders.Intake.AMP_SCORING_POSITION_LOWER))
+        if (Encoders.lift.get() <= Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER)
+          driveLift(-1 * speed);
         else
-          driveLift(0);
+          driveLift(speed);
+      else
+        driveLift(0);
       
       break;
 
       // Shooter feeding position
       case 3:
-        if (Encoders.lift.get() <= Constants.Encoders.Intake.SHOOTER_ON_LIMIT)
-          driveLift(0);
-        else
-          driveLift(speed);
+      if (Encoders.lift.get() <= Constants.Encoders.Intake.SHOOTING_POSITION_LOWER)
+        driveLift(0);
+      else
+        driveLift(speed);
 
       break;
     }
@@ -99,6 +105,7 @@ public class Intake extends SubsystemBase {
    * Turns on the intake if the lift encoder goes past a certain threshold
    */
   public static void driveIntakeAuto() {
+    // FIXME: Signs may be backwards
     if (Encoders.lift.get() >= Constants.Encoders.Intake.ON_LIMIT)
       setSpeed(Constants.Intake.SPEED);
     else if (Motors.left.get() > 0)
