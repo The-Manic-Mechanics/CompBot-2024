@@ -319,7 +319,7 @@ public final class Constants {
 				 * Where the back right wheel is located relative to the center of the robot in metres.
 				 */
 				BACK_RIGHT = 0.0;
-		}
+		}			
 	}
 
 	public static class Intake {
@@ -371,6 +371,9 @@ public final class Constants {
 		DISTANCE_PER_PULSE = 0;
 
 		public static final java.util.HashMap<String, Command> EVENT_MAP = new java.util.HashMap<>();
+		
+		// TODO: Factor in the wheel diameters and gear ratios
+		public static final int SPARKMAX_COUNTS_PER_REV = 42;
 	}
 	public static class Shooter {
 		public static double

@@ -5,13 +5,14 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
@@ -48,7 +49,7 @@ public final class DriveTrain extends SubsystemBase {
 	}
 
 	public static class Encoders {
-		public static Encoder frontLeft, frontRight, backLeft, backRight;
+		public static RelativeEncoder frontLeft, frontRight, backLeft, backRight;
 	}
 
 	public DriveTrain() {
@@ -57,7 +58,10 @@ public final class DriveTrain extends SubsystemBase {
 		Motors.backLeft = new CANSparkMax(Constants.Motors.Ports.DriveTrain.BACK_LEFT, MotorType.kBrushless);
 		Motors.backRight = new CANSparkMax(Constants.Motors.Ports.DriveTrain.BACK_RIGHT, MotorType.kBrushless);
 
-		Motors.frontLeft.getAlternateEncoder(0);
+		Encoders.frontLeft = Motors.frontLeft.getAlternateEncoder(Constants.Auton.SPARKMAX_COUNTS_PER_REV);
+		Encoders.frontRight = Motors.frontRight.getAlternateEncoder(Constants.Auton.SPARKMAX_COUNTS_PER_REV);
+		Encoders.backLeft = Motors.backLeft.getAlternateEncoder(Constants.Auton.SPARKMAX_COUNTS_PER_REV);
+		Encoders.backRight = Motors.backRight.getAlternateEncoder(Constants.Auton.SPARKMAX_COUNTS_PER_REV);
 
 		Motors.frontLeft.setInverted(true);
 		Motors.backLeft.setInverted(true);
@@ -72,18 +76,18 @@ public final class DriveTrain extends SubsystemBase {
 			new Translation2d(-1 * MotorLocations.BACK_RIGHT, -1 * MotorLocations.BACK_RIGHT)
 		);
 
-		// wheelPositions = new MecanumDriveWheelPositions(
-		// 		Encoders.frontLeft.getDistance(),
-		// 		Encoders.frontRight.getDistance(),
-		// 		Encoders.backLeft.getDistance(),
-		// 		Encoders.backRight.getDistance()
-		// );
+		wheelPositions = new MecanumDriveWheelPositions(
+				Encoders.frontLeft.getPosition(),
+				Encoders.frontRight.getPosition(),
+				Encoders.backLeft.getPosition(),
+				Encoders.backRight.getPosition()
+		);
 
-		// double[] currentPose = LimeLight.botPoseArray;
+		double[] currentPose = LimeLight.botPoseArray;
 
-		// Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], Gyroscope.sensor.getRotation2d());
+		Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], Gyroscope.sensor.getRotation2d());
 
-		// mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics, Gyroscope.sensor.getRotation2d(), wheelPositions, initPose);
+		mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics, Gyroscope.sensor.getRotation2d(), wheelPositions, initPose);
 	}
 
     /**
@@ -100,11 +104,6 @@ public final class DriveTrain extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		// mecanumDriveOdometry.update(Gyroscope.sensor.getRotation2d(), wheelPositions);
-
-		// DEBUG: SmartDashboard entries
-		SmartDashboard.putNumber("X Value", RobotContainer.driverOneController.getLeftX());
-		SmartDashboard.putNumber("Y Value", RobotContainer.driverOneController.getLeftY());
-		SmartDashboard.putNumber("Z Value", RobotContainer.driverOneController.getRightX());
+		mecanumDriveOdometry.update(Gyroscope.sensor.getRotation2d(), wheelPositions);
 	}
 }
