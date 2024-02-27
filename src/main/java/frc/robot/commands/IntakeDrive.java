@@ -47,12 +47,8 @@ public class IntakeDrive extends Command {
     if (RobotContainer.saxController.getRawButton(ButtonsPort.SALMON))
       Intake.driveLiftToPos(1, Constants.Intake.LIFT_SPEED_MULTIPLIER);
     
-    // Amp scoring position
-    if (RobotContainer.saxController.getRawButton(ButtonsPort.YELLOW))
-      Intake.driveLiftToPos(2, Constants.Intake.LIFT_SPEED_MULTIPLIER);
-     
     // Shooting position
-    if (RobotContainer.saxController.getRawButton(ButtonsPort.PINK))
+    if (RobotContainer.saxController.getRawButton(ButtonsPort.YELLOW))
       Intake.driveLiftToPos(3, Constants.Intake.LIFT_SPEED_MULTIPLIER);
   }
   // Called once the command ends or is interrupted.

@@ -83,11 +83,11 @@ public final class DriveTrain extends SubsystemBase {
 				Encoders.backRight.getPosition()
 		);
 
-		double[] currentPose = LimeLight.botPoseArray;
+		// double[] currentPose = LimeLight.botPoseArray;
 
-		Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], Gyroscope.sensor.getRotation2d());
+		// Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], Gyroscope.sensor.getRotation2d());
 
-		mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics, Gyroscope.sensor.getRotation2d(), wheelPositions, initPose);
+		// mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics, Gyroscope.sensor.getRotation2d(), wheelPositions, initPose);
 	}
 
     /**
@@ -104,6 +104,6 @@ public final class DriveTrain extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		mecanumDriveOdometry.update(Gyroscope.sensor.getRotation2d(), wheelPositions);
+		// mecanumDriveOdometry.update(Gyroscope.sensor.getRotation2d(), wheelPositions);
 	}
 }

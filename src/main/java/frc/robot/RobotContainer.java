@@ -5,21 +5,21 @@
 package frc.robot;
 
 import frc.robot.Constants.Controllers;
+import frc.robot.commands.ClimberDrive;
 import frc.robot.commands.DriveMecanum;
 import frc.robot.commands.IntakeDrive;
 import frc.robot.commands.ShooterDrive;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Gyroscope;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 
@@ -36,16 +36,13 @@ public class RobotContainer {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public static final XboxController driverOneController = new XboxController(Controllers.DRIVERONE_PORT);
-  public static final JoystickButton 
-    mainButton1 = new JoystickButton(driverOneController, 1),
-    mainButton2 = new JoystickButton(driverOneController, 4);
 
   public static final XboxController driverTwoController = new XboxController(Controllers.DRIVERTWO_PORT);
-  public static final JoystickButton 
-    driverSecondA = new JoystickButton(driverTwoController, 1),
-    driverSecondY = new JoystickButton(driverTwoController, 4),
-    driverSecondLeftBump = new JoystickButton(driverTwoController, 5),
-    driverSecondRghtBump = new JoystickButton(driverTwoController, 6);
+  // public static final JoystickButton 
+  //   driverSecondA = new JoystickButton(driverTwoController, 1),
+  //   driverSecondY = new JoystickButton(driverTwoController, 4),
+  //   driverSecondLeftBump = new JoystickButton(driverTwoController, 5),
+  //   driverSecondRghtBump = new JoystickButton(driverTwoController, 6);
 
   public static final GenericHID saxController = new GenericHID(Constants.Controllers.Sax.SAX_PORT);
   // ---------------------------------------------------------------------------------
@@ -56,14 +53,18 @@ public class RobotContainer {
     DriveTrain sysDriveTrain = new DriveTrain();
     Intake sysIntake = new Intake();
     Shooter sysShooter = new Shooter();
+    Climber sysClimber = new Climber();
 
     ShooterDrive cmdShooterDrive = new ShooterDrive(sysShooter);
     IntakeDrive cmdIntakeDrive = new IntakeDrive(sysIntake);
     DriveMecanum cmdDriveMecanum = new DriveMecanum(sysDriveTrain);
+    ClimberDrive cmdClimberDrive = new ClimberDrive(sysClimber);
 
     sysShooter.setDefaultCommand(cmdShooterDrive);
     sysDriveTrain.setDefaultCommand(cmdDriveMecanum);
     sysIntake.setDefaultCommand(cmdIntakeDrive);
+    sysClimber.setDefaultCommand(cmdClimberDrive);
+    
     // Configure the trigger bindings
     configureBindings();
 

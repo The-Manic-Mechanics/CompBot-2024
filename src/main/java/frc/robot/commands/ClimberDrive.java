@@ -27,16 +27,40 @@ public class ClimberDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (RobotContainer.saxController.getRawButton(ButtonsPort.PURPLE))
-      Climber.Motors.one.set(Constants.Climber.HOOK_POSITIONER_SPEED);
+    // Hook positioner forward
+    if (RobotContainer.saxController.getRawButton(ButtonsPort.PINK))
+      Climber.Motors.hookPositioner.set(Constants.Climber.HOOK_POSITIONER_SPEED);
     else
+      Climber.Motors.hookPositioner.set(0);
+
+    // Raise the robot, via activating climber
+    if (RobotContainer.saxController.getRawButton(ButtonsPort.JOYSTICK))
+      Climber.Motors.one.set(Constants.Climber.SPEED);
+    else {
       Climber.Motors.one.set(0);
+      Climber.Motors.two.set(0);
+    }
+
+    // Reverse Climber
+    if (RobotContainer.saxController.getRawButton(ButtonsPort.GREEN))
+      Climber.Motors.one.set(-1 * Constants.Climber.SPEED);
+    else {
+      Climber.Motors.one.set(0);
+      Climber.Motors.two.set(0);
+    }
+
+    // Hook positioner backwards
+    if (RobotContainer.saxController.getRawButton(ButtonsPort.PURPLE))
+      Climber.Motors.hookPositioner.set(-1 * Constants.Climber.HOOK_POSITIONER_SPEED);
+    else
+      Climber.Motors.hookPositioner.set(0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     Climber.Motors.one.set(0);
+    Climber.Motors.two.set(0);
 
     Climber.Motors.hookPositioner.set(0);
   }

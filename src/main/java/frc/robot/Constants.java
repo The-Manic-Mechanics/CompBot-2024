@@ -36,15 +36,15 @@ public final class Constants {
 				SAX_PORT = 2;
 			public static class ButtonsPort {
 				public static final int       
-					ORANGE = 0,
-					RED = 1,
-					BLUE = 2,
-					GREEN = 3,
-					SALMON = 4,
-					YELLOW = 5,
-					PINK = 6,
-					PURPLE = 7,
-					JOYSTICK = 12;
+					ORANGE = 1,
+					RED = 2,
+					BLUE = 3,
+					GREEN = 4,
+					SALMON = 5,
+					YELLOW = 6,
+					PINK = 7,
+					PURPLE = 8,
+					JOYSTICK = 13;
 			}
 
 			public static class AxisPort {
@@ -130,7 +130,6 @@ public final class Constants {
 	public static class Motors {
 		public static class Ports {
 			public static class DriveTrain {
-				// TODO: Fill in port traffic information once we have it.
 				/**
 				 * Front Left CAN Port
 				 */
@@ -200,7 +199,6 @@ public final class Constants {
 	public static class Encoders {
 		public static class Ports {
 			public static class DriveTrain {
-				// TODO: Fill in port traffic information once we have it.
 				/**
 				 * Front Left Encoder Channel A
 				 */
@@ -251,6 +249,7 @@ public final class Constants {
 
 		public static class Intake {
 				public static int
+					// TODO: Retake these values (New gear ratio on lift)
 					/**
 					 * The intake lift encoder's distance per pulse
 					 */
