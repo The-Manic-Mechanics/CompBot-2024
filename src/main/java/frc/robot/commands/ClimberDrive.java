@@ -7,7 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.Controllers.Sax.ButtonsPort;
+import frc.robot.Constants.Controllers.Sax.ButtonPorts;
 import frc.robot.subsystems.Climber;
 
 
@@ -28,13 +28,13 @@ public class ClimberDrive extends Command {
   @Override
   public void execute() {
     // Hook positioner forward
-    if (RobotContainer.saxController.getRawButton(ButtonsPort.PINK))
+    if (RobotContainer.saxController.getRawButton(ButtonPorts.PINK))
       Climber.Motors.hookPositioner.set(Constants.Climber.HOOK_POSITIONER_SPEED);
     else
       Climber.Motors.hookPositioner.set(0);
 
     // Raise the robot, via activating climber
-    if (RobotContainer.saxController.getRawButton(ButtonsPort.JOYSTICK))
+    if (RobotContainer.saxController.getRawButton(ButtonPorts.JOYSTICK))
       Climber.Motors.one.set(Constants.Climber.SPEED);
     else {
       Climber.Motors.one.set(0);
@@ -42,7 +42,7 @@ public class ClimberDrive extends Command {
     }
 
     // Reverse Climber
-    if (RobotContainer.saxController.getRawButton(ButtonsPort.GREEN))
+    if (RobotContainer.saxController.getRawButton(ButtonPorts.GREEN))
       Climber.Motors.one.set(-1 * Constants.Climber.SPEED);
     else {
       Climber.Motors.one.set(0);
@@ -50,7 +50,7 @@ public class ClimberDrive extends Command {
     }
 
     // Hook positioner backwards
-    if (RobotContainer.saxController.getRawButton(ButtonsPort.PURPLE))
+    if (RobotContainer.saxController.getRawButton(ButtonPorts.PURPLE))
       Climber.Motors.hookPositioner.set(-1 * Constants.Climber.HOOK_POSITIONER_SPEED);
     else
       Climber.Motors.hookPositioner.set(0);

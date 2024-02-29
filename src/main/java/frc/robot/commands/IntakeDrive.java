@@ -7,7 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.Controllers.Sax.AxisPort;
-import frc.robot.Constants.Controllers.Sax.ButtonsPort;
+import frc.robot.Constants.Controllers.Sax.ButtonPorts;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 
@@ -32,23 +32,23 @@ public class IntakeDrive extends Command {
     Intake.driveIntakeAuto();
     
     // Activate intake
-    if (RobotContainer.saxController.getRawButton(ButtonsPort.BLUE))
+    if (RobotContainer.saxController.getRawButton(ButtonPorts.BLUE))
       Intake.setSpeed(Constants.Intake.SPEED);
-    else if (Intake.Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT)
+    else if (Intake.Encoders.lift.get() <= Constants.Intake.ON_LIMIT)
       Intake.setSpeed(0);
 
     // Reverse intake
-    if (RobotContainer.saxController.getRawButton(ButtonsPort.ORANGE))
+    if (RobotContainer.saxController.getRawButton(ButtonPorts.ORANGE))
       Intake.setSpeed(-1 * Constants.Intake.SPEED);
     else
       Intake.setSpeed(0);
 
     // Intake position
-    if (RobotContainer.saxController.getRawButton(ButtonsPort.SALMON))
+    if (RobotContainer.saxController.getRawButton(ButtonPorts.SALMON))
       Intake.driveLiftToPos(1, Constants.Intake.LIFT_SPEED_MULTIPLIER);
     
     // Shooting position
-    if (RobotContainer.saxController.getRawButton(ButtonsPort.YELLOW))
+    if (RobotContainer.saxController.getRawButton(ButtonPorts.YELLOW))
       Intake.driveLiftToPos(3, Constants.Intake.LIFT_SPEED_MULTIPLIER);
   }
   // Called once the command ends or is interrupted.

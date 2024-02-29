@@ -26,7 +26,7 @@ public final class LimeLight extends SubsystemBase {
 	* The horizontal offset from the limelight crosshair to the target
 	* See <a href="https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">...</a>
 	*/
-	private static double
+	public static double
 			/**
 			 * The offset of the apriltag from the Limelight crosshair (Horizontal)
 			 */
