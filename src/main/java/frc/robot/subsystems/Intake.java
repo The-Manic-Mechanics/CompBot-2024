@@ -55,7 +55,7 @@ public class Intake extends SubsystemBase {
       Motors.lift.set(0);
     else if ((Encoders.lift.get() <= Constants.Encoders.Intake.HIGH_LIMIT) && (RobotContainer.saxController.getRawAxis(AxisPort.X) > 0)) 
       Motors.lift.set(0);
-    else 
+    else
       Motors.lift.set(speed);
   }
 
