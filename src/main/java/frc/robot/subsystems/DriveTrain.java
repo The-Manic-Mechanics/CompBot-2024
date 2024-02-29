@@ -10,14 +10,18 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
+import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.Auton;
 import frc.robot.Constants.DriveTrain.*;
 
 /**
@@ -39,10 +43,59 @@ public final class DriveTrain extends SubsystemBase {
     */
 	private static MecanumDriveWheelPositions wheelPositions;
 
-	/**
-	* Used for tracking how far the robot actually goes compared to what values are being inputed
-	*/
-	private static MecanumDriveKinematics mecanumDriveKinematics;
+
+
+	public static class Kinematics {
+		/**
+		 * Used for tracking how far the robot actually goes compared to what values are being inputed
+		 */
+		public static MecanumDriveKinematics mecanumDriveKinematics;
+		private static MecanumDriveWheelPositions wheelPositions;
+		public static MecanumDriveWheelSpeeds mecanumDriveWheelSpeeds;
+
+		public static Supplier<ChassisSpeeds> getMecanumChassisSpeeds() {
+			return (Supplier<ChassisSpeeds>) () -> mecanumDriveKinematics.toChassisSpeeds(mecanumDriveWheelSpeeds);
+		}
+
+		/**
+		 * Gets the current wheel positions.
+		 *
+		 * @return A filled-out MecanumDriveWheelPositions instance.
+		 */
+		public static MecanumDriveWheelPositions getWheelPositions() {
+			return new MecanumDriveWheelPositions(
+					DriveTrain.Encoders.frontLeft.getDistance(), DriveTrain.Encoders.frontRight.getDistance(),
+					DriveTrain.Encoders.rearLeft.getDistance(), DriveTrain.Encoders.rearRight.getDistance());
+		}
+
+		/**
+		 * Supplies the DriveTrain wheel speeds.
+		 * 
+		 * @return A filled-out MecanumDriveWheelSpeeds instance.
+		 */
+		// FIXME: Not sure if this should be negative or not
+		public static Supplier<MecanumDriveWheelSpeeds> getWheelSpeeds() {
+			Kinematics.mecanumDriveWheelSpeeds = new MecanumDriveWheelSpeeds(
+					Motors.frontLeft.get() * Auton.MAX_SPEED,
+					Motors.frontRight.get() * Auton.MAX_SPEED,
+					Motors.rearLeft.get() * Auton.MAX_SPEED,
+					Motors.rearRight.get() * Auton.MAX_SPEED);
+			return (Supplier<MecanumDriveWheelSpeeds>) () -> Kinematics.mecanumDriveWheelSpeeds;
+		}
+
+		/**
+		 * Sets voltages to each of the motors.
+		 * 
+		 * @param inVolts The voltages to set each motor with.
+		 */
+		public static void driveVolts(MecanumDriveMotorVoltages inVolts) {
+			Motors.frontLeft.setVoltage(inVolts.frontLeftVoltage);
+			Motors.frontRight.setVoltage(inVolts.frontRightVoltage);
+			Motors.rearLeft.setVoltage(inVolts.rearLeftVoltage);
+			Motors.rearRight.setVoltage(inVolts.rearRightVoltage);
+		}
+	}
+
 
 	public static class Motors {
 		public static CANSparkMax frontLeft, frontRight, backLeft, backRight;

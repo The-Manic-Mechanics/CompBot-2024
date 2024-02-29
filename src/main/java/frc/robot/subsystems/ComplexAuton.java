@@ -1,0 +1,65 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.subsystems;
+
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.function.Supplier;
+import edu.wpi.first.math.geometry.Pose2d;
+
+/**
+ * PathPlanner implementation auton
+ */
+public class ComplexAuton extends SubsystemBase {
+  public static SimpleMotorFeedforward feedforward;
+  
+  /** Creates a new ComplexAuton. */
+  public ComplexAuton() {   
+    // TODO: Unsure on what this does exactly but I know we can get the values from SysID 
+    // FIXME: Fill this in
+    feedforward = new SimpleMotorFeedforward(0.1, 0.1, 0.1);
+  }
+  
+  /**
+   * Loads the inputted paths from their files into variables
+   * @param paths The paths to the trajectories in the form "paths/YourPath.wpilib.json"
+   * @return The an array containing the loaded trajectories in the same order that they were loaded
+   */
+  public static Trajectory[] loadPaths(String[] paths) throws IOException {
+    Trajectory[] trajectories = new Trajectory[paths.length];
+    Path fs = Filesystem.getDeployDirectory().toPath();
+    for (int i = 0; i != paths.length; i++) {
+      try {
+        Path f_path = fs.resolve(paths[i]);
+        trajectories[i] = TrajectoryUtil.fromPathweaverJson(f_path);
+      } catch (IOException ex) {
+        DriverStation.reportError("Unable to %open trajectory: " + paths[i], ex.getStackTrace());
+        throw ex;
+      }
+    }
+    return trajectories;
+  }
+
+  /**
+   * Gets the pose of the robot using an apriltag if avalible, and uses odemetry if not
+   * @return The bot pose as a Pose2d based off the nearest apriltag, otherwise use the odometry
+   */
+  public static Supplier<Pose2d> getPoseDual() {
+    if (LimeLight.tagID != 0)
+      return (Supplier<Pose2d>)() -> LimeLight.getBotPose2d();
+    return (Supplier<Pose2d>)() -> DriveTrain.Odometry.mecanumDriveOdometry.getPoseMeters();
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+  }
+}

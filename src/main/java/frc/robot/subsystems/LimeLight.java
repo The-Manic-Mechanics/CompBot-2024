@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -90,10 +92,11 @@ public final class LimeLight extends SubsystemBase {
 
 	}
 
-    /**
-     * @return The bot pose as a <b>Translation2d</b>
+     /**
+     * @return The bot pose as a <b>Pose2d</b>
     */
-	public static Translation2d GetBotPose2d() {
-		return new Translation2d(botPoseArray[0], botPoseArray[1]);
+	public static Pose2d getBotPose2d() {
+		// TODO Figure out whether these values make sense in the context they're used
+		return new Pose2d(botPoseArray[0], botPoseArray[1], new Rotation2d(botPoseArray[5]));
 	}
 }

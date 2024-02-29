@@ -51,11 +51,11 @@ public class Intake extends SubsystemBase {
    * @param speed The speed to drive the lift at
    */
   public static void driveLift(double speed) {
-    if ((Encoders.lift.get() >= Constants.Encoders.Intake.LOWER_LIMIT) && (RobotContainer.saxController.getRawAxis(AxisPort.X) < 0)) 
-      Motors.lift.set(0);
-    else if ((Encoders.lift.get() <= Constants.Encoders.Intake.HIGH_LIMIT) && (RobotContainer.saxController.getRawAxis(AxisPort.X) > 0)) 
-      Motors.lift.set(0);
-    else
+    // if ((Encoders.lift.get() >= Constants.Encoders.Intake.LOWER_LIMIT) && (RobotContainer.saxController.getRawAxis(AxisPort.X) < 0)) 
+    //   Motors.lift.set(0);
+    // else if ((Encoders.lift.get() <= Constants.Encoders.Intake.HIGH_LIMIT) && (RobotContainer.saxController.getRawAxis(AxisPort.X) > 0)) 
+    //   Motors.lift.set(0);
+    // else
       Motors.lift.set(speed);
   }
 
