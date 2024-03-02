@@ -21,7 +21,9 @@ import org.ejml.data.CMatrixRMaj;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.proto.Trajectory;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -38,17 +40,19 @@ import frc.robot.Constants.PIDControllers.*;
 public class RobotContainer {
   public static SendableChooser<Command> autoRoutineChooser;
   public static SendableChooser<Trajectory> autonPathChooser;
+
   private final Gyroscope sysGyroscope = new Gyroscope();
+  private final DriveTrain sysDriveTrain = new DriveTrain();
+  private final ComplexAuton sysComplexAuton = new ComplexAuton();
+
   public static final XboxController driverOneController = new XboxController(Controllers.DRIVERONE_PORT);
   public static final XboxController driverTwoController = new XboxController(Controllers.DRIVERTWO_PORT);
 
   public static final GenericHID saxController = new GenericHID(Constants.Controllers.Sax.PORT);
-  public static final DriveTrain sysDriveTrain;
-  public static final ComplexAuton sysComplexAuton;
+
+  public static Pose2d initPose;
 
   public RobotContainer() {
-    sysDriveTrain = new DriveTrain();
-    sysComplexAuton = new ComplexAuton();
     Intake sysIntake = new Intake();
     Shooter sysShooter = new Shooter();
     Climber sysClimber = new Climber();
@@ -66,7 +70,16 @@ public class RobotContainer {
     autoRoutineChooser = new SendableChooser<>();
     autonPathChooser = new SendableChooser<Trajectory>();
 
+    Constants.Auton.loadTrajectoriesFromPaths();
+    autonPathChooser.setDefaultOption("Drive Straight", Auton.trajectories[0]);
+
     SmartDashboard.putData("Auton Chooser", autoRoutineChooser);
+
+    initPose = new Pose2d(
+      autonPathChooser.getSelected().getInitialPose().getX(), 
+      autonPathChooser.getSelected().getInitialPose().getY(), 
+      new Rotation2d(0, 0)
+    );
   }
 
   public Command getAutonomousCommand() {

@@ -4,6 +4,12 @@
 
 package frc.robot;
 
+import java.io.IOException;
+
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.subsystems.ComplexAuton;
+
 public final class Constants {
 	public static class Controllers {
 		/**
@@ -287,6 +293,27 @@ public final class Constants {
 		// TODO: Factor in the wheel diameters and gear ratios
 		public static final byte SPARKMAX_COUNTS_PER_REV = 42;
 
+
+		/**
+		 * The file paths to all Pathweaver paths in the project
+		 */
+		// TODO: Fill this in
+		public static final String[] ALL_PATHS_ORDER = { "output/Straight.wpilib.json" };
+
+		/**
+		 * All paths in the project loaded as usable Trajectories
+		 */
+		public static Trajectory [] trajectories;
+
+		public static void loadTrajectoriesFromPaths() {
+			try {
+				trajectories = ComplexAuton.loadPaths(Auton.ALL_PATHS_ORDER);
+			} catch (IOException ex) {
+				DriverStation.reportError("Failed to load trajectories", ex.getStackTrace());
+			}
+		}
+
+		// TODO: Fill all of these in
 		public static class FeedForwardControllers {
 			/**
 			 * The static gain, determined by a SysID characterization.
@@ -302,7 +329,7 @@ public final class Constants {
 			public static final double ACCEL_GAIN = 0;
 		}
 	}
-	
+	// TODO: Fill all of these in
 	public static class PIDControllers {
 		public static class Holonomic {
 			/**

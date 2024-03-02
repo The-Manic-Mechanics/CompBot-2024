@@ -10,6 +10,8 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.Auton;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Supplier;
@@ -25,7 +27,11 @@ public class ComplexAuton extends SubsystemBase {
   public ComplexAuton() {   
     // TODO: Unsure on what this does exactly but I know we can get the values from SysID 
     // FIXME: Fill this in
-    feedforward = new SimpleMotorFeedforward(0.1, 0.1, 0.1);
+    feedforward = new SimpleMotorFeedforward(
+      Auton.FeedForwardControllers.STATIC_GAIN, 
+      Auton.FeedForwardControllers.VELOCITY_GAIN, 
+      Auton.FeedForwardControllers.ACCEL_GAIN
+    );
   }
   
   /**
