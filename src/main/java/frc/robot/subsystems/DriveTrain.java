@@ -14,7 +14,6 @@ import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -168,9 +167,5 @@ public final class DriveTrain extends SubsystemBase {
 					Gyroscope.sensor.getRotation2d(),
 					Kinematics.wheelPositions,
 					LimeLight.getBotPose2d());
-
-		SmartDashboard.putNumber("X Value", RobotContainer.driverOneController.getLeftX());
-		SmartDashboard.putNumber("Y Value", RobotContainer.driverOneController.getLeftY());
-		SmartDashboard.putNumber("Z Value", RobotContainer.driverOneController.getRightX());
 	}
 }

@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.io.IOException;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.ComplexAuton;
@@ -146,6 +147,8 @@ public final class Constants {
 		 * The speed that the shooter spins at (As a percentage)
 		 */
 		public static final byte SPEED = 1;
+
+		public static final Pose2d [] SHOOTING_POSITIONS = {};
 	}
 
 	public static class Encoders {
@@ -218,7 +221,7 @@ public final class Constants {
 		/**
 		 * The lowest point the intake can be driven to
 		 */
-		public static final short LOWER_LIMIT = 690;
+		public static final short LOW_LIMIT = 690;
 		/**
 		 * The highest point the intake can be driven to
 		 */
@@ -298,7 +301,7 @@ public final class Constants {
 		 * The file paths to all Pathweaver paths in the project
 		 */
 		// TODO: Fill this in
-		public static final String[] ALL_PATHS_ORDER = { "output/Straight.wpilib.json" };
+		public static final String[] ALL_PATHS_ORDER = {"output/Straight.wpilib.json"};
 
 		/**
 		 * All paths in the project loaded as usable Trajectories

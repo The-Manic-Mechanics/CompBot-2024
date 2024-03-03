@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.Auton;
 import frc.robot.Constants.Controllers;
+import frc.robot.commands.AutoShooterAlign;
 import frc.robot.commands.ClimberDrive;
 import frc.robot.commands.DriveMecanum;
 import frc.robot.commands.IntakeDrive;
@@ -16,13 +17,9 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Gyroscope;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-
-import org.ejml.data.CMatrixRMaj;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -33,26 +30,34 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.PIDControllers.*;
 
 public class RobotContainer {
   public static SendableChooser<Command> autoRoutineChooser;
   public static SendableChooser<Trajectory> autonPathChooser;
 
-  private final Gyroscope sysGyroscope = new Gyroscope();
   private final DriveTrain sysDriveTrain = new DriveTrain();
   private final ComplexAuton sysComplexAuton = new ComplexAuton();
 
+  AutoShooterAlign cmdAutoShooterAlign = new AutoShooterAlign(sysDriveTrain, sysComplexAuton);
+
   public static final XboxController driverOneController = new XboxController(Controllers.DRIVERONE_PORT);
   public static final XboxController driverTwoController = new XboxController(Controllers.DRIVERTWO_PORT);
+
+  public static final JoystickButton
+  // FIXME: These are not the correct values 
+    driverOneX = new JoystickButton(driverOneController, 1),
+    driverOneA = new JoystickButton(driverOneController, 4),
+    driverOneB = new JoystickButton(driverOneController, 4),
+    driverOneY = new JoystickButton(driverOneController, 4);
 
   public static final GenericHID saxController = new GenericHID(Constants.Controllers.Sax.PORT);
 
   public static Pose2d initPose;
 
   public RobotContainer() {
+    Gyroscope sysGyroscope = new Gyroscope();
     Intake sysIntake = new Intake();
     Shooter sysShooter = new Shooter();
     Climber sysClimber = new Climber();
@@ -78,8 +83,17 @@ public class RobotContainer {
     initPose = new Pose2d(
       autonPathChooser.getSelected().getInitialPose().getX(), 
       autonPathChooser.getSelected().getInitialPose().getY(), 
-      new Rotation2d(0, 0)
+      // TODO: May need to be changed to autonPathChooser.getSelected().getInitialPose().getRotation()
+      Gyroscope.sensor.getRotation2d()
     );
+
+    configureBindings();
+  }
+
+  // TODO: Bind SysId commands to buttons
+  private void configureBindings() {
+    // Configure controller bindings here.
+    driverOneA.onTrue(cmdAutoShooterAlign);
   }
 
   public Command getAutonomousCommand() {
