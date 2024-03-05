@@ -29,7 +29,7 @@ public class ShooterDrive extends Command {
   public void execute() {
     // TODO: The drivers may want this changed
     // Turns on the shooter if it is past the threshold and if the Red button is pressed
-    if (Intake.Encoders.lift.get() <= Constants.Intake.SHOOTER_ON_LIMIT) 
+    if (Intake.Encoders.lift.get() <= Constants.Encoders.Intake.SHOOTER_ON_LIMIT) 
       if (RobotContainer.saxController.getRawButton(ButtonPorts.RED))
         Shooter.setSpeed(Constants.Shooter.SPEED);
       else

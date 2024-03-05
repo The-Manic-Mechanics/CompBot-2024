@@ -14,16 +14,15 @@ public class Gyroscope extends SubsystemBase {
     /**
      * Stores the current pitch rotation of the robot obtained from the sensor.
      */
-    public static double
-        pitch,
-        /**
-         * Stores the current roll rotation of the robot obtained from the sensor.
-         */ 
-        roll,
-        /**
-         * Stores the current yaw rotation of the robot obtained from the sensor.
-         */
-        yaw;
+    public static double pitch;
+    /**
+     * Stores the current roll rotation of the robot obtained from the sensor.
+     */ 
+    public static double roll;
+    /**
+     * Stores the current yaw rotation of the robot obtained from the sensor.
+     */
+    public static double yaw;
     
 	public Gyroscope() {
         sensor = new AHRS(Port.kMXP);

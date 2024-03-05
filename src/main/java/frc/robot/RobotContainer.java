@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.PIDControllers.*;
 
 public class RobotContainer {
@@ -45,12 +46,13 @@ public class RobotContainer {
   public static final XboxController driverOneController = new XboxController(Controllers.DRIVERONE_PORT);
   public static final XboxController driverTwoController = new XboxController(Controllers.DRIVERTWO_PORT);
 
-  public static final JoystickButton
-  // FIXME: These are not the correct values 
-    driverOneX = new JoystickButton(driverOneController, 1),
-    driverOneA = new JoystickButton(driverOneController, 4),
-    driverOneB = new JoystickButton(driverOneController, 4),
-    driverOneY = new JoystickButton(driverOneController, 4);
+  public static final JoystickButton driverOneX = new JoystickButton(driverOneController, 3);
+  public static final JoystickButton driverOneA = new JoystickButton(driverOneController, 1);
+  public static final JoystickButton driverOneB = new JoystickButton(driverOneController, 2);
+  public static final JoystickButton driverOneY = new JoystickButton(driverOneController, 4);
+
+  public static final POVButton driveOnePOV = new POVButton(driverOneController, -1);
+
 
   public static final GenericHID saxController = new GenericHID(Constants.Controllers.Sax.PORT);
 

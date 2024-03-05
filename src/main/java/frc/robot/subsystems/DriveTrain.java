@@ -77,7 +77,6 @@ public final class DriveTrain extends SubsystemBase {
 		 * 
 		 * @return A filled-out MecanumDriveWheelSpeeds instance.
 		 */
-		// FIXME: Not sure if this should be negative or not
 		public static Supplier<MecanumDriveWheelSpeeds> getWheelSpeeds() {
 			Kinematics.mecanumDriveWheelSpeeds = new MecanumDriveWheelSpeeds(
 					Motors.frontLeft.get() * Auton.MAX_SPEED,

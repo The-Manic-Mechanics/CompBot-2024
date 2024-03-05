@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.Arrays;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -21,7 +23,8 @@ import frc.robot.subsystems.ComplexAuton;
 import frc.robot.subsystems.DriveTrain;
 
 /**
- * Command to generate a trajectory to the best and nearest shooting position and follow said Trajectory
+ * Command to generate a trajectory to the best and nearest shooting position
+ * and follow said Trajectory
  */
 public class AutoShooterAlign extends Command {
   DriveTrain sysDriveTrain;
@@ -41,9 +44,7 @@ public class AutoShooterAlign extends Command {
 
   int closestPointIndex;
 
-  /** Creates a new AutoShooterAlign. */
   public AutoShooterAlign(DriveTrain inSysDriveTrain, ComplexAuton inSysComplexAuton) {
-    // Use addRequirements() here to declare subsystem dependencies.
     sysDriveTrain = inSysDriveTrain;
     sysComplexAuton = inSysComplexAuton;
 
@@ -53,13 +54,12 @@ public class AutoShooterAlign extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // FIXME: Not entirely sure what "when the command is initially scheduled" means, the code below should be run once on the schedualing of the command
-
     scheduler = CommandScheduler.getInstance();
 
-    double [] distances = new double[Constants.Shooter.SHOOTING_POSITIONS.length];
-    
-    // Looping through each Pose2d in SHOOTING_POSITIONS and putting the distance from the current botpose to said Pose2d into distances[]
+    double[] distances = new double[Constants.Shooter.SHOOTING_POSITIONS.length];
+
+    // Looping through each Pose2d in SHOOTING_POSITIONS and putting the distance
+    // from the current botpose to said Pose2d into distances[]
     for (int i = 0; i != Constants.Shooter.SHOOTING_POSITIONS.length; i++) {
       sideLenOne = Math.abs(Constants.Shooter.SHOOTING_POSITIONS[i].getX() - ComplexAuton.getPoseDual().get().getX());
       sideLenTwo = Math.abs(Constants.Shooter.SHOOTING_POSITIONS[i].getY() - ComplexAuton.getPoseDual().get().getY());
@@ -68,7 +68,8 @@ public class AutoShooterAlign extends Command {
     }
 
     least = distances[0];
-    // Looping through each double in distances to find which one is the least and putting the index to that double into closestPointIndex
+    // Looping through each double in distances to find which one is the least and
+    // putting the index to that double into closestPointIndex
     for (int i = 1; i != distances.length; i++) {
       prevLeast = least;
       least = Math.min(least, distances[i]);
@@ -79,17 +80,12 @@ public class AutoShooterAlign extends Command {
         closestPointIndex = i;
     }
 
-
-
     mecanumController = new MecanumControllerCommand(
-        // FIXME: May need to use different override of generateTrajectory()
         TrajectoryGenerator.generateTrajectory(
-          ComplexAuton.getPoseDual().get(), 
-          null,
-          Constants.Shooter.SHOOTING_POSITIONS[closestPointIndex], 
-          new TrajectoryConfig(
-            Auton.MAX_SPEED, 
-            Auton.MAX_ACCEL)),
+            Arrays.asList(ComplexAuton.getPoseDual().get(), Constants.Shooter.SHOOTING_POSITIONS[closestPointIndex]),
+            new TrajectoryConfig(
+                Auton.MAX_SPEED,
+                Auton.MAX_ACCEL)),
         ComplexAuton.getPoseDual(),
         ComplexAuton.feedforward,
         DriveTrain.Kinematics.mecanumDriveKinematics,
@@ -113,7 +109,7 @@ public class AutoShooterAlign extends Command {
         sysDriveTrain,
         sysComplexAuton);
 
-        scheduler.schedule(mecanumController);
+    scheduler.schedule(mecanumController);
   }
 
   // Called once the command ends or is interrupted.
@@ -127,23 +123,19 @@ public class AutoShooterAlign extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (
-      (RobotContainer.driverOneController.getLeftX() != 0)
-      || 
-      (RobotContainer.driverOneController.getLeftY() != 0) 
-      || 
-      (RobotContainer.driverOneController.getRightX() != 0)
-    ) {
+    if ((RobotContainer.driverOneController.getLeftX() != 0)
+        ||
+        (RobotContainer.driverOneController.getLeftY() != 0)
+        ||
+        (RobotContainer.driverOneController.getRightX() != 0)) {
       isAligning = false;
       return true;
-    }
-    else if (mecanumController.isFinished()) {
+    } else if (mecanumController.isFinished()) {
       isAligning = false;
       return true;
-    }
-    else {
+    } else {
       isAligning = true;
-      return false; 
+      return false;
     }
   }
 }

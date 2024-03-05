@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.Controllers.Sax.AxisPort;
 import frc.robot.Constants.Controllers.Sax.ButtonPorts;
 
 public class Intake extends SubsystemBase {
@@ -29,7 +28,7 @@ public class Intake extends SubsystemBase {
     Motors.lift = new WPI_VictorSPX(Constants.Motors.Ports.Intake.LIFT);
     Motors.right.setInverted(true);
     Encoders.lift = new Encoder(Constants.Encoders.Ports.Intake.LIFT_A, Constants.Encoders.Ports.Intake.LIFT_B);
-    Encoders.lift.setDistancePerPulse(Constants.Intake.LIFT_DISTANCE_PER_PULSE);
+    Encoders.lift.setDistancePerPulse(Constants.Encoders.Intake.LIFT_DISTANCE_PER_PULSE);
     Encoders.lift.reset();
   }
 
@@ -70,7 +69,7 @@ public class Intake extends SubsystemBase {
       // Pickup position
       case 1:
         // If the lift is below or at the pickup position stop, otherwise keep driving
-        if (Encoders.lift.get() >= Constants.Intake.PICKUP_POSITION_HIGHER)
+        if (Encoders.lift.get() >= Constants.Encoders.Intake.PICKUP_POSITION_HIGHER)
           driveLift(0);
         else
           driveLift(-speed);
@@ -80,9 +79,9 @@ public class Intake extends SubsystemBase {
       // Amp scoring position
       case 2:
         // If the lift is outside the amp scoring range keep driving
-        if ((Encoders.lift.get() <= Constants.Intake.AMP_SCORING_POSITION_UPPER) && (Encoders.lift.get() >= Constants.Intake.AMP_SCORING_POSITION_LOWER))
+        if ((Encoders.lift.get() <= Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER) && (Encoders.lift.get() >= Constants.Encoders.Intake.AMP_SCORING_POSITION_LOWER))
           // If the lift is below the upper limit drive downwards if its not drive upwards
-          if (Encoders.lift.get() <= Constants.Intake.AMP_SCORING_POSITION_UPPER)
+          if (Encoders.lift.get() <= Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER)
             driveLift(-1 * speed);
           else
             driveLift(speed);
@@ -94,7 +93,7 @@ public class Intake extends SubsystemBase {
       // Shooter feeding position
       case 3:
         // If the lift is above or at the shooting position, stop it, otherwise keep driving upwards
-        if (Encoders.lift.get() <= Constants.Intake.SHOOTING_POSITION_LOWER)
+        if (Encoders.lift.get() <= Constants.Encoders.Intake.SHOOTING_POSITION_LOWER)
           driveLift(0);
         else
           driveLift(speed);
@@ -108,10 +107,9 @@ public class Intake extends SubsystemBase {
    */
   public static void driveIntakeAuto() {
 
-    if (Encoders.lift.get() >= Constants.Intake.ON_LIMIT)
-      setSpeed(Constants.Intake.SPEED);
+    if (Encoders.lift.get() >= Constants.Encoders.Intake.ON_LIMIT)
+      setSpeed(frc.robot.Constants.Intake.SPEED);
     // If the intake is not running in reverse and the blue button is not being pressed set the speed to 0
-    // TODO: Check if this binding needs to be updated
     else if ((Motors.left.get() > 0) && !RobotContainer.saxController.getRawButton(ButtonPorts.BLUE))
       setSpeed(0); 
   }

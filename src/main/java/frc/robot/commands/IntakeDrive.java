@@ -27,29 +27,29 @@ public class IntakeDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Intake.driveLift(RobotContainer.saxController.getRawAxis(AxisPort.X) * Constants.Intake.LIFT_SPEED_MULTIPLIER);
+    Intake.driveLift(RobotContainer.saxController.getRawAxis(AxisPort.X) * frc.robot.Constants.Intake.LIFT_SPEED_MULTIPLIER);
 
     Intake.driveIntakeAuto();
     
     // Activate intake
     if (RobotContainer.saxController.getRawButton(ButtonPorts.BLUE))
-      Intake.setSpeed(Constants.Intake.SPEED);
-    else if (Intake.Encoders.lift.get() <= Constants.Intake.ON_LIMIT)
+      Intake.setSpeed(frc.robot.Constants.Intake.SPEED);
+    else if (Intake.Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT)
       Intake.setSpeed(0);
 
     // Reverse intake
     if (RobotContainer.saxController.getRawButton(ButtonPorts.ORANGE))
-      Intake.setSpeed(-1 * Constants.Intake.SPEED);
+      Intake.setSpeed(-1 * frc.robot.Constants.Intake.SPEED);
     else
       Intake.setSpeed(0);
 
     // Intake position
     if (RobotContainer.saxController.getRawButton(ButtonPorts.SALMON))
-      Intake.driveLiftToPos(1, Constants.Intake.LIFT_SPEED_MULTIPLIER);
+      Intake.driveLiftToPos(1, frc.robot.Constants.Intake.LIFT_SPEED_MULTIPLIER);
     
     // Shooting position
     if (RobotContainer.saxController.getRawButton(ButtonPorts.YELLOW))
-      Intake.driveLiftToPos(3, Constants.Intake.LIFT_SPEED_MULTIPLIER);
+      Intake.driveLiftToPos(3, frc.robot.Constants.Intake.LIFT_SPEED_MULTIPLIER);
   }
   // Called once the command ends or is interrupted.
   @Override

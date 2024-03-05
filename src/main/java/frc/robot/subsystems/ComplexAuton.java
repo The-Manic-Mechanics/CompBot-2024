@@ -22,22 +22,21 @@ import edu.wpi.first.math.geometry.Pose2d;
  */
 public class ComplexAuton extends SubsystemBase {
   public static SimpleMotorFeedforward feedforward;
-  
-  /** Creates a new ComplexAuton. */
-  public ComplexAuton() {   
-    // TODO: Unsure on what this does exactly but I know we can get the values from SysID 
-    // FIXME: Fill this in
+
+  public ComplexAuton() {
     feedforward = new SimpleMotorFeedforward(
-      Auton.FeedForwardControllers.STATIC_GAIN, 
-      Auton.FeedForwardControllers.VELOCITY_GAIN, 
-      Auton.FeedForwardControllers.ACCEL_GAIN
-    );
+        Auton.FeedForwardControllers.STATIC_GAIN,
+        Auton.FeedForwardControllers.VELOCITY_GAIN,
+        Auton.FeedForwardControllers.ACCEL_GAIN);
   }
-  
+
   /**
    * Loads the inputted paths from their files into variables
-   * @param paths The paths to the trajectories in the form "paths/YourPath.wpilib.json"
-   * @return The an array containing the loaded trajectories in the same order that they were loaded
+   * 
+   * @param paths The paths to the trajectories in the form
+   *              "paths/YourPath.wpilib.json"
+   * @return The an array containing the loaded trajectories in the same order
+   *         that they were loaded
    */
   public static Trajectory[] loadPaths(String[] paths) throws IOException {
     // Instatiate the Trajectory array
@@ -57,17 +56,19 @@ public class ComplexAuton extends SubsystemBase {
   }
 
   /**
-   * Gets the pose of the robot using an apriltag if avalible, and uses odemetry if not
-   * @return The bot pose as a Pose2d based off the nearest apriltag, otherwise use the odometry
+   * Gets the pose of the robot using an apriltag if avalible, and uses odemetry
+   * if not
+   * 
+   * @return The bot pose as a Pose2d based off the nearest apriltag, otherwise
+   *         use the odometry
    */
   public static Supplier<Pose2d> getPoseDual() {
     if (LimeLight.tagID != 0)
-      return (Supplier<Pose2d>)() -> LimeLight.getBotPose2d();
-    return (Supplier<Pose2d>)() -> DriveTrain.Odometry.mecanumDriveOdometry.getPoseMeters();
+      return (Supplier<Pose2d>) () -> LimeLight.getBotPose2d();
+    return (Supplier<Pose2d>) () -> DriveTrain.Odometry.mecanumDriveOdometry.getPoseMeters();
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
   }
 }

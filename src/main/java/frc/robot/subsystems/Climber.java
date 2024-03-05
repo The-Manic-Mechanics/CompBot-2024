@@ -21,11 +21,10 @@ public class Climber extends SubsystemBase {
     public static WPI_VictorSPX hookPositioner;
   }
 
-  /** Creates a new Climber. */
   public Climber() {
     Motors.one = new CANSparkMax(Constants.Motors.Ports.Climber.ONE, MotorType.kBrushless);
     Motors.two = new CANSparkMax(Constants.Motors.Ports.Climber.TWO, MotorType.kBrushless);
-    
+
     Motors.hookPositioner = new WPI_VictorSPX(Constants.Motors.Ports.Climber.HOOK_POSITIONER);
 
     Motors.two.follow(Motors.one, false);
@@ -33,6 +32,5 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
   }
 }
