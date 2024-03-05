@@ -20,11 +20,9 @@ public class IntakeDrive extends Command {
     addRequirements(sysIntake);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     Intake.driveLift(RobotContainer.saxController.getRawAxis(AxisPort.X) * frc.robot.Constants.Intake.LIFT_SPEED_MULTIPLIER);
@@ -34,7 +32,8 @@ public class IntakeDrive extends Command {
     // Activate intake
     if (RobotContainer.saxController.getRawButton(ButtonPorts.BLUE))
       Intake.setSpeed(frc.robot.Constants.Intake.SPEED);
-    else if (Intake.Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT)
+    // TODO: Does this encoder check actually work yet?
+    else //if (Intake.Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT)
       Intake.setSpeed(0);
 
     // Reverse intake

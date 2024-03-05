@@ -15,7 +15,6 @@ import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.Auton;
 import java.util.function.Supplier;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -144,25 +143,25 @@ public final class DriveTrain extends SubsystemBase {
 				Encoders.rearLeft.getPosition(),
 				Encoders.rearRight.getPosition());
 
-		Odometry.mecanumDriveOdometry = new MecanumDriveOdometry(
-				Kinematics.mecanumDriveKinematics,
-				Gyroscope.sensor.getRotation2d(),
-				Kinematics.wheelPositions,
-				RobotContainer.initPose);
+		// Odometry.mecanumDriveOdometry = new MecanumDriveOdometry(
+		// 		Kinematics.mecanumDriveKinematics,
+		// 		Gyroscope.sensor.getRotation2d(),
+		// 		Kinematics.wheelPositions,
+		// 		RobotContainer.initPose);
 	}
 
 	@Override
 	public void periodic() {
 		Kinematics.wheelPositions = Kinematics.getWheelPositions();
 
-		Odometry.mecanumDriveOdometry.update(
-				Gyroscope.sensor.getRotation2d(),
-				Kinematics.wheelPositions);
+		// Odometry.mecanumDriveOdometry.update(
+		// 		Gyroscope.sensor.getRotation2d(),
+		// 		Kinematics.wheelPositions);
 
-		if (LimeLight.tagID != 0)
-			Odometry.mecanumDriveOdometry.resetPosition(
-					Gyroscope.sensor.getRotation2d(),
-					Kinematics.wheelPositions,
-					LimeLight.getBotPose2d());
+		// if (LimeLight.tagID != 0)
+		// 	Odometry.mecanumDriveOdometry.resetPosition(
+		// 			Gyroscope.sensor.getRotation2d(),
+		// 			Kinematics.wheelPositions,
+		// 			LimeLight.getBotPose2d());
 	}
 }

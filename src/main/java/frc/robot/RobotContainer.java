@@ -38,8 +38,10 @@ public class RobotContainer {
   public static SendableChooser<Command> autoRoutineChooser;
   public static SendableChooser<Trajectory> autonPathChooser;
 
-  private final DriveTrain sysDriveTrain = new DriveTrain();
-  private final ComplexAuton sysComplexAuton = new ComplexAuton();
+  private static Gyroscope sysGyroscope = new Gyroscope();
+  private static DriveTrain sysDriveTrain = new DriveTrain();
+  private static ComplexAuton sysComplexAuton = new ComplexAuton();
+
 
   AutoShooterAlign cmdAutoShooterAlign = new AutoShooterAlign(sysDriveTrain, sysComplexAuton);
 
@@ -59,7 +61,6 @@ public class RobotContainer {
   public static Pose2d initPose;
 
   public RobotContainer() {
-    Gyroscope sysGyroscope = new Gyroscope();
     Intake sysIntake = new Intake();
     Shooter sysShooter = new Shooter();
     Climber sysClimber = new Climber();
