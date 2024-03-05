@@ -127,18 +127,10 @@ public class RobotContainer {
     return Commands.sequence(
         new InstantCommand(() -> {
           DriveTrain.Odometry.resetDriveOdometry(autonPathChooser.getSelected().getInitialPose());
-          DriveTrain.Motors.frontLeft.setSafetyEnabled(false);
-          DriveTrain.Motors.frontRight.setSafetyEnabled(false);
-          DriveTrain.Motors.rearLeft.setSafetyEnabled(false);
-          DriveTrain.Motors.rearRight.setSafetyEnabled(false);
         }),
         mecanumController,
         new InstantCommand(() -> {
           DriveTrain.mecanum.driveCartesian(0, 0, 0);
-          DriveTrain.Motors.frontLeft.setSafetyEnabled(true);
-          DriveTrain.Motors.frontRight.setSafetyEnabled(true);
-          DriveTrain.Motors.rearLeft.setSafetyEnabled(true);
-          DriveTrain.Motors.rearRight.setSafetyEnabled(true);
         }));
   }
 }

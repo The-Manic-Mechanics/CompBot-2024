@@ -12,24 +12,31 @@ import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.Auton;
 import java.util.function.Supplier;
-import com.ctre.phoenix.motorcontrol.can.*;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 
 public final class DriveTrain extends SubsystemBase {
 	public static MecanumDrive mecanum;
 
 	public static class Motors {
-		public static WPI_VictorSPX frontLeft, frontRight, rearLeft, rearRight;
+		public static CANSparkMax frontLeft;
+		public static CANSparkMax frontRight;
+		public static CANSparkMax rearLeft;
+		public static CANSparkMax rearRight;
 	}
 
 	public static class Encoders {
-		public static Encoder frontLeft, frontRight, rearLeft, rearRight;
+		public static RelativeEncoder frontLeft;
+		public static RelativeEncoder frontRight;
+		public static RelativeEncoder rearLeft;
+		public static RelativeEncoder rearRight;
 	}
 
 	public static class Odometry {
@@ -68,8 +75,10 @@ public final class DriveTrain extends SubsystemBase {
 		 */
 		public static MecanumDriveWheelPositions getWheelPositions() {
 			return new MecanumDriveWheelPositions(
-					DriveTrain.Encoders.frontLeft.getDistance(), DriveTrain.Encoders.frontRight.getDistance(),
-					DriveTrain.Encoders.rearLeft.getDistance(), DriveTrain.Encoders.rearRight.getDistance());
+					DriveTrain.Encoders.frontLeft.getPosition(),
+					DriveTrain.Encoders.frontRight.getPosition(),
+					DriveTrain.Encoders.rearLeft.getPosition(),
+					DriveTrain.Encoders.rearRight.getPosition());
 		}
 
 		/**
@@ -100,10 +109,16 @@ public final class DriveTrain extends SubsystemBase {
 	}
 
 	public DriveTrain() {
-		DriveTrain.Motors.frontLeft = new WPI_VictorSPX(Constants.Motors.Ports.DriveTrain.FRONT_LEFT);
-		Motors.frontRight = new WPI_VictorSPX(Constants.Motors.Ports.DriveTrain.FRONT_RIGHT);
-		Motors.rearLeft = new WPI_VictorSPX(Constants.Motors.Ports.DriveTrain.BACK_LEFT);
-		Motors.rearRight = new WPI_VictorSPX(Constants.Motors.Ports.DriveTrain.BACK_RIGHT);
+		Motors.frontLeft = new CANSparkMax(Constants.Motors.Ports.DriveTrain.FRONT_LEFT, MotorType.kBrushless);
+		Motors.frontRight = new CANSparkMax(Constants.Motors.Ports.DriveTrain.FRONT_RIGHT, MotorType.kBrushless);
+		Motors.rearLeft = new CANSparkMax(Constants.Motors.Ports.DriveTrain.REAR_LEFT, MotorType.kBrushless);
+		Motors.rearRight = new CANSparkMax(Constants.Motors.Ports.DriveTrain.REAR_RIGHT, MotorType.kBrushless);
+
+		Encoders.frontLeft = Motors.frontLeft.getAlternateEncoder(Constants.Auton.SPARKMAX_COUNTS_PER_REV);
+		Encoders.frontRight = Motors.frontRight.getAlternateEncoder(Constants.Auton.SPARKMAX_COUNTS_PER_REV);
+		Encoders.rearLeft = Motors.rearLeft.getAlternateEncoder(Constants.Auton.SPARKMAX_COUNTS_PER_REV);
+		Encoders.rearRight = Motors.rearRight.getAlternateEncoder(Constants.Auton.SPARKMAX_COUNTS_PER_REV);
+
 		Motors.frontLeft.setInverted(true);
 		Motors.rearLeft.setInverted(true);
 
@@ -112,23 +127,6 @@ public final class DriveTrain extends SubsystemBase {
 				Motors.rearLeft,
 				Motors.frontRight,
 				Motors.rearRight);
-
-		Encoders.frontLeft = new Encoder(
-				Constants.Encoders.Ports.DriveTrain.FRONT_LEFT_A,
-				Constants.Encoders.Ports.DriveTrain.FRONT_LEFT_B);
-		Encoders.frontRight = new Encoder(
-				Constants.Encoders.Ports.DriveTrain.FRONT_RIGHT_A,
-				Constants.Encoders.Ports.DriveTrain.FRONT_RIGHT_B);
-		Encoders.rearLeft = new Encoder(
-				Constants.Encoders.Ports.DriveTrain.BACK_LEFT_A,
-				Constants.Encoders.Ports.DriveTrain.BACK_LEFT_B);
-		Encoders.rearRight = new Encoder(
-				Constants.Encoders.Ports.DriveTrain.BACK_RIGHT_A,
-				Constants.Encoders.Ports.DriveTrain.BACK_RIGHT_B);
-		Encoders.frontLeft.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
-		Encoders.frontRight.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
-		Encoders.rearLeft.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
-		Encoders.rearRight.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
 
 		Kinematics.mecanumDriveKinematics = new MecanumDriveKinematics(
 				new Translation2d(Constants.Motors.Locations.DriveTrain.FRONT_LEFT,
@@ -141,10 +139,10 @@ public final class DriveTrain extends SubsystemBase {
 						-1 * Constants.Motors.Locations.DriveTrain.BACK_RIGHT));
 
 		Kinematics.wheelPositions = new MecanumDriveWheelPositions(
-				Encoders.frontLeft.getDistance(),
-				Encoders.frontRight.getDistance(),
-				Encoders.rearLeft.getDistance(),
-				Encoders.rearRight.getDistance());
+				Encoders.frontLeft.getPosition(),
+				Encoders.frontRight.getPosition(),
+				Encoders.rearLeft.getPosition(),
+				Encoders.rearRight.getPosition());
 
 		Odometry.mecanumDriveOdometry = new MecanumDriveOdometry(
 				Kinematics.mecanumDriveKinematics,

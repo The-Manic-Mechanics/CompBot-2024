@@ -95,11 +95,11 @@ public final class Constants {
 				/**
 				 * The CAN port of the back left motor.
 				 */
-				public static final byte BACK_LEFT = 3;
+				public static final byte REAR_LEFT = 3;
 				/**
 				 * The CAN port of the back right motor.
 				 */
-				public static final byte BACK_RIGHT = 4;
+				public static final byte REAR_RIGHT = 4;
 			}
 			public static class Intake {
 				/**
