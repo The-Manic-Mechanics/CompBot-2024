@@ -11,6 +11,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.ComplexAuton;
 
+// TODO: Complete reworking comments.
 public final class Constants {
 	public static class Controllers {
 		/**
@@ -214,7 +215,7 @@ public final class Constants {
 		public static class Intake {
 			// TODO: Retake these values (New gear ratio on lift)
 			/**
-		 	* The lift's encoder's distance per pulse.
+		 	* The lift's encoder's distance per pulse. (1 is not the real value)
 		 	*/
 			public static final short LIFT_DISTANCE_PER_PULSE = 1;
 			/**
@@ -256,7 +257,6 @@ public final class Constants {
 	}
 	
 	public static class Climber {
-		// TODO: Rework comments
 		public static final float SPEED = 1;
 		/**
 		 * The average speed of the hook positioner
@@ -275,11 +275,11 @@ public final class Constants {
 		public static final float LIFT_SPEED_MULTIPLIER = .8f;
 	}
 
+	// TODO: Obtain this information:
 	public static class Auton {
 		/**
 		 * The max forward speed of the robot in meters per second.
 		 */
-		// FIXME: Get these values 
 		public static final float MAX_SPEED = 1;
 		/**
 		 * The prefered velocity of the robot in autonomous mode in meters per second.
@@ -288,38 +288,40 @@ public final class Constants {
 		/**
 		 * The distance between the left and right wheels in meters.
 		 */
-		public static final float TRACK_WIDTH_METERS = 0;
+		public static final float TRACK_WIDTH_METERS = 0.4699f;
 		/**
-		 * The distance between pulses of the encoders in feet.
+		 * The distance between pulses of the encoders, in feet.
 		 */
 		public static final float DISTANCE_PER_PULSE = 0;
 		/**
 		 * The maximum acceleration of the robot in meters per second.
 		 */
 		public static final float MAX_ACCEL = 0;
-
-		// TODO: Factor in the wheel diameters and gear ratios
+		// TODO: Fix placeholder SPARKMAX_COUNTS_PER_REV value:
+		/**
+		 * The amount of ticks per revolution in the SPARK MAX motors.
+		 */
 		public static final byte SPARKMAX_COUNTS_PER_REV = 42;
-
-
 		/**
-		 * The file paths to all PathWeaver paths in the 		 */
+		 * The file paths to all PathWeaver paths in the deploy filesystem.
+		 */
 		public static final String[] ALL_PATHS_ORDER = {"output/Straight.wpilib.json"};
-
 		/**
-		 * All paths in the project loaded as usable Trajectories
+		 * A non-constant cache storage for loaded trajectories.
 		 */
 		public static Trajectory [] trajectories;
-
+		/**
+		 * Attempts to load a trajectory from each path described in ALL_PATHS_ORDER.
+		 * @throws IOException If a trajectory failed to be opened or processed.
+		 */
 		public static void loadTrajectoriesFromPaths() {
 			try {
 				trajectories = ComplexAuton.loadPaths(Auton.ALL_PATHS_ORDER);
 			} catch (IOException ex) {
-				DriverStation.reportError("Failed to load trajectories", ex.getStackTrace());
+				DriverStation.reportError("Failed to load a trajectory!", ex.getStackTrace());
 			}
 		}
-		// TODO: Unsure on what this does exactly but I know we can get the values from SysID 
-		// TODO: Fill all of these in
+		// TODO: Run a SysID characterization.
 		public static class FeedForwardControllers {
 			/**
 			 * The static gain, determined by a SysID characterization.

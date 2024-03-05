@@ -27,7 +27,7 @@ public class ShooterDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // TODO: The drivers may want this changed
+    // TODO: The drivers may want this changed:
     // Turns on the shooter if it is past the threshold and if the Red button is pressed
     if (Intake.Encoders.lift.get() <= Constants.Encoders.Intake.SHOOTER_ON_LIMIT) 
       if (RobotContainer.saxController.getRawButton(ButtonPorts.RED))

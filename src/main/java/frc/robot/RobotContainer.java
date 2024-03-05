@@ -85,14 +85,14 @@ public class RobotContainer {
     initPose = new Pose2d(
       autonPathChooser.getSelected().getInitialPose().getX(), 
       autonPathChooser.getSelected().getInitialPose().getY(), 
-      // TODO: May need to be changed to autonPathChooser.getSelected().getInitialPose().getRotation()
+      // TODO: May need to be changed to autonPathChooser.getSelected().getInitialPose().getRotation().
       Gyroscope.sensor.getRotation2d()
     );
 
     configureBindings();
   }
 
-  // TODO: Bind SysId commands to buttons
+  // TODO: Bind SysID commands to gamepad buttons.
   private void configureBindings() {
     // Configure controller bindings here.
     driverOneA.onTrue(cmdAutoShooterAlign);
