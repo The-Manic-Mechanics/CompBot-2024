@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.Constants.Controllers.Sax.AxisPort;
 import frc.robot.Constants.Controllers.Sax.ButtonPorts;
 import frc.robot.RobotContainer;
@@ -13,9 +12,8 @@ import frc.robot.subsystems.Intake;
 
 public class IntakeDrive extends Command {
   Intake sysIntake;
-  /** Creates a new IntakeDrive. */
+
   public IntakeDrive(Intake inSysIntake) {
-    // Use addRequirements() here to declare subsystem dependencies.
     sysIntake = inSysIntake;
     addRequirements(sysIntake);
   }
@@ -26,38 +24,33 @@ public class IntakeDrive extends Command {
   @Override
   public void execute() {
     Intake.driveLift(RobotContainer.saxController.getRawAxis(AxisPort.X) * frc.robot.Constants.Intake.LIFT_SPEED_MULTIPLIER);
-
     Intake.driveIntakeAuto();
     
-    // Activate intake
-    if (RobotContainer.saxController.getRawButton(ButtonPorts.BLUE))
-      Intake.setSpeed(frc.robot.Constants.Intake.SPEED);
-    // TODO: Does this encoder check actually work yet?
-    else //if (Intake.Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT)
-      Intake.setSpeed(0);
-
-    // Reverse intake
-    if (RobotContainer.saxController.getRawButton(ButtonPorts.ORANGE))
+    // Following are immediate switches for different button>action bindings.
+    
+    // Drive the intake mechanism backwards.
+    if (RobotContainer.saxController.getRawButton(ButtonPorts.ORANGE) /* TODO: && Intake.Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT */)
       Intake.setSpeed(-1 * frc.robot.Constants.Intake.SPEED);
+    else if (RobotContainer.saxController.getRawButton(ButtonPorts.BLUE))
+    // Drive the intake mechanism forwards.
+      Intake.setSpeed(frc.robot.Constants.Intake.SPEED);
     else
       Intake.setSpeed(0);
 
-    // Intake position
+    // Drive the lift to the intake position.
     if (RobotContainer.saxController.getRawButton(ButtonPorts.SALMON))
       Intake.driveLiftToPos(1, frc.robot.Constants.Intake.LIFT_SPEED_MULTIPLIER);
-    
-    // Shooting position
-    if (RobotContainer.saxController.getRawButton(ButtonPorts.YELLOW))
+    else if (RobotContainer.saxController.getRawButton(ButtonPorts.YELLOW))
+    // Drive the lift to the shooting position.
       Intake.driveLiftToPos(3, frc.robot.Constants.Intake.LIFT_SPEED_MULTIPLIER);
   }
-  // Called once the command ends or is interrupted.
+
   @Override
   public void end(boolean interrupted) {
     Intake.setSpeed(0);
     Intake.Motors.lift.set(0);
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

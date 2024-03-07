@@ -24,7 +24,8 @@ import frc.robot.subsystems.DriveTrain;
 
 /**
  * Command to generate a trajectory to the best and nearest shooting position
- * and follow said Trajectory
+ * and then have the physical robot follow said Trajectory via a scheduled
+ * Command.
  */
 public class AutoShooterAlign extends Command {
   DriveTrain sysDriveTrain;
@@ -51,15 +52,13 @@ public class AutoShooterAlign extends Command {
     addRequirements(sysDriveTrain, sysComplexAuton);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     scheduler = CommandScheduler.getInstance();
 
     double[] distances = new double[Constants.Shooter.SHOOTING_POSITIONS.length];
 
-    // Looping through each Pose2d in SHOOTING_POSITIONS and putting the distance
-    // from the current botpose to said Pose2d into distances[]
+    // Looping through SHOOTING_POSITIONS[] and storing the distance of each BotPose into distances[].
     for (int i = 0; i != Constants.Shooter.SHOOTING_POSITIONS.length; i++) {
       sideLenOne = Math.abs(Constants.Shooter.SHOOTING_POSITIONS[i].getX() - ComplexAuton.getPoseDual().get().getX());
       sideLenTwo = Math.abs(Constants.Shooter.SHOOTING_POSITIONS[i].getY() - ComplexAuton.getPoseDual().get().getY());
@@ -68,8 +67,8 @@ public class AutoShooterAlign extends Command {
     }
 
     least = distances[0];
-    // Looping through each double in distances to find which one is the least and
-    // putting the index to that double into closestPointIndex
+
+    // Stores the index of the least value in distances[] in closestPointIndex.
     for (int i = 1; i != distances.length; i++) {
       prevLeast = least;
       least = Math.min(least, distances[i]);

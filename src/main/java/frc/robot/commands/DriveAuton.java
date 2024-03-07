@@ -20,9 +20,9 @@ public final class DriveAuton extends Command {
 
 	/**
 	 * @param inDriveInches The amount of inches to drive
-	 * @param inSpeedX      The speed to travel in the X direction
-	 * @param inSpeedY      The speed to travel in the Y direction
-	 * @param inSpeedZ      The speed to travel in the Z direction
+	 * @param inSpeedX The speed to travel in the X direction
+	 * @param inSpeedY The speed to travel in the Y direction
+	 * @param inSpeedZ The speed to travel in the Z direction
 	 */
 	public DriveAuton(
 			DriveTrain inSysDriveTrain, Gyroscope inSysGyroscope, double inDriveInches, double inSpeedX,
