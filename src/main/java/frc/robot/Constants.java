@@ -280,7 +280,7 @@ public final class Constants {
 		/**
 		 * The max forward speed of the robot in meters per second.
 		 */
-		public static final float MAX_SPEED = 1;
+		public static final float MAX_SPEED = 7.613f;
 		/**
 		 * The prefered velocity of the robot in autonomous mode in meters per second.
 		 */
@@ -290,9 +290,9 @@ public final class Constants {
 		 */
 		public static final float TRACK_WIDTH_METERS = 0.4699f;
 		/**
-		 * The distance between pulses of the encoders, in feet.
+		 * The distance the a wheel travels within one pulse on the encoders, in metres.
 		 */
-		public static final float DISTANCE_PER_PULSE = 0;
+		public static final float DISTANCE_PER_PULSE = .00191f;
 		/**
 		 * The maximum acceleration of the robot in meters per second.
 		 */
@@ -301,7 +301,7 @@ public final class Constants {
 		/**
 		 * The amount of ticks per revolution in the SPARK MAX motors.
 		 */
-		public static final byte SPARKMAX_COUNTS_PER_REV = 42;
+		public static final short SPARKMAX_COUNTS_PER_REV = 250;
 		/**
 		 * The file paths to all PathWeaver paths in the deploy filesystem.
 		 */

@@ -26,30 +26,22 @@ public class ClimberDrive extends Command {
     // Move the hook positioner forwards.
     if (RobotContainer.saxController.getRawButton(ButtonPorts.PINK))
       Climber.Motors.hookPositioner.set(Constants.Climber.HOOK_POSITIONER_SPEED);
+    // Move the hook positioner backwards.
+    else if (RobotContainer.saxController.getRawButton(ButtonPorts.PURPLE))
+      Climber.Motors.hookPositioner.set(-1 * Constants.Climber.HOOK_POSITIONER_SPEED);
     else
       Climber.Motors.hookPositioner.set(0);
 
     // Move the climber upwards.
     if (RobotContainer.saxController.getRawButton(ButtonPorts.JOYSTICK))
       Climber.Motors.one.set(Constants.Climber.SPEED);
-    else {
-      Climber.Motors.one.set(0);
-      Climber.Motors.two.set(0);
-    }
-
     // Move the climber downwards.
-    if (RobotContainer.saxController.getRawButton(ButtonPorts.GREEN))
+    else if (RobotContainer.saxController.getRawButton(ButtonPorts.GREEN))
       Climber.Motors.one.set(-1 * Constants.Climber.SPEED);
     else {
       Climber.Motors.one.set(0);
       Climber.Motors.two.set(0);
     }
-
-    // Move the hook positioner backwards.
-    if (RobotContainer.saxController.getRawButton(ButtonPorts.PURPLE))
-      Climber.Motors.hookPositioner.set(-1 * Constants.Climber.HOOK_POSITIONER_SPEED);
-    else
-      Climber.Motors.hookPositioner.set(0);
   }
 
   @Override
