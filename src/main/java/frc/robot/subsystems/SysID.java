@@ -36,16 +36,4 @@ public class SysID extends SubsystemBase {
 		Motors.rearLeft.setVoltage(driveVolts.baseUnitMagnitude());
 		Motors.rearRight.setVoltage(driveVolts.baseUnitMagnitude());
 	}
-
-	@Override
-	public void periodic() {
-		// if (RobotContainer.driverTwoController.getAButton() == true)
-		// 	CommandScheduler.getInstance().schedule(this.sysIdQuasistatic(Direction.kReverse));
-		// if (RobotContainer.driverTwoController.getYButton() == true)
-		// 	CommandScheduler.getInstance().schedule(this.sysIdQuasistatic(Direction.kForward));
-		// if (RobotContainer.driverTwoController.getXButton() == true)
-		// 	CommandScheduler.getInstance().schedule(this.sysIdDynamic(Direction.kForward));
-		// if (RobotContainer.driverTwoController.getBButton() == true)
-		// 	CommandScheduler.getInstance().schedule(this.sysIdDynamic(Direction.kReverse));
-	}
 }

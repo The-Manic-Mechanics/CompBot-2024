@@ -7,46 +7,13 @@ package frc.robot;
 import java.io.IOException;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.ComplexAuton;
 
 // TODO: Complete reworking comments.
 public final class Constants {
-	public static class Controllers {
-		/**
-		 * The port which the first driver's controller is connected to.
-		 */
-		public static final byte DRIVERONE_PORT = 0;
-		/**
-		 * The port which the second driver's controller is connected to.
-		 */
-		public static final byte DRIVERTWO_PORT = 1;
-
-		public static class Sax {
-			public static final byte PORT = 2;
-			public static class ButtonPorts {
-				public static final byte ORANGE = 1;
-				public static final byte RED = 2;
-				public static final byte BLUE = 3;
-				public static final byte GREEN = 4;
-				public static final byte SALMON = 5;
-				public static final byte YELLOW = 6;
-				public static final byte PINK = 7;
-				public static final byte PURPLE = 8;
-				public static final byte JOYSTICK = 13;
-			}
-			public static class AxisPort {
-				/**
-				 * X is towards the bell for positive and away for negative
-				 * Y is towards the buttons for positive and away for negative
-				 */
-				public static final byte X = 0;
-				public static final byte Y = 1;
-			}
-		}
-	}
-
 	public static class LimeLightMounting {
 		/**
 		 * How many degrees the limelight is mounted from perfectly vertical.
@@ -75,12 +42,12 @@ public final class Constants {
 				 * The position of the back left wheel relative to the center of the robot, in
 				 * meters.
 				 */
-				public static final float BACK_LEFT = 0;
+				public static final float REAR_LEFT = 0;
 				/**
 				 * The position of the back right wheel relative to the center of the robot, in
 				 * meters.
 				 */
-				public static final float BACK_RIGHT = 0;
+				public static final float REAR_RIGHT = 0;
 			}
 		}
 		public static class Ports {
@@ -94,11 +61,11 @@ public final class Constants {
 				 */
 				public static final byte FRONT_RIGHT = 2;
 				/**
-				 * The CAN port of the back left motor.
+				 * The CAN port of the rear left motor.
 				 */
 				public static final byte REAR_LEFT = 3;
 				/**
-				 * The CAN port of the back right motor.
+				 * The CAN port of the rear right motor.
 				 */
 				public static final byte REAR_RIGHT = 4;
 			}
@@ -149,45 +116,15 @@ public final class Constants {
 		 */
 		public static final byte SPEED = 1;
 
+		// TODO: Fill this in
+		/**
+		 * All the optimal positions the robot can shoot from.
+		 */
 		public static final Pose2d [] SHOOTING_POSITIONS = {};
 	}
 
 	public static class Encoders {
 		public static class Ports {
-			public static class DriveTrain {
-				/**
-				 * The A channel port of the front left encoder.
-				 */
-				public static final byte FRONT_LEFT_A = 30;
-				/**
-				 * The B channel port of the front left encoder.
-				 */
-				public static final byte FRONT_LEFT_B = 40;
-				/**
-				 * The A channel port of the front right encoder.
-				 */
-				public static final byte FRONT_RIGHT_A = 50;
-				/**
-				 * The B channel port of the front right encoder.
-				 */
-				public static final byte FRONT_RIGHT_B = 60;
-				/**
-				 * The A channel port of the back left encoder.
-				 */
-				public static final byte BACK_LEFT_A = 70;
-				/**
-				 * The B channel port of the back left encoder.
-				 */
-				public static final byte BACK_LEFT_B = 80;
-				/**
-				 * The A channel port of the back right encoder.
-				 */
-				public static final byte BACK_RIGHT_A = 90;
-				/**
-				 * The B channel port of the back right encoder.
-				 */
-				public static final byte BACK_RIGHT_B = 100;
-			}
 			public static class Intake {
 				/**
 				 * The A channel port of the lift encoder.
@@ -245,11 +182,11 @@ public final class Constants {
 			 */
 			public static final short AMP_SCORING_POSITION_LOWER = 300;
 			/**
-			 * The upper limit to the pickup position
+			 * The upper limit to the pickup position.
 			 */
 			public static final short PICKUP_POSITION_HIGHER = 600;
 			/**
-			 * The lower limit to the shooting position
+			 * The lower limit to the shooting position.
 			 */
 			public static final short SHOOTING_POSITION_LOWER = 100;
 		}
@@ -257,16 +194,19 @@ public final class Constants {
 	}
 	
 	public static class Climber {
+		/**
+		 * The speed the climber motors move at (aas a percentage).
+		 */
 		public static final float SPEED = 1;
 		/**
-		 * The average speed of the hook positioner
+		 * The average speed of the hook positioner.
 		 */
 		public static final float HOOK_POSITIONER_SPEED = 1;
 	}
 
 	public static class Intake {
 		/**
-		 * The speed of the actual intake motors
+		 * The speed of the actual intake motors.
 		 */
 		public static final float SPEED = .5f;
 		/**
@@ -282,6 +222,10 @@ public final class Constants {
 		 */
 		public static final float MAX_SPEED = 7.613f;
 		/**
+		 * The backup initial coordinates for a no-autonomous path no-AprilTag setup.
+		 */
+		public static final Translation2d BACKUP_INITIAL_COORDINATES = new Translation2d(0, 0);
+		/** 
 		 * The prefered velocity of the robot in autonomous mode in meters per second.
 		 */
 		public static final float DRIVE_VEL = 0;

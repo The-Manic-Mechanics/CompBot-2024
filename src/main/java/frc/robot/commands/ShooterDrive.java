@@ -6,9 +6,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import frc.robot.Constants.Controllers.Sax.ButtonPorts;
+import frc.robot.HumanInterface;
 import frc.robot.subsystems.Shooter;
+
 
 public class ShooterDrive extends Command {
   Shooter sysShooter;
@@ -20,13 +20,12 @@ public class ShooterDrive extends Command {
 
   @Override
   public void execute() {
-    // TODO: The drivers may want this changed: Update: See class frc.robot.Controllers.
     // Turns on the shooter if it is past the threshold and if the Red button is pressed
     // if (Intake.Encoders.lift.get() <= Constants.Encoders.Intake.SHOOTER_ON_LIMIT) 
-      if (RobotContainer.saxController.getRawButton(ButtonPorts.RED))
-        Shooter.setSpeed(Constants.Shooter.SPEED);
-      else
-        Shooter.setSpeed(0);
+    if (HumanInterface.ShooterDrive.activationDesired())
+      Shooter.setSpeed(Constants.Shooter.SPEED);
+    else
+      Shooter.setSpeed(0);
   }
 
   @Override

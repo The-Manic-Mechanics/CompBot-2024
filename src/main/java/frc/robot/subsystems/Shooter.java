@@ -16,9 +16,7 @@ public class Shooter extends SubsystemBase {
     public static WPI_VictorSPX left, right;
   }
 
-  /** Creates a new Shooter. */
   public Shooter() {
-    // Use addRequirements() here to declare subsystem dependencies.
     Motors.left = new WPI_VictorSPX(Constants.Motors.Ports.Shooter.LEFT);
     Motors.right = new WPI_VictorSPX(Constants.Motors.Ports.Shooter.RIGHT);
 

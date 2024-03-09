@@ -6,8 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import frc.robot.Constants.Controllers.Sax.ButtonPorts;
+import frc.robot.HumanInterface;
 import frc.robot.subsystems.Climber;
 
 
@@ -24,19 +23,19 @@ public class ClimberDrive extends Command {
     // Following are immediate switches for different button>action bindings.
 
     // Move the hook positioner forwards.
-    if (RobotContainer.saxController.getRawButton(ButtonPorts.PINK))
+    if (HumanInterface.ClimberDrive.hookForwardDesired())
       Climber.Motors.hookPositioner.set(Constants.Climber.HOOK_POSITIONER_SPEED);
     // Move the hook positioner backwards.
-    else if (RobotContainer.saxController.getRawButton(ButtonPorts.PURPLE))
+    else if (HumanInterface.ClimberDrive.hookBackwardDesired())
       Climber.Motors.hookPositioner.set(-1 * Constants.Climber.HOOK_POSITIONER_SPEED);
     else
       Climber.Motors.hookPositioner.set(0);
 
-    // Move the climber upwards.
-    if (RobotContainer.saxController.getRawButton(ButtonPorts.JOYSTICK))
+    // Drive the climber.
+    if (HumanInterface.ClimberDrive.climberDriveDesired())
       Climber.Motors.one.set(Constants.Climber.SPEED);
-    // Move the climber downwards.
-    else if (RobotContainer.saxController.getRawButton(ButtonPorts.GREEN))
+    // Reverse the climber.
+    else if (HumanInterface.ClimberDrive.climberReverseDesired())
       Climber.Motors.one.set(-1 * Constants.Climber.SPEED);
     else {
       Climber.Motors.one.set(0);

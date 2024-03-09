@@ -5,7 +5,6 @@
 package frc.robot;
 
 import frc.robot.Constants.Auton;
-import frc.robot.Constants.Controllers;
 import frc.robot.commands.AutoShooterAlign;
 import frc.robot.commands.ClimberDrive;
 import frc.robot.commands.DriveMecanum;
@@ -20,39 +19,21 @@ import frc.robot.subsystems.Shooter;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.PIDControllers.*;
 
 public class RobotContainer {
-  public static SendableChooser<Command> autoRoutineChooser;
-  public static SendableChooser<Trajectory> autonPathChooser;
-
   private static Gyroscope sysGyroscope = new Gyroscope();
   private static DriveTrain sysDriveTrain = new DriveTrain();
   private static ComplexAuton sysComplexAuton = new ComplexAuton();
 
-
-  AutoShooterAlign cmdAutoShooterAlign = new AutoShooterAlign(sysDriveTrain, sysComplexAuton);
-
-  public static final XboxController driverOneController = new XboxController(Controllers.DRIVERONE_PORT);
-  public static final XboxController driverTwoController = new XboxController(Controllers.DRIVERTWO_PORT);
-
-  public static final JoystickButton driverOneX = new JoystickButton(driverOneController, 3);
-  public static final JoystickButton driverOneA = new JoystickButton(driverOneController, 1);
-  public static final JoystickButton driverOneB = new JoystickButton(driverOneController, 2);
-  public static final JoystickButton driverOneY = new JoystickButton(driverOneController, 4);
-
-  public static final GenericHID saxController = new GenericHID(Constants.Controllers.Sax.PORT);
+  public static AutoShooterAlign cmdAutoShooterAlign = new AutoShooterAlign(sysDriveTrain, sysComplexAuton);
 
   public static Pose2d initPose;
 
@@ -71,33 +52,24 @@ public class RobotContainer {
     sysIntake.setDefaultCommand(cmdIntakeDrive);
     sysClimber.setDefaultCommand(cmdClimberDrive);
 
-    autoRoutineChooser = new SendableChooser<>();
-    autonPathChooser = new SendableChooser<Trajectory>();
-
-    Constants.Auton.loadTrajectoriesFromPaths();
-    autonPathChooser.setDefaultOption("Drive Straight", Auton.trajectories[0]);
-
-    SmartDashboard.putData("Auton Chooser", autoRoutineChooser);
-
-    initPose = new Pose2d(
-      autonPathChooser.getSelected().getInitialPose().getX(), 
-      autonPathChooser.getSelected().getInitialPose().getY(), 
-      // TODO: May need to be changed to autonPathChooser.getSelected().getInitialPose().getRotation().
-      Gyroscope.sensor.getRotation2d()
-    );
-
     configureBindings();
   }
 
   // TODO: Bind SysID commands to gamepad buttons.
   private void configureBindings() {
-    // Configure controller bindings here.
-    driverOneA.onTrue(cmdAutoShooterAlign);
+    // Define the controls used in new functions within HumanInterface.CommandMap and then supply the command here.
+    // Example: HumanInterface.CommandMap.straightAuton(cmdStraightAuton);
+    HumanInterface.CommandMap.autoShooterAlign(cmdAutoShooterAlign);
   }
 
   public Command getAutonomousCommand() {
+    // If the "no trajectory" option is chosen, do not run anything.
+    if (DriveTrain.Odometry.autonPathChooser.getSelected() == null)
+      return new InstantCommand(() -> {});
     MecanumControllerCommand mecanumController = new MecanumControllerCommand(
-        autonPathChooser.getSelected(),
+        // Get the selected path from Shuffleboard
+        DriveTrain.Odometry.autonPathChooser.getSelected(),
+        // Pose supplier
         ComplexAuton.getPoseDual(),
         ComplexAuton.feedforward,
         DriveTrain.Kinematics.mecanumDriveKinematics,
@@ -105,25 +77,32 @@ public class RobotContainer {
         new PIDController(Holonomic.XCONTROLLER_P, Holonomic.XCONTROLLER_I, Holonomic.XCONTROLLER_D),
         // Y controller (Field Space)
         new PIDController(Holonomic.YCONTROLLER_P, Holonomic.YCONTROLLER_I, Holonomic.YCONTROLLER_D),
+        // Rotation controller
         new ProfiledPIDController(Holonomic.THETACONTROLLER_P, Holonomic.THETACONTROLLER_I, Holonomic.THETACONTROLLER_D,
             new TrapezoidProfile.Constraints(Auton.MAX_SPEED, Auton.MAX_ACCEL)),
         Auton.MAX_SPEED,
+        // FrontLeft speed controller
         new PIDController(WheelVelocities.FL_CONTROLLER_P, WheelVelocities.FL_CONTROLLER_I,
             WheelVelocities.FL_CONTROLLER_D),
+        // RearLeft speed controller
         new PIDController(WheelVelocities.RL_CONTROLLER_P, WheelVelocities.RL_CONTROLLER_I,
             WheelVelocities.RL_CONTROLLER_D),
+        // FrontRight speed controller
         new PIDController(WheelVelocities.FR_CONTROLLER_P, WheelVelocities.FR_CONTROLLER_I,
             WheelVelocities.FR_CONTROLLER_D),
+        // RearRight speed controller
         new PIDController(WheelVelocities.RR_CONTROLLER_P, WheelVelocities.RR_CONTROLLER_I,
             WheelVelocities.RR_CONTROLLER_D),
+        // Wheelspeeds supplier
         DriveTrain.Kinematics.getWheelSpeeds(),
+        // Voltage consumer that drives the robot using inputted voltage
         DriveTrain.Kinematics::driveVolts,
         sysDriveTrain,
         sysComplexAuton);
 
     return Commands.sequence(
         new InstantCommand(() -> {
-          DriveTrain.Odometry.resetDriveOdometry(autonPathChooser.getSelected().getInitialPose());
+          DriveTrain.Odometry.resetDriveOdometry(DriveTrain.Odometry.autonPathChooser.getSelected().getInitialPose());
         }),
         mecanumController,
         new InstantCommand(() -> {

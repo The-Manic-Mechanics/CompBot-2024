@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
+import frc.robot.HumanInterface;
 import frc.robot.subsystems.DriveTrain;
 
 /**
@@ -39,9 +39,9 @@ public final class DriveMecanum extends Command {
 	public void execute() {
 		// TODO: Driver prefrence specific, change accordingly.
 		// Get the speeds from the driver controller and multiply it by the speed.
-		moveSpeedY = speedMultiplier * RobotContainer.driverOneController.getLeftX();
-		moveSpeedX = -speedMultiplier * RobotContainer.driverOneController.getLeftY();
-		moveSpeedZ = -speedMultiplier * RobotContainer.driverOneController.getRightX();
+		moveSpeedY = speedMultiplier * HumanInterface.DriveMecanum.getAxisX();
+		moveSpeedX = -speedMultiplier * HumanInterface.DriveMecanum.getAxisY();
+		moveSpeedZ = -speedMultiplier * HumanInterface.DriveMecanum.getAxisZ();
 
 		// Put in controller inputs and drive the motors accordingly
 		DriveTrain.mecanum.driveCartesian(moveSpeedX, moveSpeedY, moveSpeedZ);

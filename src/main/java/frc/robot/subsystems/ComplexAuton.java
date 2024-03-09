@@ -31,7 +31,7 @@ public class ComplexAuton extends SubsystemBase {
   }
 
   /**
-   * Loads the inputted paths from their files into variables
+   * Loads the data from the files at the given paths into variables.
    * 
    * @param paths The paths to the trajectories in the form
    *              "paths/YourPath.wpilib.json"
@@ -56,19 +56,14 @@ public class ComplexAuton extends SubsystemBase {
   }
 
   /**
-   * Gets the pose of the robot using an apriltag if avalible, and uses odemetry
-   * if not
+   * Gets the pose of the robot using an AprilTag if avalible, and uses the
+   * avalible odometry if there is not.
    * 
-   * @return The bot pose as a Pose2d based off the nearest apriltag, otherwise
-   *         use the odometry
+   * @return The position of the bot as a <b>Pose2d</b> instance.
    */
   public static Supplier<Pose2d> getPoseDual() {
     if (LimeLight.tagID != 0)
       return (Supplier<Pose2d>) () -> LimeLight.getBotPose2d();
     return (Supplier<Pose2d>) () -> DriveTrain.Odometry.mecanumDriveOdometry.getPoseMeters();
-  }
-
-  @Override
-  public void periodic() {
   }
 }

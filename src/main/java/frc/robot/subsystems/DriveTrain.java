@@ -12,7 +12,10 @@ import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.Constants.Auton;
@@ -43,6 +46,8 @@ public final class DriveTrain extends SubsystemBase {
 		 * Used for keeping track of the robot's position while it drives.
 		 */
 		public static MecanumDriveOdometry mecanumDriveOdometry;
+
+		public static SendableChooser<Trajectory> autonPathChooser = new SendableChooser<Trajectory>();
 
 		/**
 		 * Sets the driveOdometry values to those supplied in the Pose2d.
@@ -132,10 +137,10 @@ public final class DriveTrain extends SubsystemBase {
 						Constants.Motors.Locations.DriveTrain.FRONT_LEFT),
 				new Translation2d(Constants.Motors.Locations.DriveTrain.FRONT_RIGHT,
 						-1 * Constants.Motors.Locations.DriveTrain.FRONT_RIGHT),
-				new Translation2d(-1 * Constants.Motors.Locations.DriveTrain.BACK_LEFT,
-						Constants.Motors.Locations.DriveTrain.BACK_LEFT),
-				new Translation2d(-1 * Constants.Motors.Locations.DriveTrain.BACK_RIGHT,
-						-1 * Constants.Motors.Locations.DriveTrain.BACK_RIGHT));
+				new Translation2d(-1 * Constants.Motors.Locations.DriveTrain.REAR_LEFT,
+						Constants.Motors.Locations.DriveTrain.REAR_LEFT),
+				new Translation2d(-1 * Constants.Motors.Locations.DriveTrain.REAR_RIGHT,
+						-1 * Constants.Motors.Locations.DriveTrain.REAR_RIGHT));
 
 		Kinematics.wheelPositions = new MecanumDriveWheelPositions(
 				Encoders.frontLeft.getPosition(),
@@ -143,25 +148,38 @@ public final class DriveTrain extends SubsystemBase {
 				Encoders.rearLeft.getPosition(),
 				Encoders.rearRight.getPosition());
 
-		// Odometry.mecanumDriveOdometry = new MecanumDriveOdometry(
-		// 		Kinematics.mecanumDriveKinematics,
-		// 		Gyroscope.sensor.getRotation2d(),
-		// 		Kinematics.wheelPositions,
-		// 		RobotContainer.initPose);
+		Odometry.autonPathChooser.setDefaultOption("None", null);
+		Odometry.autonPathChooser.addOption("Drive Straight", Auton.trajectories[0]);
+		SmartDashboard.putData("Auton Path Chooser", Odometry.autonPathChooser);
+		
+		if (Odometry.autonPathChooser.getSelected() != null)
+			Constants.Auton.loadTrajectoriesFromPaths();
+
+		Odometry.mecanumDriveOdometry = new MecanumDriveOdometry(
+				Kinematics.mecanumDriveKinematics,
+				Gyroscope.sensor.getRotation2d(),
+				Kinematics.wheelPositions,
+				Odometry.autonPathChooser.getSelected() == null ? 
+					LimeLight.tagID == 0 ?
+						new Pose2d(Constants.Auton.BACKUP_INITIAL_COORDINATES, Gyroscope.sensor.getRotation2d())
+						:
+						LimeLight.getBotPose2d()
+					: 
+					Odometry.autonPathChooser.getSelected().getInitialPose());
 	}
 
 	@Override
 	public void periodic() {
 		Kinematics.wheelPositions = Kinematics.getWheelPositions();
 
-		// Odometry.mecanumDriveOdometry.update(
-		// 		Gyroscope.sensor.getRotation2d(),
-		// 		Kinematics.wheelPositions);
+		Odometry.mecanumDriveOdometry.update(
+				Gyroscope.sensor.getRotation2d(),
+				Kinematics.wheelPositions);
 
-		// if (LimeLight.tagID != 0)
-		// 	Odometry.mecanumDriveOdometry.resetPosition(
-		// 			Gyroscope.sensor.getRotation2d(),
-		// 			Kinematics.wheelPositions,
-		// 			LimeLight.getBotPose2d());
+		if (LimeLight.tagID != 0)
+			Odometry.mecanumDriveOdometry.resetPosition(
+					Gyroscope.sensor.getRotation2d(),
+					Kinematics.wheelPositions,
+					LimeLight.getBotPose2d());
 	}
 }
