@@ -70,7 +70,7 @@ public class HumanInterface {
         }
 
         public static boolean hookBackwardDesired() {
-            return port3_.getRawButton(ToySaxophone.GREEN);
+            return port3_.getRawButton(ToySaxophone.PURPLE);
         }
 
         public static boolean climberDriveDesired() {
@@ -92,7 +92,7 @@ public class HumanInterface {
             public static final byte YELLOW = 6;
             public static final byte PINK = 7;
             public static final byte PURPLE = 8;
-            public static final byte JOYSTICK = 13;
+            public static final byte JOYSTICK = 12;
             /**
              * The X axis on the joystick, towards the bell for positive values and away
              * from it for negative values.

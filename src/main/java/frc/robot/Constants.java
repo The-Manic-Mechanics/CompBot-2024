@@ -195,7 +195,7 @@ public final class Constants {
 	
 	public static class Climber {
 		/**
-		 * The speed the climber motors move at (aas a percentage).
+		 * The speed the climber motors move at (as a percentage).
 		 */
 		public static final float SPEED = 1;
 		/**
@@ -206,11 +206,11 @@ public final class Constants {
 
 	public static class Intake {
 		/**
-		 * The speed of the actual intake motors.
+		 * The speed that the intake motors are run at.
 		 */
 		public static final float SPEED = .5f;
 		/**
-		 * The speed multiplier for the intake lift
+		 * The multiplier on the intake lift speed.
 		 */
 		public static final float LIFT_SPEED_MULTIPLIER = .8f;
 	}

@@ -148,13 +148,12 @@ public final class DriveTrain extends SubsystemBase {
 				Encoders.rearLeft.getPosition(),
 				Encoders.rearRight.getPosition());
 
+		// Constants.Auton.loadTrajectoriesFromPaths();
+
 		Odometry.autonPathChooser.setDefaultOption("None", null);
-		Odometry.autonPathChooser.addOption("Drive Straight", Auton.trajectories[0]);
+		// Odometry.autonPathChooser.addOption("Drive Straight", Auton.trajectories[0]);
 		SmartDashboard.putData("Auton Path Chooser", Odometry.autonPathChooser);
 		
-		if (Odometry.autonPathChooser.getSelected() != null)
-			Constants.Auton.loadTrajectoriesFromPaths();
-
 		Odometry.mecanumDriveOdometry = new MecanumDriveOdometry(
 				Kinematics.mecanumDriveKinematics,
 				Gyroscope.sensor.getRotation2d(),
