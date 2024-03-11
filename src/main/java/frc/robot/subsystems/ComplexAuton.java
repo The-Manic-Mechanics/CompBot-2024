@@ -39,10 +39,8 @@ public class ComplexAuton extends SubsystemBase {
    *         that they were loaded
    */
   public static Trajectory[] loadPaths(String[] paths) throws IOException {
-    // Instatiate the Trajectory array
     Trajectory[] trajectories = new Trajectory[paths.length];
     Path fs = Filesystem.getDeployDirectory().toPath();
-    // Loop through the paths array and load each of them
     for (int i = 0; i != paths.length; i++) {
       try {
         Path f_path = fs.resolve(paths[i]);

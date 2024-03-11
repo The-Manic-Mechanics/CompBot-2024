@@ -234,18 +234,18 @@ public final class Constants {
 		 */
 		public static final float TRACK_WIDTH_METERS = 0.4699f;
 		/**
-		 * The distance the a wheel travels within one pulse on the encoders, in metres.
+		 * The distance the a wheel travels within one pulse on the encoders, in meters.
 		 */
 		public static final float DISTANCE_PER_PULSE = .00191f;
 		/**
 		 * The maximum acceleration of the robot in meters per second.
 		 */
 		public static final float MAX_ACCEL = 0;
-		// TODO: Fix placeholder SPARKMAX_COUNTS_PER_REV value:
+		// TODO: Fix placeholder MOTOR_COUNTS_PER_REV value: (and find a better class to move this maybeee?)
 		/**
-		 * The amount of ticks per revolution in the SPARK MAX motors.
+		 * The amount of ticks per revolution in the DriveMecanum motors (SparkMAX(es)).
 		 */
-		public static final short SPARKMAX_COUNTS_PER_REV = 250;
+		public static final short MOTOR_COUNTS_PER_REV = 250;
 		/**
 		 * The file paths to all PathWeaver paths in the deploy filesystem.
 		 */

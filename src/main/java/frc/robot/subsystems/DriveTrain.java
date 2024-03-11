@@ -118,10 +118,10 @@ public final class DriveTrain extends SubsystemBase {
 		Motors.rearLeft = new CANSparkMax(Constants.Motors.Ports.DriveTrain.REAR_LEFT, MotorType.kBrushless);
 		Motors.rearRight = new CANSparkMax(Constants.Motors.Ports.DriveTrain.REAR_RIGHT, MotorType.kBrushless);
 
-		Encoders.frontLeft = Motors.frontLeft.getAlternateEncoder(Constants.Auton.SPARKMAX_COUNTS_PER_REV);
-		Encoders.frontRight = Motors.frontRight.getAlternateEncoder(Constants.Auton.SPARKMAX_COUNTS_PER_REV);
-		Encoders.rearLeft = Motors.rearLeft.getAlternateEncoder(Constants.Auton.SPARKMAX_COUNTS_PER_REV);
-		Encoders.rearRight = Motors.rearRight.getAlternateEncoder(Constants.Auton.SPARKMAX_COUNTS_PER_REV);
+		Encoders.frontLeft = Motors.frontLeft.getAlternateEncoder(Constants.Auton.MOTOR_COUNTS_PER_REV);
+		Encoders.frontRight = Motors.frontRight.getAlternateEncoder(Constants.Auton.MOTOR_COUNTS_PER_REV);
+		Encoders.rearLeft = Motors.rearLeft.getAlternateEncoder(Constants.Auton.MOTOR_COUNTS_PER_REV);
+		Encoders.rearRight = Motors.rearRight.getAlternateEncoder(Constants.Auton.MOTOR_COUNTS_PER_REV);
 
 		Motors.frontLeft.setInverted(true);
 		Motors.rearLeft.setInverted(true);
