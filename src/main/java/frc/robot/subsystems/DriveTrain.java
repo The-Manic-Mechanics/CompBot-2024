@@ -133,14 +133,11 @@ public final class DriveTrain extends SubsystemBase {
 				Motors.rearRight);
 
 		Kinematics.mecanumDriveKinematics = new MecanumDriveKinematics(
-				new Translation2d(Constants.Motors.Locations.DriveTrain.FRONT_LEFT,
-						Constants.Motors.Locations.DriveTrain.FRONT_LEFT),
-				new Translation2d(Constants.Motors.Locations.DriveTrain.FRONT_RIGHT,
-						-1 * Constants.Motors.Locations.DriveTrain.FRONT_RIGHT),
-				new Translation2d(-1 * Constants.Motors.Locations.DriveTrain.REAR_LEFT,
-						Constants.Motors.Locations.DriveTrain.REAR_LEFT),
-				new Translation2d(-1 * Constants.Motors.Locations.DriveTrain.REAR_RIGHT,
-						-1 * Constants.Motors.Locations.DriveTrain.REAR_RIGHT));
+				Constants.Motors.Locations.DriveTrain.FRONT_LEFT,
+				Constants.Motors.Locations.DriveTrain.FRONT_RIGHT,
+				Constants.Motors.Locations.DriveTrain.REAR_LEFT,
+				Constants.Motors.Locations.DriveTrain.REAR_RIGHT
+		);
 
 		Kinematics.wheelPositions = new MecanumDriveWheelPositions(
 				Encoders.frontLeft.getPosition(),

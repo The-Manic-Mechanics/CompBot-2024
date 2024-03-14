@@ -40,7 +40,7 @@ public final class DriveMecanum extends Command {
 		// TODO: Driver prefrence specific, change accordingly.
 		// Get the speeds from the driver controller and multiply it by the speed.
 		moveSpeedY = speedMultiplier * HumanInterface.DriveMecanum.getAxisX();
-		moveSpeedX = -speedMultiplier * HumanInterface.DriveMecanum.getAxisY();
+		moveSpeedX = speedMultiplier * HumanInterface.DriveMecanum.getAxisY();
 		moveSpeedZ = -speedMultiplier * HumanInterface.DriveMecanum.getAxisZ();
 
 		// Put in controller inputs and drive the motors accordingly

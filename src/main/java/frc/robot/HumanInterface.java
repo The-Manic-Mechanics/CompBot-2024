@@ -16,7 +16,7 @@ public class HumanInterface {
     private static final JoystickButton port1_bA = new JoystickButton(port1_, 1);
     // private static final JoystickButton port1_bB = new JoystickButton(port1_, 2);
     // private static final JoystickButton port1_bY = new JoystickButton(port1_, 4);
-    // private static final XboxController port2_ = new XboxController(1);
+    private static final XboxController port2_ = new XboxController(1);
     // private static final JoystickButton port2_bX = new JoystickButton(port2_, 3);
     // private static final JoystickButton port2_bA = new JoystickButton(port2_, 1);
     // private static final JoystickButton port2_bB = new JoystickButton(port2_, 2);
@@ -46,39 +46,63 @@ public class HumanInterface {
 
     public class ShooterDrive {
         public static boolean activationDesired() {
-            return port3_.getRawButton(ToySaxophone.RED);
+            // + Saxophone
+            // return port3_.getRawButton(ToySaxophone.RED);
+            // + Generic
+            return port2_.getRawButton(XboxController.Button.kRightBumper.value);
         }
     }
 
     public class IntakeDrive {
-        public static boolean forwardDesired() {
-            return port3_.getRawButton(ToySaxophone.BLUE);
+        public static boolean outDesired() {
+            // + Saxophone
+            // return port3_.getRawButton(ToySaxophone.BLUE);
+            // + Generic
+            return port2_.getRawButton(XboxController.Button.kLeftBumper.value);
         }
 
-        public static boolean backwardsDesired() {
-            return port3_.getRawButton(ToySaxophone.ORANGE);
+        public static boolean inDesired() {
+            // + Saxophone
+            // return port3_.getRawButton(ToySaxophone.ORANGE);
+            // + Generic
+            return port2_.getRawButton(XboxController.Button.kY.value);
         }
 
         public static double getLiftDriveAxis() {
-            return port3_.getRawAxis(ToySaxophone.AXIS_X);
+            // + Saxophone
+            // return port3_.getRawAxis(ToySaxophone.AXIS_X);
+            // + Generic
+            return port2_.getLeftY();
         }
     }
 
     public class ClimberDrive {
         public static boolean hookForwardDesired() {
-            return port3_.getRawButton(ToySaxophone.PINK);
+            // + Saxophone
+            // return port3_.getRawButton(ToySaxophone.PINK);
+            // + Generic
+            return port2_.getRawButton(XboxController.Button.kX.value);
         }
 
         public static boolean hookBackwardDesired() {
-            return port3_.getRawButton(ToySaxophone.PURPLE);
+            // + Saxophone
+            // return port3_.getRawButton(ToySaxophone.PURPLE);
+            // + Generic
+            return port2_.getRawButton(XboxController.Button.kA.value);
         }
 
         public static boolean climberDriveDesired() {
-            return port3_.getRawButton(ToySaxophone.JOYSTICK);
+            // + Saxophone
+            // return port3_.getRawButton(ToySaxophone.JOYSTICK);
+            // + Generic
+            return port2_.getRawButton(XboxController.Button.kStart.value);
         }
 
         public static boolean climberReverseDesired() {
-            return port3_.getRawButton(ToySaxophone.GREEN);
+            // + Saxophone
+            // return port3_.getRawButton(ToySaxophone.GREEN);
+            // + Generic
+            return port2_.getRawButton(XboxController.Button.kBack.value);
         }
     }
 

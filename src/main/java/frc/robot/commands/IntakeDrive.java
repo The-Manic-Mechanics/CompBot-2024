@@ -24,9 +24,9 @@ public class IntakeDrive extends Command {
     // Following are immediate switches for different button>action bindings.
     
     // Drive the intake mechanism backwards.
-    if (HumanInterface.IntakeDrive.backwardsDesired() /* TODO: && Intake.Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT */)
+    if (HumanInterface.IntakeDrive.inDesired() /* TODO: && Intake.Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT */)
       Intake.setSpeed(-1 * frc.robot.Constants.Intake.SPEED);
-    else if (HumanInterface.IntakeDrive.forwardDesired())
+    else if (HumanInterface.IntakeDrive.outDesired())
     // Drive the intake mechanism forwards.
       Intake.setSpeed(frc.robot.Constants.Intake.SPEED);
     else

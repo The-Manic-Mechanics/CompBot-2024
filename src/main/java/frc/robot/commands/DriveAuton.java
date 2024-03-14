@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.Auton;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Gyroscope;
 
@@ -37,19 +38,21 @@ public final class DriveAuton extends Command {
 	@Override
 	public void initialize() {
 		isFinished = false;
+		// Converting to counts per inch
+		driveInches =  Math.floor(driveInches / (Auton.DISTANCE_PER_PULSE * 39.370));
 	}
 
 	@Override
 	public void execute() {
 		// Checking if the encoders have read the desired distance, if so stop.
-		// if ((DriveTrain.Encoders.frontLeft.getDistance() >= driveInches ||
-		// (DriveTrain.Encoders.frontRight.getDistance() >= driveInches) ||
-		// (DriveTrain.Encoders.backLeft.getDistance() >= driveInches) ||
-		// (DriveTrain.Encoders.backRight.getDistance() >= driveInches))) {
-		// DriveTrain.mecanum.driveCartesian(0, 0, 0);
-		// isFinished = true;
-		// } else
-		// DriveTrain.mecanum.driveCartesian(speedX, speedY, speedZ);
+		if ((DriveTrain.Encoders.frontLeft.getPosition() >= driveInches ||
+		(DriveTrain.Encoders.frontRight.getPosition() >= driveInches) ||
+		(DriveTrain.Encoders.rearLeft.getPosition() >= driveInches) ||
+		(DriveTrain.Encoders.rearRight.getPosition() >= driveInches))) {
+		DriveTrain.mecanum.driveCartesian(0, 0, 0);
+		isFinished = true;
+		} else
+		DriveTrain.mecanum.driveCartesian(speedX, speedY, speedZ);
 	}
 
 	@Override

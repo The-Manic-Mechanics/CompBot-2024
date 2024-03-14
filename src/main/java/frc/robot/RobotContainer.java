@@ -64,6 +64,7 @@ public class RobotContainer {
     // If the "no trajectory" option is chosen, do not run anything.
     if (DriveTrain.Odometry.autonPathChooser.getSelected() == null)
       return new InstantCommand(() -> {});
+      
     MecanumControllerCommand mecanumController = new MecanumControllerCommand(
         // Get the selected path from Shuffleboard
         DriveTrain.Odometry.autonPathChooser.getSelected(),

@@ -34,8 +34,8 @@ public class Gyroscope extends SubsystemBase {
 		roll = sensor.getRoll();
 		yaw = sensor.getYaw();
 
-		SmartDashboard.putNumber("Pitch (Less Fancy)", pitch);
-		SmartDashboard.putNumber("Roll (Less Fancy)", roll);
-		SmartDashboard.putNumber("Yaw (Less Fancy)", yaw);
+		// SmartDashboard.putNumber("Pitch (Less Fancy)", pitch);
+		// SmartDashboard.putNumber("Roll (Less Fancy)", roll);
+		// SmartDashboard.putNumber("Yaw (Less Fancy)", yaw);
     }
 }

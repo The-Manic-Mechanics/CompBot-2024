@@ -16,6 +16,8 @@ public class Shooter extends SubsystemBase {
     public static WPI_VictorSPX left, right;
   }
 
+  private static boolean isSpunUp;
+
   public Shooter() {
     Motors.left = new WPI_VictorSPX(Constants.Motors.Ports.Shooter.LEFT);
     Motors.right = new WPI_VictorSPX(Constants.Motors.Ports.Shooter.RIGHT);
@@ -30,6 +32,12 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if ((Motors.left.get() >= .9) || (Motors.left.get() <= -.9))
+      isSpunUp = true;
+    else
+      isSpunUp = false;
+
     SmartDashboard.putBoolean("Shooter Alignment Active", AutoShooterAlign.isAligning);
+    SmartDashboard.putBoolean("Shoot Spun Up", isSpunUp);
   }
 }

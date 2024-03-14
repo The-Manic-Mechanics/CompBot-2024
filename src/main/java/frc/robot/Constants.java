@@ -32,22 +32,22 @@ public final class Constants {
 				 * The position of the front left wheel relative to the center of the robot, in
 				 * meters.
 				 */
-				public static final float FRONT_LEFT = 0;
+				public static final Translation2d FRONT_LEFT = new Translation2d(-10.125, 10.25);
 				/**
 				 * The position of the front right wheel relative to the center of the robot, in
 				 * meters.
 				 */
-				public static final float FRONT_RIGHT = 0;
+				public static final Translation2d FRONT_RIGHT = new Translation2d(10.125, 10.25);
 				/**
 				 * The position of the back left wheel relative to the center of the robot, in
 				 * meters.
 				 */
-				public static final float REAR_LEFT = 0;
+				public static final Translation2d REAR_LEFT = new Translation2d(-10.125, -10.25);
 				/**
 				 * The position of the back right wheel relative to the center of the robot, in
 				 * meters.
 				 */
-				public static final float REAR_RIGHT = 0;
+				public static final Translation2d REAR_RIGHT = new Translation2d(10.125, -10.25);
 			}
 		}
 		public static class Ports {

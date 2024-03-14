@@ -108,7 +108,7 @@ public class Intake extends SubsystemBase {
     if (Encoders.lift.get() >= Constants.Encoders.Intake.ON_LIMIT)
       setSpeed(frc.robot.Constants.Intake.SPEED);
     // If the intake is not running in reverse and the intake drive button is not being pressed, stop the motor.
-    else if ((Motors.left.get() > 0) && !HumanInterface.IntakeDrive.forwardDesired())
+    else if ((Motors.left.get() > 0) && !HumanInterface.IntakeDrive.outDesired())
       setSpeed(0); 
   }
 
