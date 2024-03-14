@@ -26,8 +26,13 @@ public final class DriveAuton extends Command {
 	 * @param inSpeedZ The speed to travel in the Z direction.
 	 */
 	public DriveAuton(
-			DriveTrain inSysDriveTrain, Gyroscope inSysGyroscope, double inDriveInches, double inSpeedX,
-			double inSpeedY, double inSpeedZ, boolean inFinishOnIncline) {
+			DriveTrain inSysDriveTrain, 
+			Gyroscope inSysGyroscope, 
+			double inDriveInches, 
+			double inSpeedX,
+			double inSpeedY, 
+			double inSpeedZ
+	) {
 		addRequirements(inSysDriveTrain, inSysGyroscope);
 		driveInches = inDriveInches;
 		speedX = inSpeedX;
@@ -45,14 +50,19 @@ public final class DriveAuton extends Command {
 	@Override
 	public void execute() {
 		// Checking if the encoders have read the desired distance, if so stop.
-		if ((DriveTrain.Encoders.frontLeft.getPosition() >= driveInches ||
-		(DriveTrain.Encoders.frontRight.getPosition() >= driveInches) ||
-		(DriveTrain.Encoders.rearLeft.getPosition() >= driveInches) ||
-		(DriveTrain.Encoders.rearRight.getPosition() >= driveInches))) {
-		DriveTrain.mecanum.driveCartesian(0, 0, 0);
-		isFinished = true;
+		if (
+			DriveTrain.Encoders.frontLeft.getPosition() >= driveInches
+			||
+			DriveTrain.Encoders.frontRight.getPosition() >= driveInches
+			||
+			DriveTrain.Encoders.rearLeft.getPosition() >= driveInches
+			||
+			DriveTrain.Encoders.rearRight.getPosition() >= driveInches
+		) {
+			DriveTrain.mecanum.driveCartesian(0, 0, 0);
+			isFinished = true;
 		} else
-		DriveTrain.mecanum.driveCartesian(speedX, speedY, speedZ);
+			DriveTrain.mecanum.driveCartesian(speedX, speedY, speedZ);
 	}
 
 	@Override

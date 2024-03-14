@@ -55,50 +55,59 @@ public class Intake extends SubsystemBase {
   }
 
   /**
-   * Drives the lift to whatever position is specified
-   * @param position Which position to set the intake to (1 is pickup and 2 is shooter feeding)
-   * @param speed The speed the lift motor drives at
+   * Drive the Intake at speed to encoderPos
+   * @param encoderPos The encoder position to drive to
+   * @param speed The speed to drive the intake at
    */
-  public static void driveLiftToPos(int position, double speed) {
-
-    speed = Math.abs(speed);
-
-    switch (position) {
-      // Pickup position
-      case 1:
-        // If the lift is below or at the pickup position stop, otherwise keep driving
-        if (Encoders.lift.get() >= Constants.Encoders.Intake.PICKUP_POSITION_HIGHER)
-          driveLift(0);
-        else
-          driveLift(-speed);
-
-      break;
-
-      // Amp scoring position
-      // case 2:
-      //   // If the lift is outside the amp scoring range keep driving
-      //   if ((Encoders.lift.get() <= Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER) && (Encoders.lift.get() >= Constants.Encoders.Intake.AMP_SCORING_POSITION_LOWER))
-      //     // If the lift is below the upper limit drive downwards if its not drive upwards
-      //     if (Encoders.lift.get() <= Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER)
-      //       driveLift(-1 * speed);
-      //     else
-      //       driveLift(speed);
-      //   else
-      //     driveLift(0);
-      
-      // break;
-
-      // Shooter feeding position
-      case 2:
-        // If the lift is above or at the shooting position, stop it, otherwise keep driving upwards
-        if (Encoders.lift.get() <= Constants.Encoders.Intake.SHOOTING_POSITION_LOWER)
-          driveLift(0);
-        else
-          driveLift(speed);
-
-      break;
-    }
+  public static void driveLiftAuton(short encoderPos, float speed) {
+      // TODO: Finish this
   }
+
+  // /**
+  //  * Drives the lift to whatever position is specified
+  //  * @param position Which position to set the intake to (1 is pickup and 2 is shooter feeding)
+  //  * @param speed The speed the lift motor drives at
+  //  */
+  // public static void driveLiftToPos(byte position, double speed) {
+
+  //   speed = Math.abs(speed);
+
+  //   switch (position) {
+  //     // Pickup position
+  //     case 1:
+  //       // If the lift is below or at the pickup position stop, otherwise keep driving
+  //       if (Encoders.lift.get() >= Constants.Encoders.Intake.PICKUP_POSITION_HIGHER)
+  //         driveLift(0);
+  //       else
+  //         driveLift(-speed);
+
+  //     break;
+
+  //     // Amp scoring position
+  //     // case 2:
+  //     //   // If the lift is outside the amp scoring range keep driving
+  //     //   if ((Encoders.lift.get() <= Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER) && (Encoders.lift.get() >= Constants.Encoders.Intake.AMP_SCORING_POSITION_LOWER))
+  //     //     // If the lift is below the upper limit drive downwards if its not drive upwards
+  //     //     if (Encoders.lift.get() <= Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER)
+  //     //       driveLift(-1 * speed);
+  //     //     else
+  //     //       driveLift(speed);
+  //     //   else
+  //     //     driveLift(0);
+      
+  //     // break;
+
+  //     // Shooter feeding position
+  //     case 2:
+  //       // If the lift is above or at the shooting position, stop it, otherwise keep driving upwards
+  //       if (Encoders.lift.get() <= Constants.Encoders.Intake.SHOOTING_POSITION_LOWER)
+  //         driveLift(0);
+  //       else
+  //         driveLift(speed);
+
+  //     break;
+  //   }
+  // }
 
   /**
    * Turns on the intake if the lift encoder goes past a certain threshold

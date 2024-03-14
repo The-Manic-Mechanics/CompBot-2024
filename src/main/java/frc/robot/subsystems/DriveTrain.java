@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
@@ -19,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.Constants.Auton;
+import frc.robot.commands.DriveAuton;
 import java.util.function.Supplier;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -47,7 +47,8 @@ public final class DriveTrain extends SubsystemBase {
 		 */
 		public static MecanumDriveOdometry mecanumDriveOdometry;
 
-		public static SendableChooser<Trajectory> autonPathChooser = new SendableChooser<Trajectory>();
+		public static SendableChooser<Object> autonRoutineChooser = new SendableChooser<Object>();
+		public static SendableChooser<Pose2d> autonStartPositionChooser = new SendableChooser<Pose2d>();
 
 		/**
 		 * Sets the driveOdometry values to those supplied in the Pose2d.
@@ -145,23 +146,39 @@ public final class DriveTrain extends SubsystemBase {
 				Encoders.rearLeft.getPosition(),
 				Encoders.rearRight.getPosition());
 
-		// Constants.Auton.loadTrajectoriesFromPaths();
+		Constants.Auton.loadTrajectoriesFromPaths();
 
-		Odometry.autonPathChooser.setDefaultOption("None", null);
-		// Odometry.autonPathChooser.addOption("Drive Straight", Auton.trajectories[0]);
-		SmartDashboard.putData("Auton Path Chooser", Odometry.autonPathChooser);
+		// TODO: Where are these locations really (and should null be default? handle this?)
+		// Odometry.autonStartPositionChooser.setDefaultOption("Center", new Pose2d());
+		// Odometry.autonStartPositionChooser.addOption("Left", new Pose2d());
+		// Odometry.autonStartPositionChooser.addOption("Right", new Pose2d());
+
+		// SmartDashboard.putData("Start Position Chooser", Odometry.autonStartPositionChooser);
+
+		Odometry.autonRoutineChooser.setDefaultOption("None", null);
+		Odometry.autonRoutineChooser.addOption("Straight Auton", new DriveAuton(this, new Gyroscope(), 180, -.5, 0, 0));
+		Odometry.autonRoutineChooser.addOption("Trajectory One", Auton.trajectories[0]);
 		
+		SmartDashboard.putData("Auton Path Chooser", Odometry.autonRoutineChooser);
+
 		Odometry.mecanumDriveOdometry = new MecanumDriveOdometry(
 				Kinematics.mecanumDriveKinematics,
 				Gyroscope.sensor.getRotation2d(),
 				Kinematics.wheelPositions,
-				Odometry.autonPathChooser.getSelected() == null ? 
+				Odometry.autonRoutineChooser.getSelected() == null ? 
 					LimeLight.tagID == 0 ?
 						new Pose2d(Constants.Auton.BACKUP_INITIAL_COORDINATES, Gyroscope.sensor.getRotation2d())
 						:
 						LimeLight.getBotPose2d()
-					: 
-					Odometry.autonPathChooser.getSelected().getInitialPose());
+					:
+					(Odometry.autonRoutineChooser.getSelected() instanceof Trajectory) ?
+						((Trajectory)Odometry.autonRoutineChooser.getSelected()).getInitialPose()
+						:
+						// TODO: Get data from position chooser rather than from backup coordinates ^^^
+						new Pose2d(Constants.Auton.BACKUP_INITIAL_COORDINATES, Gyroscope.sensor.getRotation2d())
+		);
+					
+					
 	}
 
 	@Override
