@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.Auton;
 import frc.robot.commands.AutoShooterAlign;
 import frc.robot.commands.ClimberDrive;
+import frc.robot.commands.DriveAuton;
 import frc.robot.commands.DriveMecanum;
 import frc.robot.commands.IntakeDrive;
 import frc.robot.commands.ShooterDrive;
@@ -54,7 +55,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Define the controls used in new functions within HumanInterface.CommandMap and then supply the command here.
     // Example: HumanInterface.CommandMap.straightAuton(cmdStraightAuton);
-    HumanInterface.CommandMap.autoShooterAlign(cmdAutoShooterAlign);
+    // HumanInterface.CommandMap.autoShooterAlign(cmdAutoShooterAlign);
   }
 
   public Command getAutonomousCommand() {
@@ -63,7 +64,7 @@ public class RobotContainer {
       return new InstantCommand(() -> {});
 
     return DriveTrain.Odometry.autonRoutineChooser.getSelected() instanceof Trajectory ?
-      ComplexAuton.createDriveCommand(((Trajectory)DriveTrain.Odometry.autonRoutineChooser.getSelected()))
+      ComplexAuton.createDriveCommand(((Trajectory)DriveTrain.Odometry.autonRoutineChooser.getSelected()), true)
       :
       (Command)DriveTrain.Odometry.autonRoutineChooser.getSelected();
   }

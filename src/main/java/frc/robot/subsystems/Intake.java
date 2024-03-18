@@ -109,21 +109,10 @@ public class Intake extends SubsystemBase {
   //   }
   // }
 
-  /**
-   * Turns on the intake if the lift encoder goes past a certain threshold
-   */
-  public static void driveIntakeAuto() {
-
-    if (Encoders.lift.get() >= Constants.Encoders.Intake.ON_LIMIT)
-      setSpeed(frc.robot.Constants.Intake.SPEED);
-    // If the intake is not running in reverse and the intake drive button is not being pressed, stop the motor.
-    else if ((Motors.left.get() > 0) && !HumanInterface.IntakeDrive.outDesired())
-      setSpeed(0); 
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run.
     SmartDashboard.putNumber("Intake Lift Encoder Pos", Encoders.lift.get());    
+    SmartDashboard.putBoolean("Intake On", Intake.Motors.left.get() != 0);
   }
 }

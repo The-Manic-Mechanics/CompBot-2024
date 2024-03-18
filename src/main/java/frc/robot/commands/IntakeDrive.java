@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.HumanInterface;
 import frc.robot.subsystems.Intake;
 
@@ -18,13 +19,27 @@ public class IntakeDrive extends Command {
 
   @Override
   public void execute() {
-    Intake.driveLift(HumanInterface.IntakeDrive.getLiftDriveAxis() * frc.robot.Constants.Intake.LIFT_SPEED_MULTIPLIER);
-    Intake.driveIntakeAuto();
-    
     // Following are immediate switches for different button>action bindings.
+
+    // if (
+    //     !HumanInterface.IntakeDrive.ignoreLiftLimitsDesired()
+    //     &&
+    //     (
+    //       Intake.Encoders.lift.getDistance() < Constants.Encoders.Intake.LOW_LIMIT
+    //       &&
+    //       HumanInterface.IntakeDrive.getLiftDriveAxis() > 0
+    //     )
+    //     ||
+    //     (
+    //       Intake.Encoders.lift.getDistance() > Constants.Encoders.Intake.HIGH_LIMIT
+    //       &&
+    //       HumanInterface.IntakeDrive.getLiftDriveAxis() < 0
+    //     )
+    // )
+      Intake.driveLift(HumanInterface.IntakeDrive.getLiftDriveAxis() * frc.robot.Constants.Intake.LIFT_SPEED_MULTIPLIER);
     
     // Drive the intake mechanism backwards.
-    if (HumanInterface.IntakeDrive.inDesired() /* TODO: && Intake.Encoders.lift.get() <= Constants.Encoders.Intake.ON_LIMIT */)
+    if (HumanInterface.IntakeDrive.inDesired())
       Intake.setSpeed(-1 * frc.robot.Constants.Intake.SPEED);
     else if (HumanInterface.IntakeDrive.outDesired())
     // Drive the intake mechanism forwards.

@@ -17,7 +17,7 @@ public class GenericSmartAuton extends SequentialCommandGroup {
       // new InstantCommand(() -> {
       //   Intake.
       // }),
-      ComplexAuton.createDriveCommand(Auton.trajectories[0])
+      ComplexAuton.createDriveCommand(Auton.trajectories[0], true)
     );
   }
 }

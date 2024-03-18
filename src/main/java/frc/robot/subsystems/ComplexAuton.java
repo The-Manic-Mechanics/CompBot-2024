@@ -70,11 +70,12 @@ public class ComplexAuton extends SubsystemBase {
    * @param pathToFollow The trajectory to use in the mecanumControllerCommand.
    * @return The path-following Command (The MecanumControllerCommand with added odometry reset and DriveTrain stop)
    */
-  public static Command createDriveCommand(Trajectory pathToFollow) {
+  public static Command createDriveCommand(Trajectory pathToFollow, boolean resetOdometry) {
     return new SequentialCommandGroup(
-      // Reset odometry
+      // Reset odometry if desired
       new InstantCommand(() -> {
-        DriveTrain.Odometry.resetDriveOdometry(pathToFollow.getInitialPose());
+        if (resetOdometry)
+          DriveTrain.Odometry.resetDriveOdometry(pathToFollow.getInitialPose());
       }),
       
       // Generate drive command

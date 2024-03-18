@@ -4,8 +4,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.Auton;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Gyroscope;
 
@@ -17,6 +17,7 @@ public final class DriveAuton extends Command {
 	double speedX;
 	double speedY;
 	double speedZ;
+	double oldPosition;
 	boolean isFinished;
 
 	/**
@@ -43,21 +44,28 @@ public final class DriveAuton extends Command {
 	@Override
 	public void initialize() {
 		isFinished = false;
-		// Converting to counts per inch
-		driveInches =  Math.floor(driveInches / (Auton.DISTANCE_PER_PULSE * 39.370));
+		// Converting to counts per inch (???)
+		// driveInches =  Math.floor(driveInches / 0.449);
+		// oldPosition = Math.abs(DriveTrain.Encoders.frontLeft.getPosition());
+		DriveTrain.Encoders.frontLeft.setPosition(0);
+		DriveTrain.Encoders.frontRight.setPosition(0);
+		DriveTrain.Encoders.rearLeft.setPosition(0);
+		DriveTrain.Encoders.rearRight.setPosition(0);
 	}
 
 	@Override
 	public void execute() {
+		SmartDashboard.putNumber("c_DriveInches", driveInches);
+		SmartDashboard.putNumber("c_encFrontLeft", DriveTrain.Encoders.frontLeft.getPosition());
 		// Checking if the encoders have read the desired distance, if so stop.
 		if (
-			DriveTrain.Encoders.frontLeft.getPosition() >= driveInches
+			Math.abs(DriveTrain.Encoders.frontLeft.getPosition()) >= driveInches
 			||
-			DriveTrain.Encoders.frontRight.getPosition() >= driveInches
+			Math.abs(DriveTrain.Encoders.frontRight.getPosition()) >= driveInches
 			||
-			DriveTrain.Encoders.rearLeft.getPosition() >= driveInches
+			Math.abs(DriveTrain.Encoders.rearLeft.getPosition()) >= driveInches
 			||
-			DriveTrain.Encoders.rearRight.getPosition() >= driveInches
+			Math.abs(DriveTrain.Encoders.rearRight.getPosition()) >= driveInches
 		) {
 			DriveTrain.mecanum.driveCartesian(0, 0, 0);
 			isFinished = true;
@@ -67,11 +75,17 @@ public final class DriveAuton extends Command {
 
 	@Override
 	public void end(boolean interrupted) {
+		// Stop the robot.
 		DriveTrain.mecanum.driveCartesian(0, 0, 0);
+		DriveTrain.Encoders.frontLeft.setPosition(0);
+		DriveTrain.Encoders.frontRight.setPosition(0);
+		DriveTrain.Encoders.rearLeft.setPosition(0);
+		DriveTrain.Encoders.rearRight.setPosition(0);
 	}
 
 	@Override
 	public boolean isFinished() {
+		// Reset encoders.
 		return isFinished;
 	}
 }

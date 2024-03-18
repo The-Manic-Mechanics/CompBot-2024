@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkRelativeEncoder;
 
 public final class DriveTrain extends SubsystemBase {
 	public static MecanumDrive mecanum;
@@ -61,7 +62,6 @@ public final class DriveTrain extends SubsystemBase {
 					Kinematics.getWheelPositions(),
 					pose);
 		}
-
 	}
 
 	public static class Kinematics {
@@ -119,10 +119,10 @@ public final class DriveTrain extends SubsystemBase {
 		Motors.rearLeft = new CANSparkMax(Constants.Motors.Ports.DriveTrain.REAR_LEFT, MotorType.kBrushless);
 		Motors.rearRight = new CANSparkMax(Constants.Motors.Ports.DriveTrain.REAR_RIGHT, MotorType.kBrushless);
 
-		Encoders.frontLeft = Motors.frontLeft.getAlternateEncoder(Constants.Auton.MOTOR_COUNTS_PER_REV);
-		Encoders.frontRight = Motors.frontRight.getAlternateEncoder(Constants.Auton.MOTOR_COUNTS_PER_REV);
-		Encoders.rearLeft = Motors.rearLeft.getAlternateEncoder(Constants.Auton.MOTOR_COUNTS_PER_REV);
-		Encoders.rearRight = Motors.rearRight.getAlternateEncoder(Constants.Auton.MOTOR_COUNTS_PER_REV);
+		Encoders.frontLeft = Motors.frontLeft.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+		Encoders.frontRight = Motors.frontRight.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+		Encoders.rearLeft = Motors.rearLeft.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+		Encoders.rearRight = Motors.rearRight.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
 
 		Motors.frontLeft.setInverted(true);
 		Motors.rearLeft.setInverted(true);
@@ -156,14 +156,16 @@ public final class DriveTrain extends SubsystemBase {
 		// SmartDashboard.putData("Start Position Chooser", Odometry.autonStartPositionChooser);
 
 		Odometry.autonRoutineChooser.setDefaultOption("None", null);
-		Odometry.autonRoutineChooser.addOption("Straight Auton", new DriveAuton(this, new Gyroscope(), 180, -.5, 0, 0));
+		Odometry.autonRoutineChooser.addOption("Straight Auton Center", new DriveAuton(this, new Gyroscope(), 24, -.1, 0, 0));
 		Odometry.autonRoutineChooser.addOption("Trajectory One", Auton.trajectories[0]);
+		Odometry.autonRoutineChooser.addOption("Straight Auton Wall", new DriveAuton(this, new Gyroscope(), 48, -.1, 0, 0));
+
 		
 		SmartDashboard.putData("Auton Path Chooser", Odometry.autonRoutineChooser);
 
 		Odometry.mecanumDriveOdometry = new MecanumDriveOdometry(
 				Kinematics.mecanumDriveKinematics,
-				Gyroscope.sensor.getRotation2d(),
+				Gyroscope.sensor.getRotation2d(),	
 				Kinematics.wheelPositions,
 				Odometry.autonRoutineChooser.getSelected() == null ? 
 					LimeLight.tagID == 0 ?
@@ -177,8 +179,6 @@ public final class DriveTrain extends SubsystemBase {
 						// TODO: Get data from position chooser rather than from backup coordinates ^^^
 						new Pose2d(Constants.Auton.BACKUP_INITIAL_COORDINATES, Gyroscope.sensor.getRotation2d())
 		);
-					
-					
 	}
 
 	@Override

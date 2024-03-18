@@ -158,16 +158,16 @@ public final class Constants {
 			/**
 			 * The lowest point the intake can be driven to
 			 */
-			public static final short LOW_LIMIT = 690;
+			public static final short LOW_LIMIT = -832;
 			/**
 			 * The highest point the intake can be driven to
 			 */
-			public static final short HIGH_LIMIT = 40;
+			public static final short HIGH_LIMIT = -35;
 			/**
 			 * The upper limit below which the intake will turn on
 			 * (The lift goes below this limit and the intake motors turn on)
 			 */
-			public static final short ON_LIMIT = 486;
+			public static final short ON_LIMIT = -486;
 			/**
 			 *  The upper limit above which the shooter turns on 
 			 * (The lift goes above this threshold and the shooter motors activate)
