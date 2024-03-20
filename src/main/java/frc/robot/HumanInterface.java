@@ -13,10 +13,10 @@ public class HumanInterface {
     // I wouldn't make any sort of routine triggers for controllers after the first.
 
     private static final XboxController port1_ = new XboxController(0);
-    // private static final JoystickButton port1_bX = new JoystickButton(port1_, 3);
+    private static final JoystickButton port1_bX = new JoystickButton(port1_, 3);
     private static final JoystickButton port1_bA = new JoystickButton(port1_, 1);
-    // private static final JoystickButton port1_bB = new JoystickButton(port1_, 2);
-    // private static final JoystickButton port1_bY = new JoystickButton(port1_, 4);
+    private static final JoystickButton port1_bB = new JoystickButton(port1_, 2);
+    private static final JoystickButton port1_bY = new JoystickButton(port1_, 4);
     private static final GenericHID port2_ = new GenericHID(1);
     // private static final JoystickButton port2_bX = new JoystickButton(port2_, 3);
     // private static final JoystickButton port2_bA = new JoystickButton(port2_, 1);
@@ -64,9 +64,20 @@ public class HumanInterface {
     }
 
     public class CommandMap {
-        public static void autoShooterAlign(Command execute) {
-            // A button, interface on port 1.
+        public static void runSysIDQuasistaticForwards(Command execute) {
+            port1_bY.onTrue(execute);
+        }
+
+        public static void runSysIDQuasistaticBackwards(Command execute) {
             port1_bA.onTrue(execute);
+        }
+
+        public static void runSysIDDynamicForwards(Command execute) {
+            port1_bB.onTrue(execute);
+        }
+
+        public static void runSysIDDynamicBackwards(Command execute) {
+            port1_bX.onTrue(execute);
         }
     }
 

@@ -7,7 +7,6 @@ package frc.robot;
 import frc.robot.Constants.Auton;
 import frc.robot.commands.AutoShooterAlign;
 import frc.robot.commands.ClimberDrive;
-import frc.robot.commands.DriveAuton;
 import frc.robot.commands.DriveMecanum;
 import frc.robot.commands.IntakeDrive;
 import frc.robot.commands.ShooterDrive;
@@ -17,15 +16,18 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Gyroscope;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SysID;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 public class RobotContainer {
   private static Gyroscope sysGyroscope = new Gyroscope();
   private static DriveTrain sysDriveTrain = new DriveTrain();
   private static ComplexAuton sysComplexAuton = new ComplexAuton(sysDriveTrain);
+  private static SysID sysSysID = new SysID(sysDriveTrain);
 
   public static AutoShooterAlign cmdAutoShooterAlign = new AutoShooterAlign(sysDriveTrain, sysComplexAuton);
 
@@ -54,8 +56,10 @@ public class RobotContainer {
   // TODO: Bind SysID commands to gamepad buttons.
   private void configureBindings() {
     // Define the controls used in new functions within HumanInterface.CommandMap and then supply the command here.
-    // Example: HumanInterface.CommandMap.straightAuton(cmdStraightAuton);
-    // HumanInterface.CommandMap.autoShooterAlign(cmdAutoShooterAlign);
+    HumanInterface.CommandMap.runSysIDQuasistaticForwards(sysSysID.runQuasistatic(Direction.kReverse));  
+    HumanInterface.CommandMap.runSysIDQuasistaticBackwards(sysSysID.runQuasistatic(Direction.kForward));  
+    HumanInterface.CommandMap.runSysIDDynamicForwards(sysSysID.runDynamic(Direction.kReverse));
+    HumanInterface.CommandMap.runSysIDDynamicBackwards(sysSysID.runDynamic(Direction.kForward));
   }
 
   public Command getAutonomousCommand() {
