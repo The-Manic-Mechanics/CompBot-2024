@@ -208,7 +208,7 @@ public final class Constants {
 		/**
 		 * The speed that the intake motors are run at.
 		 */
-		public static final float SPEED = .5f;
+		public static final float SPEED = 1;
 		/**
 		 * The multiplier on the intake lift speed.
 		 */
