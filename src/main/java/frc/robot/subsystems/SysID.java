@@ -33,14 +33,14 @@ public class SysID extends SubsystemBase {
                 log.motor("frontLeft")
                     .voltage(
                         m_appliedVoltage.mut_replace(
-                            DriveTrain.Encoders.frontLeft.getPosition() * RobotController.getBatteryVoltage(), Units.Volts))
+                            DriveTrain.Motors.frontLeft.getBusVoltage(), Units.Volts))
                     .linearPosition(m_distance.mut_replace(DriveTrain.Encoders.frontLeft.getPosition(), Units.Inches))
                     .linearVelocity(
                         m_velocity.mut_replace((DriveTrain.Encoders.frontLeft.getVelocity() * (Auton.DISTANCE_PER_PULSE * Auton.MOTOR_COUNTS_PER_REV)) * 39.37, Units.InchesPerSecond));
                 log.motor("frontRight")
                     .voltage(
                         m_appliedVoltage.mut_replace(
-                            DriveTrain.Encoders.frontRight.getPosition() * RobotController.getBatteryVoltage(), Units.Volts))
+                            DriveTrain.Motors.frontRight.getBusVoltage(), Units.Volts))
                     .linearPosition(m_distance.mut_replace(DriveTrain.Encoders.frontRight.getPosition(), Units.Inches))
 
                     .linearVelocity(
@@ -48,7 +48,7 @@ public class SysID extends SubsystemBase {
 				log.motor("rearLeft")
                     .voltage(
                         m_appliedVoltage.mut_replace(
-                            DriveTrain.Encoders.rearLeft.getPosition() * RobotController.getBatteryVoltage(), Units.Volts))
+                            DriveTrain.Motors.rearLeft.getBusVoltage(), Units.Volts))
                     .linearPosition(m_distance.mut_replace(DriveTrain.Encoders.rearLeft.getPosition(), Units.Inches))
 
                     .linearVelocity(
@@ -56,7 +56,7 @@ public class SysID extends SubsystemBase {
                 log.motor("rearRight")
                     .voltage(
                         m_appliedVoltage.mut_replace(
-                            DriveTrain.Encoders.rearRight.getPosition() * RobotController.getBatteryVoltage(), Units.Volts))
+                            DriveTrain.Motors.rearRight.getBusVoltage(), Units.Volts))
                     .linearPosition(m_distance.mut_replace(DriveTrain.Encoders.rearRight.getPosition(), Units.Inches))
 
                     .linearVelocity(
