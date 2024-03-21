@@ -50,24 +50,25 @@ public final class Constants {
 				public static final Translation2d REAR_RIGHT = new Translation2d(10.125, -10.25);
 			}
 		}
+
 		public static class Ports {
 			public static class DriveTrain {
 				/**
 				 * The CAN port of the front left motor.
 				 */
-				public static final byte FRONT_LEFT = 1;
+				public static final byte FRONT_LEFT = 2;
 				/**
 				 * The CAN port of the front right motor.
 				 */
-				public static final byte FRONT_RIGHT = 2;
+				public static final byte FRONT_RIGHT = 3;
 				/**
 				 * The CAN port of the rear left motor.
 				 */
-				public static final byte REAR_LEFT = 3;
+				public static final byte REAR_LEFT = 4;
 				/**
 				 * The CAN port of the rear right motor.
 				 */
-				public static final byte REAR_RIGHT = 4;
+				public static final byte REAR_RIGHT = 5;
 			}
 			public static class Intake {
 				/**
@@ -77,7 +78,7 @@ public final class Constants {
 				/**
 				 * The CAN port of the left motor on the intake mechanism.
 				 */
-				public static final byte LEFT= 9;
+				public static final byte LEFT = 9;
 				/**
 				 * The CAN port of the right motor on the intake mechanism. 
 				 */
@@ -87,15 +88,11 @@ public final class Constants {
 				/**
 				 * The CAN port of the first motor on the climber mechanism.
 				 */
-				public static final byte ONE = 5;
+				public static final byte ONE = 6;
 				/**
 				 * The CAN port of the second motor on the climber mechanism.
 				 */
-				public static final byte TWO = 6;
-				/**
-				 * The CAN port of the hook positioning motor on the climber mechanism.
-				 */
-				public static final byte HOOK_POSITIONER = 13;
+				public static final byte TWO = 7;
 			}
 			public static class Shooter {
 				/**

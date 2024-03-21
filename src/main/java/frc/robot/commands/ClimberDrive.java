@@ -22,15 +22,6 @@ public class ClimberDrive extends Command {
   public void execute() {
     // Following are immediate switches for different button>action bindings.
 
-    // Move the hook positioner forwards.
-    if (HumanInterface.ClimberDrive.hookForwardDesired())
-      Climber.Motors.hookPositioner.set(Constants.Climber.HOOK_POSITIONER_SPEED);
-    // Move the hook positioner backwards.
-    else if (HumanInterface.ClimberDrive.hookBackwardDesired())
-      Climber.Motors.hookPositioner.set(-1 * Constants.Climber.HOOK_POSITIONER_SPEED);
-    else
-      Climber.Motors.hookPositioner.set(0);
-
     // Drive the climber.
     if (HumanInterface.ClimberDrive.climberDriveDesired())
       Climber.Motors.one.set(Constants.Climber.SPEED);
@@ -47,7 +38,6 @@ public class ClimberDrive extends Command {
   public void end(boolean interrupted) {
     Climber.Motors.one.set(0);
     Climber.Motors.two.set(0);
-    Climber.Motors.hookPositioner.set(0);
   }
 
   @Override

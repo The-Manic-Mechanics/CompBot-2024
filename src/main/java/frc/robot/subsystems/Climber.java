@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,18 +13,11 @@ public class Climber extends SubsystemBase {
   public static class Motors {
     public static CANSparkMax one;
     public static CANSparkMax two;
-
-    /**
-     * The motor that flips the hook into position
-     */
-    public static WPI_VictorSPX hookPositioner;
   }
 
   public Climber() {
     Motors.one = new CANSparkMax(Constants.Motors.Ports.Climber.ONE, MotorType.kBrushless);
     Motors.two = new CANSparkMax(Constants.Motors.Ports.Climber.TWO, MotorType.kBrushless);
-
-    Motors.hookPositioner = new WPI_VictorSPX(Constants.Motors.Ports.Climber.HOOK_POSITIONER);
 
     Motors.two.follow(Motors.one, false);
   }

@@ -120,20 +120,6 @@ public class HumanInterface {
     }
 
     public class ClimberDrive {
-        public static boolean hookForwardDesired() {
-            // + Saxophone
-            // return port3_.getRawButton(ToySaxophone.PINK);
-            // + Generic
-            return port2_.getRawButton(LogitechGamepad.X);
-        }
-
-        public static boolean hookBackwardDesired() {
-            // + Saxophone
-            // return port3_.getRawButton(ToySaxophone.PURPLE);
-            // + Generic
-            return port2_.getRawButton(LogitechGamepad.A);
-        }
-
         public static boolean climberDriveDesired() {
             // + Saxophone
             // return port3_.getRawButton(ToySaxophone.JOYSTICK);
