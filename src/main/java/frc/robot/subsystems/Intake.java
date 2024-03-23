@@ -29,9 +29,9 @@ public class Intake extends SubsystemBase {
     Motors.right = new CANSparkMax(Ports.Intake.RIGHT, MotorType.kBrushless);
 
     Motors.lift = new WPI_VictorSPX(Constants.Motors.Ports.Intake.LIFT);
-    
-    Motors.right.setInverted(true);
-    
+
+    Motors.right.setInverted(false);
+
     Encoders.lift = new Encoder(Constants.Encoders.Ports.Intake.LIFT_A, Constants.Encoders.Ports.Intake.LIFT_B);
     Encoders.lift.setDistancePerPulse(Constants.Encoders.Intake.LIFT_DISTANCE_PER_PULSE);
     Encoders.lift.reset();
@@ -46,80 +46,106 @@ public class Intake extends SubsystemBase {
   }
 
   /**
-   * Drives the lift at "speed" 
+   * Drives the lift at "speed"
+   * 
    * @param speed The speed to drive the lift at
    */
   public static void driveLift(double speed) {
-    // If the lift is below the lower limit or above the higher limit stop the lift from being driven and made it so it can only driven the way oppoisite the limit 
+    // If the lift is below the lower limit or above the higher limit stop the lift
+    // from being driven and made it so it can only driven the way oppoisite the
+    // limit
     // if (
-    // (Encoders.lift.get() >= Constants.Intake.LOW_LIMIT) && (RobotContainer.saxController.getRawAxis(AxisPort.X) < 0) 
-    // || 
-    // (Encoders.lift.get() <= Constants.Intake.HIGH_LIMIT) && (RobotContainer.saxController.getRawAxis(AxisPort.X) > 0)
-    // ) 
-    //   Motors.lift.set(0);
+    // (Encoders.lift.get() >= Constants.Intake.LOW_LIMIT) &&
+    // (RobotContainer.saxController.getRawAxis(AxisPort.X) < 0)
+    // ||
+    // (Encoders.lift.get() <= Constants.Intake.HIGH_LIMIT) &&
+    // (RobotContainer.saxController.getRawAxis(AxisPort.X) > 0)
+    // )
+    // Motors.lift.set(0);
     // else
-      Motors.lift.set(speed);
+    Motors.lift.set(speed);
   }
 
   /**
    * Drive the Intake at speed to encoderPos
-   * @param encoderPos The encoder position to drive to
-   * @param speed The speed to drive the intake at
+   * 
+   * @param desiredPos The encoder position to drive to
+   * @param speed      The speed to drive the intake at
    */
-  public static void driveLiftAuton(short encoderPos, float speed) {
-      // TODO: Finish this
+  public static void driveLiftAuton(short desiredPos, float speed) {
+
+    speed = desiredPos > Encoders.lift.get() ? speed : -speed;
+
+    // Check if the lift is heading downward and if the lift encoder position is
+    // less than or equal to the desired position and stop if it is.
+    if (speed > 0 && desiredPos >= Encoders.lift.get())
+      driveLift(0);
+
+    // Check if the lift is heading upward and if the lift encoder position is
+    // greater than or equal to the desired position and stop if it is.
+    else if (speed < 0 && desiredPos <= Encoders.lift.get())
+      driveLift(0);
+    else
+      driveLift(speed);
   }
 
   // /**
-  //  * Drives the lift to whatever position is specified
-  //  * @param position Which position to set the intake to (1 is pickup and 2 is shooter feeding)
-  //  * @param speed The speed the lift motor drives at
-  //  */
+  // * Drives the lift to whatever position is specified
+  // * @param position Which position to set the intake to (1 is pickup and 2 is
+  // shooter feeding)
+  // * @param speed The speed the lift motor drives at
+  // */
   // public static void driveLiftToPos(byte position, double speed) {
 
-  //   speed = Math.abs(speed);
+  // speed = Math.abs(speed);
 
-  //   switch (position) {
-  //     // Pickup position
-  //     case 1:
-  //       // If the lift is below or at the pickup position stop, otherwise keep driving
-  //       if (Encoders.lift.get() >= Constants.Encoders.Intake.PICKUP_POSITION_HIGHER)
-  //         driveLift(0);
-  //       else
-  //         driveLift(-speed);
+  // switch (position) {
+  // // Pickup position
+  // case 1:
+  // // If the lift is below or at the pickup position stop, otherwise keep
+  // driving
+  // if (Encoders.lift.get() >= Constants.Encoders.Intake.PICKUP_POSITION_HIGHER)
+  // driveLift(0);
+  // else
+  // driveLift(-speed);
 
-  //     break;
+  // break;
 
-  //     // Amp scoring position
-  //     // case 2:
-  //     //   // If the lift is outside the amp scoring range keep driving
-  //     //   if ((Encoders.lift.get() <= Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER) && (Encoders.lift.get() >= Constants.Encoders.Intake.AMP_SCORING_POSITION_LOWER))
-  //     //     // If the lift is below the upper limit drive downwards if its not drive upwards
-  //     //     if (Encoders.lift.get() <= Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER)
-  //     //       driveLift(-1 * speed);
-  //     //     else
-  //     //       driveLift(speed);
-  //     //   else
-  //     //     driveLift(0);
-      
-  //     // break;
+  // // Amp scoring position
+  // // case 2:
+  // // // If the lift is outside the amp scoring range keep driving
+  // // if ((Encoders.lift.get() <=
+  // Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER) && (Encoders.lift.get()
+  // >= Constants.Encoders.Intake.AMP_SCORING_POSITION_LOWER))
+  // // // If the lift is below the upper limit drive downwards if its not drive
+  // upwards
+  // // if (Encoders.lift.get() <=
+  // Constants.Encoders.Intake.AMP_SCORING_POSITION_UPPER)
+  // // driveLift(-1 * speed);
+  // // else
+  // // driveLift(speed);
+  // // else
+  // // driveLift(0);
 
-  //     // Shooter feeding position
-  //     case 2:
-  //       // If the lift is above or at the shooting position, stop it, otherwise keep driving upwards
-  //       if (Encoders.lift.get() <= Constants.Encoders.Intake.SHOOTING_POSITION_LOWER)
-  //         driveLift(0);
-  //       else
-  //         driveLift(speed);
+  // // break;
 
-  //     break;
-  //   }
+  // // Shooter feeding position
+  // case 2:
+  // // If the lift is above or at the shooting position, stop it, otherwise keep
+  // driving upwards
+  // if (Encoders.lift.get() <= Constants.Encoders.Intake.SHOOTING_POSITION_LOWER)
+  // driveLift(0);
+  // else
+  // driveLift(speed);
+
+  // break;
+  // }
   // }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run.
-    SmartDashboard.putNumber("Intake Lift Encoder Pos", Encoders.lift.get());    
+    SmartDashboard.putNumber("Intake Lift Encoder Pos", Encoders.lift.get());
     SmartDashboard.putBoolean("Intake On", Intake.Motors.left.get() != 0);
   }
 }

@@ -21,29 +21,35 @@ public class IntakeDrive extends Command {
   public void execute() {
     // Following are immediate switches for different button>action bindings.
 
+    // FIXME: FIXME FIXME PWEASEEE!!!!
     // if (
-    //     !HumanInterface.IntakeDrive.ignoreLiftLimitsDesired()
-    //     &&
-    //     (
-    //       Intake.Encoders.lift.getDistance() < Constants.Encoders.Intake.LOW_LIMIT
-    //       &&
-    //       HumanInterface.IntakeDrive.getLiftDriveAxis() > 0
-    //     )
+    //     HumanInterface.IntakeDrive.ignoreLiftLimitsDesired()
     //     ||
     //     (
-    //       Intake.Encoders.lift.getDistance() > Constants.Encoders.Intake.HIGH_LIMIT
-    //       &&
-    //       HumanInterface.IntakeDrive.getLiftDriveAxis() < 0
+    //       (
+    //         Intake.Encoders.lift.getDistance() < Constants.Encoders.Intake.LOW_LIMIT
+    //         &&
+    //         HumanInterface.IntakeDrive.getLiftDriveAxis() > 0
+    //       )
+    //       ||
+    //       (
+    //         Intake.Encoders.lift.getDistance() > Constants.Encoders.Intake.HIGH_LIMIT
+    //         &&
+    //         HumanInterface.IntakeDrive.getLiftDriveAxis() < 0
+    //       )
     //     )
     // )
       Intake.driveLift(HumanInterface.IntakeDrive.getLiftDriveAxis() * frc.robot.Constants.Intake.LIFT_SPEED_MULTIPLIER);
     
-    // Drive the intake mechanism backwards.
-    if (HumanInterface.IntakeDrive.inDesired())
-      Intake.setSpeed(-1 * frc.robot.Constants.Intake.SPEED);
-    else if (HumanInterface.IntakeDrive.outDesired())
+    // Drive the intake mechanism manually, used for hopefully scoring in the amplifier.
+    if (HumanInterface.IntakeDrive.getIntakeManualOutAxis() > 0)
+      Intake.setSpeed(-HumanInterface.IntakeDrive.getIntakeManualOutAxis());
     // Drive the intake mechanism forwards.
+    else if (HumanInterface.IntakeDrive.inDesired())
       Intake.setSpeed(frc.robot.Constants.Intake.SPEED);
+    else if (HumanInterface.IntakeDrive.outDesired())
+    // Drive the intake mechanism backwards.
+      Intake.setSpeed(-frc.robot.Constants.Intake.SPEED);
     else
       Intake.setSpeed(0);
 

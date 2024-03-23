@@ -56,10 +56,10 @@ public class RobotContainer {
   // TODO: Bind SysID commands to gamepad buttons.
   private void configureBindings() {
     // Define the controls used in new functions within HumanInterface.CommandMap and then supply the command here.
-    HumanInterface.CommandMap.runSysIDQuasistaticForwards(sysSysID.runQuasistatic(Direction.kReverse));  
-    HumanInterface.CommandMap.runSysIDQuasistaticBackwards(sysSysID.runQuasistatic(Direction.kForward));  
-    HumanInterface.CommandMap.runSysIDDynamicForwards(sysSysID.runDynamic(Direction.kReverse));
-    HumanInterface.CommandMap.runSysIDDynamicBackwards(sysSysID.runDynamic(Direction.kForward));
+    // HumanInterface.CommandMap.runSysIDQuasistaticForwards(sysSysID.runQuasistatic(Direction.kReverse));  
+    // HumanInterface.CommandMap.runSysIDQuasistaticBackwards(sysSysID.runQuasistatic(Direction.kForward));  
+    // HumanInterface.CommandMap.runSysIDDynamicForwards(sysSysID.runDynamic(Direction.kReverse));
+    // HumanInterface.CommandMap.runSysIDDynamicBackwards(sysSysID.runDynamic(Direction.kForward));
   }
 
   public Command getAutonomousCommand() {

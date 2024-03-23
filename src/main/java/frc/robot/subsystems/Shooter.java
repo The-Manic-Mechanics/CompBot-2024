@@ -39,5 +39,7 @@ public class Shooter extends SubsystemBase {
 
     SmartDashboard.putBoolean("Shooter Alignment Active", AutoShooterAlign.isAligning);
     SmartDashboard.putBoolean("Shoot Spun Up", isSpunUp);
+    SmartDashboard.putNumber("Left Shooter Speed", Motors.left.get());
+    SmartDashboard.putNumber("Right Shooter Speed", Motors.right.get());
   }
 }

@@ -19,6 +19,9 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.Constants.Auton;
 import frc.robot.commands.DriveAuton;
+import frc.robot.commands.ShootAuton;
+import frc.robot.commands.ShootNDriveAuton;
+
 import java.util.function.Supplier;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -156,9 +159,11 @@ public final class DriveTrain extends SubsystemBase {
 		// SmartDashboard.putData("Start Position Chooser", Odometry.autonStartPositionChooser);
 
 		Odometry.autonRoutineChooser.setDefaultOption("None", null);
-		Odometry.autonRoutineChooser.addOption("Straight Auton Center", new DriveAuton(this, new Gyroscope(), 24, -.1, 0, 0));
-		Odometry.autonRoutineChooser.addOption("Trajectory One", Auton.trajectories[0]);
-		Odometry.autonRoutineChooser.addOption("Straight Auton Wall", new DriveAuton(this, new Gyroscope(), 48, -.1, 0, 0));
+		Odometry.autonRoutineChooser.addOption("Straight Auton", new DriveAuton(this, new Gyroscope(), 24, -.1, 0, 0));
+		// Odometry.autonRoutineChooser.addOption("Trajectory One", Auton.trajectories[0]);
+		// Odometry.autonRoutineChooser.addOption("Straight Auton Wall", new DriveAuton(this, new Gyroscope(), 48, -.1, 0, 0));
+		Odometry.autonRoutineChooser.addOption("Shooter Auton", new ShootAuton());
+		Odometry.autonRoutineChooser.addOption("Shooter Straight Auton", new ShootNDriveAuton(this, new Gyroscope(), 48, -.1, 0, 0));
 
 		
 		SmartDashboard.putData("Auton Path Chooser", Odometry.autonRoutineChooser);

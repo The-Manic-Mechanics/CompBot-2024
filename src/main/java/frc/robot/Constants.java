@@ -153,13 +153,13 @@ public final class Constants {
 		 	*/
 			public static final short LIFT_DISTANCE_PER_PULSE = 1;
 			/**
-			 * The lowest point the intake can be driven to
+			 * The lowest point the lift can be driven to.
 			 */
-			public static final short LOW_LIMIT = -832;
+			public static final short LOW_LIMIT = -857;
 			/**
-			 * The highest point the intake can be driven to
+			 * The highest point the lift can be driven to.
 			 */
-			public static final short HIGH_LIMIT = -35;
+			public static final short HIGH_LIMIT = -10;
 			/**
 			 * The upper limit below which the intake will turn on
 			 * (The lift goes below this limit and the intake motors turn on)

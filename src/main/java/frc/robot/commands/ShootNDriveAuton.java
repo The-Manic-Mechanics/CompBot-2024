@@ -4,21 +4,25 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Gyroscope;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 /**
- * Used to drive the robot during auton via the inputted speeds and distance.
+ * Used to shoot a note and then drive the robot during auton via the inputted speeds and distance.
  */
-public final class DriveAuton extends Command {
+public final class ShootNDriveAuton extends Command {
 	double driveInches;
 	double speedX;
 	double speedY;
 	double speedZ;
 	double oldPosition;
 	boolean isFinished;
+	boolean throwComplete;
 
 	/**
 	 * @param inDriveInches The amount of inches to drive.
@@ -26,7 +30,7 @@ public final class DriveAuton extends Command {
 	 * @param inSpeedY The speed to travel in the Y direction.
 	 * @param inSpeedZ The speed to travel in the Z direction.
 	 */
-	public DriveAuton(
+	public ShootNDriveAuton(
 			DriveTrain inSysDriveTrain, 
 			Gyroscope inSysGyroscope, 
 			double inDriveInches, 
@@ -43,10 +47,7 @@ public final class DriveAuton extends Command {
 
 	@Override
 	public void initialize() {
-		isFinished = false;
-		// Converting to counts per inch (???)
-		// driveInches =  Math.floor(driveInches / 0.449);
-		// oldPosition = Math.abs(DriveTrain.Encoders.frontLeft.getPosition());
+		isFinished = throwComplete = false;
 		DriveTrain.Encoders.frontLeft.setPosition(0);
 		DriveTrain.Encoders.frontRight.setPosition(0);
 		DriveTrain.Encoders.rearLeft.setPosition(0);
@@ -55,6 +56,15 @@ public final class DriveAuton extends Command {
 
 	@Override
 	public void execute() {
+		if (!throwComplete) {
+			Shooter.setSpeed(1);
+			Timer.delay(2);
+			Intake.setSpeed(-frc.robot.Constants.Intake.SPEED);
+			Timer.delay(.8);
+			Shooter.setSpeed(0);
+			Intake.setSpeed(0);
+			throwComplete = true;
+		}
 		SmartDashboard.putNumber("c_DriveInches", driveInches);
 		SmartDashboard.putNumber("c_encFrontLeft", DriveTrain.Encoders.frontLeft.getPosition());
 		// Checking if the encoders have read the desired distance, if so stop.
@@ -77,6 +87,7 @@ public final class DriveAuton extends Command {
 	public void end(boolean interrupted) {
 		// Stop the robot.
 		DriveTrain.mecanum.driveCartesian(0, 0, 0);
+		// Reset encoders.
 		DriveTrain.Encoders.frontLeft.setPosition(0);
 		DriveTrain.Encoders.frontRight.setPosition(0);
 		DriveTrain.Encoders.rearLeft.setPosition(0);
@@ -85,7 +96,6 @@ public final class DriveAuton extends Command {
 
 	@Override
 	public boolean isFinished() {
-		// Reset encoders.
 		return isFinished;
 	}
 }

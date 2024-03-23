@@ -112,6 +112,13 @@ public class HumanInterface {
             return port2_.getRawAxis(LogitechGamepad.AXIS_LEFT_Y);
         }
 
+        public static float getIntakeManualOutAxis() {
+            float a = (float)port2_.getRawAxis(LogitechGamepad.AXIS_RIGHT_TRIGGER);
+            if (a < .1f)
+                return 0f;
+            return a;
+        }
+
         public static boolean ignoreLiftLimitsDesired() {
             boolean a = port2_.getRawAxis(LogitechGamepad.AXIS_LEFT_TRIGGER) > .8;
             SmartDashboard.putBoolean("Lift Limits Ignored", a);
