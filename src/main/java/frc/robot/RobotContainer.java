@@ -4,98 +4,72 @@
 
 package frc.robot;
 
-import frc.robot.Constants.Controllers;
+import frc.robot.Constants.Auton;
+import frc.robot.commands.AutoShooterAlign;
+import frc.robot.commands.ClimberDrive;
 import frc.robot.commands.DriveMecanum;
 import frc.robot.commands.IntakeDrive;
 import frc.robot.commands.ShooterDrive;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.ComplexAuton;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Gyroscope;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Solenoids;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.SysID;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
-
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
- */
 public class RobotContainer {
-  SendableChooser<Command> autoRoutineChooser;
+  private static Gyroscope sysGyroscope = new Gyroscope();
+  private static DriveTrain sysDriveTrain = new DriveTrain();
+  private static ComplexAuton sysComplexAuton = new ComplexAuton(sysDriveTrain);
+  private static SysID sysSysID = new SysID(sysDriveTrain);
 
-  private final Solenoids sysSolenoids = new Solenoids();
-  private final Gyroscope sysGyroscope = new Gyroscope();
+  public static AutoShooterAlign cmdAutoShooterAlign = new AutoShooterAlign(sysDriveTrain, sysComplexAuton);
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  public static final XboxController driverOneController = new XboxController(Controllers.DRIVERONE_PORT);
-  public static final JoystickButton 
-    mainButton1 = new JoystickButton(driverOneController, 1),
-    mainButton2 = new JoystickButton(driverOneController, 4);
+  public static Pose2d initPose;
 
-  public static final XboxController driverTwoController = new XboxController(Controllers.DRIVERTWO_PORT);
-  public static final JoystickButton 
-    driverSecondA = new JoystickButton(driverTwoController, 1),
-    driverSecondY = new JoystickButton(driverTwoController, 4),
-    driverSecondLeftBump = new JoystickButton(driverTwoController, 5),
-    driverSecondRghtBump = new JoystickButton(driverTwoController, 6);
-
-  public static final GenericHID saxController = new GenericHID(Constants.Controllers.SAX_PORT);
-  // ---------------------------------------------------------------------------------
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // The robot's subsystems and commands are defined here...
-    DriveTrain sysDriveTrain = new DriveTrain();
     Intake sysIntake = new Intake();
     Shooter sysShooter = new Shooter();
+    Climber sysClimber = new Climber();
 
     ShooterDrive cmdShooterDrive = new ShooterDrive(sysShooter);
     IntakeDrive cmdIntakeDrive = new IntakeDrive(sysIntake);
     DriveMecanum cmdDriveMecanum = new DriveMecanum(sysDriveTrain);
+    ClimberDrive cmdClimberDrive = new ClimberDrive(sysClimber);
 
     sysShooter.setDefaultCommand(cmdShooterDrive);
     sysDriveTrain.setDefaultCommand(cmdDriveMecanum);
     sysIntake.setDefaultCommand(cmdIntakeDrive);
-    // Configure the trigger bindings
+    sysClimber.setDefaultCommand(cmdClimberDrive);
+
     configureBindings();
 
-  // -------------------------
-  // SmartDashboard
-  // -------------------------
-  
-    autoRoutineChooser = new SendableChooser<>();
-
-    SmartDashboard.putData("Auton Chooser", autoRoutineChooser);
+    Auton.loadTrajectoriesFromPaths();
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
+  // TODO: Bind SysID commands to gamepad buttons.
   private void configureBindings() {
-    // Configure controller bindings here.
-    // mainButton1.onTrue(cmdMove);
-    // mainButton2.onTrue(cmdBrakeUp);
-
-    // The DriveMecanum command periodically checks the controller's joysticks for acceleration.
+    // Define the controls used in new functions within HumanInterface.CommandMap and then supply the command here.
+    // HumanInterface.CommandMap.runSysIDQuasistaticForwards(sysSysID.runQuasistatic(Direction.kReverse));  
+    // HumanInterface.CommandMap.runSysIDQuasistaticBackwards(sysSysID.runQuasistatic(Direction.kForward));  
+    // HumanInterface.CommandMap.runSysIDDynamicForwards(sysSysID.runDynamic(Direction.kReverse));
+    // HumanInterface.CommandMap.runSysIDDynamicBackwards(sysSysID.runDynamic(Direction.kForward));
   }
 
   public Command getAutonomousCommand() {
-    return autoRoutineChooser.getSelected();
+    // If the "no trajectory" option is chosen, do not run anything.
+    if (DriveTrain.Odometry.autonRoutineChooser.getSelected() == null)
+      return new InstantCommand(() -> {});
+
+    return DriveTrain.Odometry.autonRoutineChooser.getSelected() instanceof Trajectory ?
+      ComplexAuton.createDriveCommand(((Trajectory)DriveTrain.Odometry.autonRoutineChooser.getSelected()), true)
+      :
+      (Command)DriveTrain.Odometry.autonRoutineChooser.getSelected();
   }
 }

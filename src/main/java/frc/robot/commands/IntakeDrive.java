@@ -4,44 +4,69 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
+import frc.robot.HumanInterface;
 import frc.robot.subsystems.Intake;
 
 public class IntakeDrive extends Command {
   Intake sysIntake;
-  /** Creates a new IntakeDrive. */
+
   public IntakeDrive(Intake inSysIntake) {
-    // Use addRequirements() here to declare subsystem dependencies.
     sysIntake = inSysIntake;
     addRequirements(sysIntake);
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // TODO: Add encoder stops and add controller 
-    Intake.driveLift(RobotContainer.driverTwoController.getLeftY() * Constants.Intake.LIFT_SPEED_MULTIPLIER);
+    // Following are immediate switches for different button>action bindings.
 
-    Intake.driveIntakeAuto();    
+    // FIXME: FIXME FIXME PWEASEEE!!!!
+    // if (
+    //     HumanInterface.IntakeDrive.ignoreLiftLimitsDesired()
+    //     ||
+    //     (
+    //       (
+    //         Intake.Encoders.lift.getDistance() < Constants.Encoders.Intake.LOW_LIMIT
+    //         &&
+    //         HumanInterface.IntakeDrive.getLiftDriveAxis() > 0
+    //       )
+    //       ||
+    //       (
+    //         Intake.Encoders.lift.getDistance() > Constants.Encoders.Intake.HIGH_LIMIT
+    //         &&
+    //         HumanInterface.IntakeDrive.getLiftDriveAxis() < 0
+    //       )
+    //     )
+    // )
+      Intake.driveLift(HumanInterface.IntakeDrive.getLiftDriveAxis() * frc.robot.Constants.Intake.LIFT_SPEED_MULTIPLIER);
+    
+    // Drive the intake mechanism manually, used for hopefully scoring in the amplifier.
+    if (HumanInterface.IntakeDrive.getIntakeManualOutAxis() > 0)
+      Intake.setSpeed(-HumanInterface.IntakeDrive.getIntakeManualOutAxis());
+    // Drive the intake mechanism forwards.
+    else if (HumanInterface.IntakeDrive.inDesired())
+      Intake.setSpeed(frc.robot.Constants.Intake.SPEED);
+    else if (HumanInterface.IntakeDrive.outDesired())
+    // Drive the intake mechanism backwards.
+      Intake.setSpeed(-frc.robot.Constants.Intake.SPEED);
+    else
+      Intake.setSpeed(0);
 
-    if (RobotContainer.saxController.getRawButton(Constants.Controllers.Sax.ButtonsPort.ORANGE))
-      Intake.setSpeed(-1 * Constants.Intake.SPEED);
+    // Drive the lift to the intake position.
+    // if (RobotContainer.saxController.getRawButton(Bindings.))
+    //   Intake.driveLiftToPos(1, frc.robot.Constants.Intake.LIFT_SPEED_MULTIPLIER);
+    // else if (RobotContainer.saxController.getRawButton(ButtonPorts.YELLOW))
+    // Drive the lift to the shooting position.
+      // Intake.driveLiftToPos(3, frc.robot.Constants.Intake.LIFT_SPEED_MULTIPLIER);
   }
-  // Called once the command ends or is interrupted.
+
   @Override
   public void end(boolean interrupted) {
     Intake.setSpeed(0);
     Intake.Motors.lift.set(0);
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

@@ -4,129 +4,200 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
+import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import frc.robot.Constants.DriveTrain.*;
+import frc.robot.Constants.Auton;
+import frc.robot.commands.DriveAuton;
+import frc.robot.commands.ShootAuton;
+import frc.robot.commands.ShootNDriveAuton;
 
-/**
-* The subsystem that holds all the motors and functions pertaining to the DriveTrain
-*/
+import java.util.function.Supplier;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkRelativeEncoder;
+
 public final class DriveTrain extends SubsystemBase {
-	/**
-	* Represents the MecanumDrive (Used for driving the robot)
-	*/
 	public static MecanumDrive mecanum;
 
-	/**
-	* Used for keeping track of the robot's position while it drives
-	*/
-	public static MecanumDriveOdometry mecanumDriveOdometry;
-
-    /**
-    * Stores the position of the wheels in robot space (Used for kinematics and odometry)
-    */
-	private static MecanumDriveWheelPositions wheelPositions;
-
-	/**
-	* Used for tracking how far the robot actually goes compared to what values are being inputed
-	*/
-	private static MecanumDriveKinematics mecanumDriveKinematics;
-
 	public static class Motors {
-		public static CANSparkMax frontLeft, frontRight, backLeft, backRight;
+		public static CANSparkMax frontLeft;
+		public static CANSparkMax frontRight;
+		public static CANSparkMax rearLeft;
+		public static CANSparkMax rearRight;
 	}
 
 	public static class Encoders {
-		public static Encoder frontLeft, frontRight, backLeft, backRight;
+		public static RelativeEncoder frontLeft;
+		public static RelativeEncoder frontRight;
+		public static RelativeEncoder rearLeft;
+		public static RelativeEncoder rearRight;
+	}
+
+	public static class Odometry {
+		/**
+		 * Used for keeping track of the robot's position while it drives.
+		 */
+		public static MecanumDriveOdometry mecanumDriveOdometry;
+
+		public static SendableChooser<Object> autonRoutineChooser = new SendableChooser<Object>();
+		public static SendableChooser<Pose2d> autonStartPositionChooser = new SendableChooser<Pose2d>();
+
+		/**
+		 * Sets the driveOdometry values to those supplied in the Pose2d.
+		 * 
+		 * @param pose The pose to set the driveOdometry values to.
+		 */
+		public static void resetDriveOdometry(Pose2d pose) {
+			mecanumDriveOdometry.resetPosition(
+					Gyroscope.sensor.getRotation2d(),
+					Kinematics.getWheelPositions(),
+					pose);
+		}
+	}
+
+	public static class Kinematics {
+		public static MecanumDriveKinematics mecanumDriveKinematics;
+		private static MecanumDriveWheelPositions wheelPositions;
+		public static MecanumDriveWheelSpeeds mecanumDriveWheelSpeeds;
+
+		public static Supplier<ChassisSpeeds> getMecanumChassisSpeeds() {
+			return (Supplier<ChassisSpeeds>) () -> mecanumDriveKinematics.toChassisSpeeds(mecanumDriveWheelSpeeds);
+		}
+
+		/**
+		 * Gets the current wheel positions.
+		 *
+		 * @return A filled-out MecanumDriveWheelPositions instance.
+		 */
+		public static MecanumDriveWheelPositions getWheelPositions() {
+			return new MecanumDriveWheelPositions(
+					DriveTrain.Encoders.frontLeft.getPosition(),
+					DriveTrain.Encoders.frontRight.getPosition(),
+					DriveTrain.Encoders.rearLeft.getPosition(),
+					DriveTrain.Encoders.rearRight.getPosition());
+		}
+
+		/**
+		 * Supplies the DriveTrain wheel speeds.
+		 * 
+		 * @return A filled-out MecanumDriveWheelSpeeds instance.
+		 */
+		public static Supplier<MecanumDriveWheelSpeeds> getWheelSpeeds() {
+			Kinematics.mecanumDriveWheelSpeeds = new MecanumDriveWheelSpeeds(
+					Motors.frontLeft.get() * Auton.MAX_SPEED,
+					Motors.frontRight.get() * Auton.MAX_SPEED,
+					Motors.rearLeft.get() * Auton.MAX_SPEED,
+					Motors.rearRight.get() * Auton.MAX_SPEED);
+			return (Supplier<MecanumDriveWheelSpeeds>) () -> Kinematics.mecanumDriveWheelSpeeds;
+		}
+
+		/**
+		 * Sets voltages to each of the motors.
+		 * 
+		 * @param inVolts The voltages to set each motor with.
+		 */
+		public static void driveVolts(MecanumDriveMotorVoltages inVolts) {
+			Motors.frontLeft.setVoltage(inVolts.frontLeftVoltage);
+			Motors.frontRight.setVoltage(inVolts.frontRightVoltage);
+			Motors.rearLeft.setVoltage(inVolts.rearLeftVoltage);
+			Motors.rearRight.setVoltage(inVolts.rearRightVoltage);
+		}
 	}
 
 	public DriveTrain() {
 		Motors.frontLeft = new CANSparkMax(Constants.Motors.Ports.DriveTrain.FRONT_LEFT, MotorType.kBrushless);
 		Motors.frontRight = new CANSparkMax(Constants.Motors.Ports.DriveTrain.FRONT_RIGHT, MotorType.kBrushless);
-		Motors.backLeft = new CANSparkMax(Constants.Motors.Ports.DriveTrain.BACK_LEFT, MotorType.kBrushless);
-		Motors.backRight = new CANSparkMax(Constants.Motors.Ports.DriveTrain.BACK_RIGHT, MotorType.kBrushless);
+		Motors.rearLeft = new CANSparkMax(Constants.Motors.Ports.DriveTrain.REAR_LEFT, MotorType.kBrushless);
+		Motors.rearRight = new CANSparkMax(Constants.Motors.Ports.DriveTrain.REAR_RIGHT, MotorType.kBrushless);
 
-		// Encoders.frontLeft = new Encoder(
-		// 		Constants.Encoders.Ports.DriveTrain.FRONT_LEFT_A,
-		// 		Constants.Encoders.Ports.DriveTrain.FRONT_LEFT_B
-		// );
-
-		// Encoders.frontRight = new Encoder(
-		// 		Constants.Encoders.Ports.DriveTrain.FRONT_RIGHT_A,
-		// 		Constants.Encoders.Ports.DriveTrain.FRONT_RIGHT_B
-		// );
-
-		// Encoders.backLeft = new Encoder(
-		// 		Constants.Encoders.Ports.DriveTrain.BACK_LEFT_A,
-		// 		Constants.Encoders.Ports.DriveTrain.BACK_LEFT_A
-		// );
-
-		// Encoders.backRight = new Encoder(
-		// 		Constants.Encoders.Ports.DriveTrain.BACK_RIGHT_A,
-		// 		Constants.Encoders.Ports.DriveTrain.BACK_RIGHT_B
-		// );
-		// Encoders.frontLeft.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
-		// Encoders.frontRight.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
-		// Encoders.backLeft.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
-		// Encoders.backRight.setDistancePerPulse(Auton.DISTANCE_PER_PULSE);
+		Encoders.frontLeft = Motors.frontLeft.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+		Encoders.frontRight = Motors.frontRight.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+		Encoders.rearLeft = Motors.rearLeft.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+		Encoders.rearRight = Motors.rearRight.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
 
 		Motors.frontLeft.setInverted(true);
-		Motors.backLeft.setInverted(true);
+		Motors.rearLeft.setInverted(true);
 
-		mecanum = new MecanumDrive(Motors.frontLeft, Motors.backLeft, Motors.frontRight, Motors.backRight);
+		mecanum = new MecanumDrive(
+				Motors.frontLeft,
+				Motors.rearLeft,
+				Motors.frontRight,
+				Motors.rearRight);
 
-		mecanumDriveKinematics = new MecanumDriveKinematics
-	    (
-			new Translation2d(MotorLocations.FRONT_LEFT, MotorLocations.FRONT_LEFT),
-			new Translation2d(MotorLocations.FRONT_RIGHT, -1 * MotorLocations.FRONT_RIGHT),
-			new Translation2d(-1 * MotorLocations.BACK_LEFT, MotorLocations.BACK_LEFT),
-			new Translation2d(-1 * MotorLocations.BACK_RIGHT, -1 * MotorLocations.BACK_RIGHT)
+		Kinematics.mecanumDriveKinematics = new MecanumDriveKinematics(
+				Constants.Motors.Locations.DriveTrain.FRONT_LEFT,
+				Constants.Motors.Locations.DriveTrain.FRONT_RIGHT,
+				Constants.Motors.Locations.DriveTrain.REAR_LEFT,
+				Constants.Motors.Locations.DriveTrain.REAR_RIGHT
 		);
 
-		// wheelPositions = new MecanumDriveWheelPositions(
-		// 		Encoders.frontLeft.getDistance(),
-		// 		Encoders.frontRight.getDistance(),
-		// 		Encoders.backLeft.getDistance(),
-		// 		Encoders.backRight.getDistance()
-		// );
+		Kinematics.wheelPositions = new MecanumDriveWheelPositions(
+				Encoders.frontLeft.getPosition(),
+				Encoders.frontRight.getPosition(),
+				Encoders.rearLeft.getPosition(),
+				Encoders.rearRight.getPosition());
 
-		// double[] currentPose = LimeLight.botPoseArray;
+		Constants.Auton.loadTrajectoriesFromPaths();
 
-		// Pose2d initPose = new Pose2d(currentPose[1], currentPose[2], Gyroscope.sensor.getRotation2d());
+		// TODO: Where are these locations really (and should null be default? handle this?)
+		// Odometry.autonStartPositionChooser.setDefaultOption("Center", new Pose2d());
+		// Odometry.autonStartPositionChooser.addOption("Left", new Pose2d());
+		// Odometry.autonStartPositionChooser.addOption("Right", new Pose2d());
 
-		// mecanumDriveOdometry = new MecanumDriveOdometry(mecanumDriveKinematics, Gyroscope.sensor.getRotation2d(), wheelPositions, initPose);
+		// SmartDashboard.putData("Start Position Chooser", Odometry.autonStartPositionChooser);
+
+		Odometry.autonRoutineChooser.setDefaultOption("None", null);
+		Odometry.autonRoutineChooser.addOption("Straight Auton", new DriveAuton(this, new Gyroscope(), 24, -.1, 0, 0));
+		// Odometry.autonRoutineChooser.addOption("Trajectory One", Auton.trajectories[0]);
+		// Odometry.autonRoutineChooser.addOption("Straight Auton Wall", new DriveAuton(this, new Gyroscope(), 48, -.1, 0, 0));
+		Odometry.autonRoutineChooser.addOption("Shooter Auton", new ShootAuton());
+		Odometry.autonRoutineChooser.addOption("Shooter Straight Auton", new ShootNDriveAuton(this, new Gyroscope(), 48, -.1, 0, 0));
+
+		
+		SmartDashboard.putData("Auton Path Chooser", Odometry.autonRoutineChooser);
+
+		Odometry.mecanumDriveOdometry = new MecanumDriveOdometry(
+				Kinematics.mecanumDriveKinematics,
+				Gyroscope.sensor.getRotation2d(),	
+				Kinematics.wheelPositions,
+				Odometry.autonRoutineChooser.getSelected() == null ? 
+					LimeLight.tagID == 0 ?
+						new Pose2d(Constants.Auton.BACKUP_INITIAL_COORDINATES, Gyroscope.sensor.getRotation2d())
+						:
+						LimeLight.getBotPose2d()
+					:
+					(Odometry.autonRoutineChooser.getSelected() instanceof Trajectory) ?
+						((Trajectory)Odometry.autonRoutineChooser.getSelected()).getInitialPose()
+						:
+						// TODO: Get data from position chooser rather than from backup coordinates ^^^
+						new Pose2d(Constants.Auton.BACKUP_INITIAL_COORDINATES, Gyroscope.sensor.getRotation2d())
+		);
 	}
-
-    /**
-     * Gets the current mecanum wheel positions.
-	 *
-	 * @return <i>(type MecanumDriveWheelPositions)</i> filled out
-    */
-	// public static MecanumDriveWheelPositions getWheelPositions() {
-	// 	return new MecanumDriveWheelPositions(
-	// 			Encoders.frontLeft.getDistance(), Encoders.frontRight.getDistance(),
-	// 			Encoders.backLeft.getDistance(), Encoders.backRight.getDistance());
-	// }
 
 	@Override
 	public void periodic() {
-		// This method will be called once per scheduler run
-		// mecanumDriveOdometry.update(Gyroscope.sensor.getRotation2d(), wheelPositions);
+		Kinematics.wheelPositions = Kinematics.getWheelPositions();
 
-		// DEBUG: SmartDashboard entries
-		SmartDashboard.putNumber("X Value", RobotContainer.driverOneController.getLeftX());
-		SmartDashboard.putNumber("Y Value", RobotContainer.driverOneController.getLeftY());
-		SmartDashboard.putNumber("Z Value", RobotContainer.driverOneController.getRightX());
+		Odometry.mecanumDriveOdometry.update(
+				Gyroscope.sensor.getRotation2d(),
+				Kinematics.wheelPositions);
+
+		if (LimeLight.tagID != 0)
+			Odometry.mecanumDriveOdometry.resetPosition(
+					Gyroscope.sensor.getRotation2d(),
+					Kinematics.wheelPositions,
+					LimeLight.getBotPose2d());
 	}
 }

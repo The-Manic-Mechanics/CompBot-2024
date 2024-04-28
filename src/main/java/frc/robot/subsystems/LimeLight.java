@@ -4,96 +4,86 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
-* Holds all things pertaining to the LimeLight
-*/
+ * Interface to the LimeLight camera.
+ */
 public final class LimeLight extends SubsystemBase {
 	/**
-	* The limelight data from the Network Table
-	* See <a href="https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">...</a>
-	*/
+	 * The LimeLight data gathered from the NetworkTable.
+	 * See <a href=
+	 * "https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">the
+	 * API</a>.
+	 */
 	private static final NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
 	/**
-	* The horizontal offset from the limelight crosshair to the target
-	* See <a href="https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">...</a>
-	*/
-	private static double
-			/**
-			 * The offset of the apriltag from the Limelight crosshair (Horizontal)
-			 */
-			offsetFromCrosshairH,
+	 * The horizontal offset from the LimeLight crosshair to the target.
+	 * See <a href=
+	 * "https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">the
+	 * API</a>.
+	 */
+	private static double offsetFromCrosshairH;
+	/**
+	 * The LimeLight's distance from it's current target.
+	 * See <a href=
+	 * "https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">the
+	 * API</a>.
+	 */
+	private static double distanceFromTarget;
+	/**
+	 * The vertical offset from the LimeLight crosshair to the target.
+	 * See <a href=
+	 * "https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">the
+	 * API</a>.
+	 */
+	private static double offsetFromCrosshairV;
 
-            /**
-             * The limelight distance from target
-             * (Read as area that the target takes up
-             * (If you still don't know remember that objects diminish with distance))
-             * See <a href="https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">...</a>
-             */
-	        distanceFromTarget,
-
-	        /**
-	        * The april tag id identified by the limelight
-	        * See <a href="https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">...</a>
-	        */
-	        tagID,
-			/**
-			 * Current position of the robot on the field in (X, Y, Z)
-			 * See <a href="https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">...</a>
-			 */
-			botPose,
-			/**
-    		* The vertical offset from the limelight crosshair to the target
-    		* See <a href="https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">...</a>
-    		*/
-			offsetFromCrosshairV;
-
-    /**
-    * Holds the bot pose calculated based off of the april tag (X, Y, Z, Roll, Pitch, and Yaw respectivly)
-    * See <a href="https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">...</a>
-    */
+	/**
+	 * Holds the BotPose calculated based off of the AprilTag (X, Y, Z, Roll,
+	 * Pitch, and Yaw respectively).
+	 * See <a href=
+	 * "https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">the
+	 * API</a>.
+	 */
 	public static double[] botPoseArray;
-
-	boolean tagDetected;
-	public static double id;
+	/**
+	 * The AprilTag id identified by the LimeLight.
+	 * See <a href=
+	 * "https://docs.limelightvision.io/en/latest/networktables_api.html?highlight=api">the
+	 * API</a>.
+	 */
+	public static double tagID;
 
 	@Override
 	public void periodic() {
-		// Fetch data from LimeLight
+		// Fetch data from the LimeLight NetworkTable.
 		offsetFromCrosshairH = limeLightTable.getEntry("tx").getDouble(0.0);
 		offsetFromCrosshairV = limeLightTable.getEntry("ty").getDouble(0.0);
 		distanceFromTarget = limeLightTable.getEntry("ta").getDouble(0.0);
 		tagID = limeLightTable.getEntry("tid").getDouble(0.0);
-		botPose = limeLightTable.getEntry("botpose").getDouble(0.0);
-
-
-		// This method will be called once per scheduler run
-		// Getting the Limelight values from the Network tables periodically (Default 0)
-		id = tagID;
-
-		// Getting the botpose from the limelight based off of the apriltag 
+		
+		// Getting the BotPose from the LimeLight based off of the AprilTag's position.
 		botPoseArray = limeLightTable.getEntry("botpose").getDoubleArray(new double[6]);
 
-		// Putting LimeLight values onto SmartDashboard
-		SmartDashboard.putNumber("LimeLight X", offsetFromCrosshairH);
-		SmartDashboard.putNumber("LimeLight Y", offsetFromCrosshairV);
-		SmartDashboard.putNumber("LimeLight Area", distanceFromTarget);
-		SmartDashboard.putNumber("BotPose Z", botPoseArray[2]);
+		// Uncomment to put debug values on the SmartDashboard.
 
-		SmartDashboard.putBoolean("AprilTag Detected", tagDetected);
-
+		// SmartDashboard.putNumber("LimeLight X", offsetFromCrosshairH);
+		// SmartDashboard.putNumber("LimeLight Y", offsetFromCrosshairV);
+		// SmartDashboard.putNumber("LimeLight Area", distanceFromTarget);
+		// SmartDashboard.putNumber("BotPose Z", botPoseArray[2]);
 	}
 
-    /**
-     * @return The bot pose as a <b>Translation2d</b>
-    */
-	public static Translation2d GetBotPose2d() {
-		return new Translation2d(botPoseArray[0], botPoseArray[1]);
+	/**
+	 * @return The BotPose as a Pose2d instance.
+	 */
+	public static Pose2d getBotPose2d() {
+		// TODO: Figure out whether these values make sense in the context they're used.
+		return new Pose2d(botPoseArray[0], botPoseArray[1], new Rotation2d(botPoseArray[5]));
 	}
 }

@@ -4,51 +4,59 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
+import frc.robot.HumanInterface;
 import frc.robot.subsystems.DriveTrain;
 
 /**
-* Used for driving the robot during teleop by taking in the controller values and giving them to the motors
-*/
+ * Used for driving the robot during TeleOperation by polling the controllers
+ * and commanding the Mecanum with the polled controller data.
+ */
 public final class DriveMecanum extends Command {
-	
-	DriveTrain sysDriveTrain;
-
-	double 
-		/**
-		 * The robot's movement speed along the X axis (Usually stafing)
-		 */
-		moveSpeedX, 
-		/**
-		 * The robot's movement speed along the Y axis (Usually forward/backward)
-		 */
-		moveSpeedY, 
-		/**
-		 * The robot's movement speed along the Z axis (Rotation)
-		 */
-		moveSpeedZ,
-		speedMultiplier = 1;
-
+	/**
+	 * The robot's movement speed along the X axis, usually in a strafing motion.
+	 */
+	double moveSpeedX;
+	/**
+	 * The robot's movement speed along the Y axis, usually in forward or backward
+	 * motion.
+	 */
+	double moveSpeedY;
+	/**
+	 * The robot's movement speed along the Z axis.
+	 */
+	double moveSpeedZ;
+	/**
+	 * ( :
+	 */
+	double speedMultiplier = 1;
 
 	public DriveMecanum(DriveTrain inSysDriveTrain) {
-		sysDriveTrain = inSysDriveTrain;
-		addRequirements(sysDriveTrain);
+		addRequirements(inSysDriveTrain);
 	}
 
 	@Override
 	public void execute() {
-		// Get the speeds from controller and multiply it by the speed 
-		moveSpeedY = speedMultiplier * RobotContainer.driverOneController.getLeftX();
-		moveSpeedX = speedMultiplier * RobotContainer.driverOneController.getLeftY();
-		moveSpeedZ = -speedMultiplier * RobotContainer.driverOneController.getRightX();
+		// TODO: Driver prefrence specific, change accordingly.
+		// Get the speeds from the driver controller and multiply it by the speed.
+		SmartDashboard.putNumber("c_encFrontLeft", DriveTrain.Encoders.frontLeft.getPosition());
+		SmartDashboard.putNumber("c_encRearRight", DriveTrain.Encoders.rearRight.getPosition());
+		HumanInterface.DriveMecanum.smartDashboardDebugPut();
+		// Turning, negative is right
+		moveSpeedX = speedMultiplier * HumanInterface.DriveMecanum.getAxisY();
+		// Crabbing, negative is right
+		moveSpeedY = speedMultiplier * HumanInterface.DriveMecanum.getAxisX();
+		// Drive, forwards is negative.
+		moveSpeedZ = speedMultiplier * HumanInterface.DriveMecanum.getAxisZ();
+		
 		// Put in controller inputs and drive the motors accordingly
 		DriveTrain.mecanum.driveCartesian(moveSpeedX, moveSpeedY, moveSpeedZ);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		// Set the motor speeds to zero on interupt
+		// Set the motor speeds to zero in event of an interruption.
 		DriveTrain.mecanum.driveCartesian(0, 0, 0);
 	}
 
